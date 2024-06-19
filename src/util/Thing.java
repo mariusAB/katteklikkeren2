@@ -7,8 +7,9 @@ public class Thing {
     private String path = "img/icon.png";
     private int speed;
     private Room currRoom = new Room();
+    private int hitBox;
 
-    public Thing(int x, int y) {
+    public Thing(int x, int y, int hitBox) {
         this.x = x;
         this.y = y;
     }
@@ -30,6 +31,10 @@ public class Thing {
 
     public int getY() {
         return y;
+    }
+
+    public int getHitBox() {
+        return hitBox;
     }
 
     public void moveX(int x, int w, int h) {

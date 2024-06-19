@@ -130,7 +130,7 @@ public class Katteknappeklikkeren2 extends JFrame{
                 g.drawImage(scaledImage, 0, 0, this);
                 for (int i = 0; i < things.size(); i++) {
                     try {
-                        img = ImageIO.read(new File(t.getPath()));
+                        img = ImageIO.read(new File(things.get(i).getPath()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }

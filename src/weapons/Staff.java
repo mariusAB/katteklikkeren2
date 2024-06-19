@@ -8,7 +8,7 @@ public class Staff extends Weapon{
         this.l = l;
     }
 	public void use(int x, int y, int vx, int vy, boolean homing) {
-        Projectile p = new Projectile(x,y,vx,vy,homing);
+        Projectile p = new Projectile(x,y,vx,vy,false,15, l);
         p.setX(x);
         p.setY(y);
         p.setPath("img/magicProjectile.png");

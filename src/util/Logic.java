@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import java.util.Iterator;
+
 import weapons.Staff;
 
 public class Logic {
@@ -12,10 +14,12 @@ public class Logic {
     private Thing main;
     private Set<Integer> keys;
     private List<Projectile> projectiles = new ArrayList<Projectile>();
+    private Room currRoom = new Room();
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Thing(0,0);
+        main = new Thing(0,0,10);
+        main.setPath("img/icon.png");
         k.addImage(main);
         activeThings.add(main);
         main.setSpeed(15);
@@ -26,11 +30,19 @@ public class Logic {
             thing.tick();
             k.addImage(thing);
         }
-        for (Projectile p : projectiles) {
+        Iterator<Projectile> iterator = projectiles.iterator();
+        while (iterator.hasNext()) {
+            Projectile p = iterator.next();
             if (p.isHoming()) {
-                p.homeTick(main);
+                p.homeTick(main, k.getWidth(), k.getHeight());
+                if (p.getX() - main.getX() < main.getHitBox() && p.getY() - main.getY() < 10) {
+                    iterator.remove();
+                }
             } else {
                 p.tick();
+                if (p.getX() - main.getX() < main.getHitBox() && p.getY() - main.getY() < 10) {
+                    iterator.remove();
+                }
             }
             k.addImage(p);
         }
@@ -50,6 +62,10 @@ public class Logic {
                 main.moveY(main.getSpeed(), k.getWidth(), k.getHeight());
             }
         }
+    }
+
+    public Room getRoom() {
+        return currRoom;
     }
 
     public void toMid() {

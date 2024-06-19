@@ -1,6 +1,8 @@
+package util;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,6 +10,8 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,7 +37,6 @@ public class Katteknappeklikkeren2 extends JFrame{
     private Image backgroundImage;
     private int monKilInt = 0;
     private Image roomImg;
-    private int i = 0;
     private Image img;
     private List<Thing> things = new ArrayList<>();
     private Logic l = new Logic(this);
@@ -72,14 +75,13 @@ public class Katteknappeklikkeren2 extends JFrame{
     
 
     public void start() {
-        i = 0;
         changeBackground("img/room1.png");
+        l.toMid();
         Timer timer = new Timer(1000 / 200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 things.clear();
                 l.tick();
-                i++;
                 //((Timer) e.getSource()).stop(); // TODO: stop timer
             }
         });
@@ -98,6 +100,13 @@ public class Katteknappeklikkeren2 extends JFrame{
                 pressedKeys.remove(e.getKeyCode());
                 l.keys(pressedKeys);
             }
+        });
+
+        this.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            l.mouseClicked(e.getX(), e.getY());
+        }
         });
         this.requestFocusInWindow();
     }

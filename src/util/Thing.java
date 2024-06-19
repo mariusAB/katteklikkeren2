@@ -10,6 +10,7 @@ public class Thing {
     private int hitBox;
     private boolean isFriendly;
     private Logic l;
+    private double rotation = 0.0;
 
     public Thing(int x, int y, int hitBox, boolean isFriendly, Logic l) {
         this.x = x;
@@ -25,6 +26,7 @@ public class Thing {
         this.vx = vx;
         this.vy = vy;
         this.l = l;
+        rotation = Math.toDegrees(Math.atan2(vy, vx));
     }
 
     public void setCurrRoom(Room c) {
@@ -41,6 +43,10 @@ public class Thing {
 
     public int getHitBox() {
         return hitBox;
+    }
+
+    public double getRotation() {
+        return rotation;
     }
 
     public boolean isFriendly() {

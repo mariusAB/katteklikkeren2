@@ -56,6 +56,10 @@ public class Logic {
         return currRoom;
     }
 
+    public Thing getMain() {
+        return main;
+    }
+
     public void toMid() {
         main.setX(k.getSize().width / 2);
         main.setY(k.getSize().height / 2);

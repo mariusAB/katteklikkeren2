@@ -12,6 +12,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -106,6 +107,8 @@ public class Katteknappeklikkeren2 extends JFrame{
         @Override
         public void mousePressed(MouseEvent e) {
             l.mouseClicked(e.getX(), e.getY());
+            System.out.println("Mouse pressed at: " + e.getX() + ", " + e.getY());
+            System.out.println("Main at: " + l.getMain().getX() + ", " + l.getMain().getY());
         }
         });
         
@@ -127,19 +130,23 @@ public class Katteknappeklikkeren2 extends JFrame{
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
                 Image scaledImage = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
-                g.drawImage(scaledImage, 0, 0, this);
+                g2d.drawImage(scaledImage, 0, 0, this);
                 for (int i = 0; i < things.size(); i++) {
                     try {
                         img = ImageIO.read(new File(things.get(i).getPath()));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    double widthScale = (double) game.getWidth() / img.getWidth(null);
-                    double heightScale = (double) game.getHeight() / img.getHeight(null);
+                    double widthScale = (double) img.getWidth(null) / game.getWidth();
+                    double heightScale = (double) img.getHeight(null) / game.getHeight();
                     double scale = Math.min(widthScale, heightScale);
-                    Image sImg = img.getScaledInstance((int) (scale*3), (int) (scale*3), Image.SCALE_SMOOTH);
-                    g.drawImage(sImg, things.get(i).getX(), things.get(i).getY(), this);
+                    Image sImg = img.getScaledInstance((int) (scale*2500), (int) (scale*2500), Image.SCALE_SMOOTH);
+                    AffineTransform old = g2d.getTransform();
+                    g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX() + sImg.getWidth(null)/2, things.get(i).getY() + sImg.getHeight(null)/2);
+                    g2d.drawImage(sImg, things.get(i).getX()-sImg.getWidth(null)/2, things.get(i).getY()-sImg.getHeight(null)/2, this);
+                    g2d.setTransform(old);
                 }
             }
             @Override

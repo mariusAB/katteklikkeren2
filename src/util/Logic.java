@@ -18,7 +18,7 @@ public class Logic {
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Thing(0,0,10);
+        main = new Thing(0,0,10, true);
         main.setPath("img/icon.png");
         k.addImage(main);
         activeThings.add(main);
@@ -34,15 +34,19 @@ public class Logic {
         while (iterator.hasNext()) {
             Projectile p = iterator.next();
             if (p.isHoming()) {
+                // Using the radius of the projectile as the hitbox
+                if (Math.sqrt(Math.pow(p.getX() - main.getX(), 2) + Math.pow(p.getY() - main.getY(), 2)) < p.getHitBox()){
+                    iterator.remove();
+                }
                 p.homeTick(main, k.getWidth(), k.getHeight());
-                if (p.getX() - main.getX() < main.getHitBox() && p.getY() - main.getY() < 10) {
-                    iterator.remove();
+            }
+            else {
+                for (Thing t : activeThings) {
+                    if (!t.isFriendly() && Math.sqrt(Math.pow(p.getX() - t.getX(), 2) + Math.pow(p.getY() - t.getY(), 2)) < p.getHitBox()){
+                        iterator.remove();
+                    }
                 }
-            } else {
                 p.tick();
-                if (p.getX() - main.getX() < main.getHitBox() && p.getY() - main.getY() < 10) {
-                    iterator.remove();
-                }
             }
             k.addImage(p);
         }
@@ -77,7 +81,7 @@ public class Logic {
         int vx = x - main.getX();
         int vy = y - main.getY();
         Staff s = new Staff(this);
-        s.use(main.getX(), main.getY(), vx, vy, true);
+        s.use(main.getX(), main.getY(), vx, vy, false);
     }
 
     public void addProjectile(Projectile p) {

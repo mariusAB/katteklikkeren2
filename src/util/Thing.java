@@ -8,10 +8,13 @@ public class Thing {
     private int speed;
     private Room currRoom = new Room();
     private int hitBox;
+    private boolean isFriendly;
 
-    public Thing(int x, int y, int hitBox) {
+    public Thing(int x, int y, int hitBox, boolean isFriendly) {
         this.x = x;
         this.y = y;
+        this.hitBox = hitBox;
+        this.isFriendly = isFriendly;
     }
 
     public Thing(int x, int y, int vx, int vy) {
@@ -35,6 +38,10 @@ public class Thing {
 
     public int getHitBox() {
         return hitBox;
+    }
+
+    public boolean isFriendly() {
+        return isFriendly;
     }
 
     public void moveX(int x, int w, int h) {

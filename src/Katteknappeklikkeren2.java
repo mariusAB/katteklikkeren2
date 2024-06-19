@@ -9,6 +9,8 @@ import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.io.IOException;
 
+// TODO: fjern blit når man starter spillet
+
 public class Katteknappeklikkeren2 extends JFrame{
     private CardLayout scenes = new CardLayout();
     private boolean running = true;
@@ -18,8 +20,11 @@ public class Katteknappeklikkeren2 extends JFrame{
     private JPanel menu = new JPanel();
     private JPanel settings = new JPanel();
     private JPanel stats = new JPanel();
+    private JPanel game = new JPanel();
     private Image backgroundImage;
     private int monKilInt = 0;
+    private Image roomImg;
+    private int i = 0;
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -45,6 +50,7 @@ public class Katteknappeklikkeren2 extends JFrame{
         menu(menu, panel);
         settings(settings, panel);
         stats(stats, panel);
+        panel.add(game, "Game");
         panel.add(menu, "Menu");
         panel.add(settings, "Settings");
         panel.add(stats, "Stats");
@@ -54,15 +60,69 @@ public class Katteknappeklikkeren2 extends JFrame{
     
 
     public void start() {
-        while (running) {
-            // update();
-            // repaint();
-            try {
-                Thread.sleep(1000 / 60);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+        Logic l = new Logic();
+        i = 0;
+        Timer timer = new Timer(1000 / 60, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                l.tick();
+                changeBackground("img/room1.png");
+                addImage("img/icon.png", i, 100);
+                i++;
+                //if (i > 100) {
+                //    ((Timer) e.getSource()).stop();
+                //}
+            }
+        });
+        timer.start();
+    }
+
+    public void changeBackground(String path) {
+        try {
+            roomImg = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        class Background extends JPanel {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image scaledImage = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
+                g.drawImage(scaledImage, 0, 0, this);
+            }
+
+            @Override
+            public Dimension getPreferredSize() {
+                if (roomImg != null) {
+                    return new Dimension(game.getWidth(), game.getHeight());
+                }
+                return super.getPreferredSize();
             }
         }
+        Background background = new Background();
+        game.add(background);
+        game.revalidate();
+        game.repaint();
+    }
+
+    public void addImage(String path, int x, int y) { //, Thing t) {
+        try {
+            Image i = ImageIO.read(new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        class Item extends JPanel {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(roomImg, x, y, this);
+            }
+        }
+        Item item = new Item();
+        game.add(item);
+        game.revalidate();
+        game.repaint();
     }
 
     public void resized() {
@@ -107,6 +167,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 scenes.show(panel, "Game");
                 currentScene = "Game";
+                start();
             }
         });
         menu.add(startButton);
@@ -187,6 +248,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             }
         });
         s.add(fullScreen);
+        s.setOpaque(false);
     }
 
     private void stats(JPanel s, JPanel p) {
@@ -216,6 +278,7 @@ public class Katteknappeklikkeren2 extends JFrame{
         monKil.setAlignmentX(Component.CENTER_ALIGNMENT);
         monKil.setBorder(b);
         s.add(monKil);
+        s.setOpaque(false);
     }
 
     private void formatButton(JButton b) {
@@ -269,8 +332,6 @@ public class Katteknappeklikkeren2 extends JFrame{
                         frame.resized();
                     }
                 });
-
-                // frame.start();
             }
         });
     }

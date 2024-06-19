@@ -104,10 +104,11 @@ public class Katteknappeklikkeren2 extends JFrame{
 
         this.addMouseListener(new MouseAdapter() {
         @Override
-        public void mouseClicked(MouseEvent e) {
+        public void mousePressed(MouseEvent e) {
             l.mouseClicked(e.getX(), e.getY());
         }
         });
+        
         this.requestFocusInWindow();
     }
 

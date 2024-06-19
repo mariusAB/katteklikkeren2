@@ -3,9 +3,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import java.util.Iterator;
-
 import weapons.Staff;
 
 public class Logic {
@@ -13,12 +11,12 @@ public class Logic {
     private Katteknappeklikkeren2 k;
     private Thing main;
     private Set<Integer> keys;
-    private List<Projectile> projectiles = new ArrayList<Projectile>();
     private Room currRoom = new Room();
+    private List<Thing> toRemove = new ArrayList<Thing>();
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Thing(0,0,10, true);
+        main = new Thing(0,0,10, true, this);
         main.setPath("img/icon.png");
         k.addImage(main);
         activeThings.add(main);
@@ -26,30 +24,16 @@ public class Logic {
     }
 
     public void tick() {
-        for (Thing thing : activeThings) {
-            thing.tick();
-            k.addImage(thing);
-        }
-        Iterator<Projectile> iterator = projectiles.iterator();
+        Iterator<Thing> iterator = activeThings.iterator();
         while (iterator.hasNext()) {
-            Projectile p = iterator.next();
-            if (p.isHoming()) {
-                // Using the radius of the projectile as the hitbox
-                if (Math.sqrt(Math.pow(p.getX() - main.getX(), 2) + Math.pow(p.getY() - main.getY(), 2)) < p.getHitBox()){
-                    iterator.remove();
-                }
-                p.homeTick(main, k.getWidth(), k.getHeight());
-            }
-            else {
-                for (Thing t : activeThings) {
-                    if (!t.isFriendly() && Math.sqrt(Math.pow(p.getX() - t.getX(), 2) + Math.pow(p.getY() - t.getY(), 2)) < p.getHitBox()){
-                        iterator.remove();
-                    }
-                }
-                p.tick();
-            }
-            k.addImage(p);
+            Thing t = iterator.next();
+            t.tick(k.getWidth(), k.getHeight());
+            k.addImage(t);
         }
+        for (Thing t : toRemove) {
+            activeThings.remove(t);
+        }
+        toRemove.clear();
         if (keys != null) {
             if (keys.contains(KeyEvent.VK_A)) {
                 main.moveX(-main.getSpeed(), k.getWidth(), k.getHeight());
@@ -81,15 +65,18 @@ public class Logic {
         int vx = x - main.getX();
         int vy = y - main.getY();
         Staff s = new Staff(this);
-        s.use(main.getX(), main.getY(), vx, vy, false);
+        if (vx == 0 && vy == 0) {
+            vx = 1;
+        }
+        s.use(main.getX(), main.getY(), vx, vy);
     }
 
-    public void addProjectile(Projectile p) {
-        projectiles.add(p);
+    public void addProjectile(Thing p) {
+        activeThings.add(p);
     }
 
-    public void removeProjectile(Projectile p) {
-        projectiles.remove(p);
+    public void removeProjectile(Thing p) {
+        activeThings.remove(p);
     }
 
     public void keys(Set<Integer> keys) {
@@ -105,7 +92,7 @@ public class Logic {
     }
 
     public void removeThing(Thing thing) {
-        activeThings.remove(thing);
+        toRemove.add(thing);
     }
 
     public void resize(int prevWidth, int prevHeight, int width, int height) {

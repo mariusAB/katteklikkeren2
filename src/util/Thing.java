@@ -9,19 +9,22 @@ public class Thing {
     private Room currRoom = new Room();
     private int hitBox;
     private boolean isFriendly;
+    private Logic l;
 
-    public Thing(int x, int y, int hitBox, boolean isFriendly) {
+    public Thing(int x, int y, int hitBox, boolean isFriendly, Logic l) {
         this.x = x;
         this.y = y;
         this.hitBox = hitBox;
         this.isFriendly = isFriendly;
+        this.l = l;
     }
 
-    public Thing(int x, int y, int vx, int vy) {
+    public Thing(int x, int y, int vx, int vy, boolean isFriendly, Logic l) {
         this.x = x;
         this.y = y;
         this.vx = vx;
         this.vy = vy;
+        this.l = l;
     }
 
     public void setCurrRoom(Room c) {
@@ -100,8 +103,13 @@ public class Thing {
         speed = speed * width / prevWidth;
     }
 
-    public void tick() {
-        x += vx;
-        y += vy;
+    public void tick(int w, int h) {
+        if (currRoom.canMove(x + vx, y + vy, w, h)) {
+            x += vx;
+            y += vy;
+        }
+        else {
+            l.removeThing(this);
+        }
     }
 }

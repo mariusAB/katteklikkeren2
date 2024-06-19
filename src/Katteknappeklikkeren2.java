@@ -15,9 +15,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-// TODO: fjern blit når man starter spillet
-// TODO: fiks størrelsesforhold på bilder
-
 public class Katteknappeklikkeren2 extends JFrame{
     private CardLayout scenes = new CardLayout();
     private int width = 1200;
@@ -39,6 +36,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private int i = 0;
     private Image img;
     private List<Thing> things = new ArrayList<>();
+    private Logic l = new Logic(this);
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -74,7 +72,6 @@ public class Katteknappeklikkeren2 extends JFrame{
     
 
     public void start() {
-        Logic l = new Logic(this);
         i = 0;
         changeBackground("img/room1.png");
         Timer timer = new Timer(1000 / 200, new ActionListener() {
@@ -114,11 +111,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     }
 
     public void addImage(Thing t) {
-        try {
-            img = ImageIO.read(new File(t.getPath()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
         things.add(t);
         class Item extends JPanel {
             @Override
@@ -127,7 +120,16 @@ public class Katteknappeklikkeren2 extends JFrame{
                 Image scaledImage = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
                 g.drawImage(scaledImage, 0, 0, this);
                 for (int i = 0; i < things.size(); i++) {
-                    g.drawImage(img, things.get(i).getX(), things.get(i).getY(), this);
+                    try {
+                        img = ImageIO.read(new File(t.getPath()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    double widthScale = (double) game.getWidth() / img.getWidth(null);
+                    double heightScale = (double) game.getHeight() / img.getHeight(null);
+                    double scale = Math.min(widthScale, heightScale);
+                    Image sImg = img.getScaledInstance((int) (scale*3), (int) (scale*3), Image.SCALE_SMOOTH);
+                    g.drawImage(sImg, things.get(i).getX(), things.get(i).getY(), this);
                 }
             }
             @Override
@@ -164,6 +166,9 @@ public class Katteknappeklikkeren2 extends JFrame{
                     c.setFont(f.deriveFont((float) width*height/num));
                 }
             }
+        }
+        else {
+            l.resize(prevWidth, prevHeight, width, height);
         }
 
     }

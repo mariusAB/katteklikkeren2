@@ -15,6 +15,7 @@ public class Logic {
         main = new Thing(k.getSize().width / 2, k.getSize().height / 2);
         k.addImage(main);
         activeThings.add(main);
+        main.setSpeed(15);
     }
 
     public void tick() {
@@ -25,16 +26,16 @@ public class Logic {
         i++;
         if (keys != null) {
             if (keys.contains(KeyEvent.VK_A)) {
-                main.moveX(-10);
+                main.moveX(-main.getSpeed());
             }
             if (keys.contains(KeyEvent.VK_D)) {
-                main.moveX(10);
+                main.moveX(main.getSpeed());
             }
             if (keys.contains(KeyEvent.VK_W)) {
-                main.moveY(-10);
+                main.moveY(-main.getSpeed());
             }
             if (keys.contains(KeyEvent.VK_S)) {
-                main.moveY(10);
+                main.moveY(main.getSpeed());
             }
         }
     }
@@ -53,5 +54,11 @@ public class Logic {
 
     public void removeThing(Thing thing) {
         activeThings.remove(thing);
+    }
+
+    public void resize(int prevWidth, int prevHeight, int width, int height) {
+        for (Thing thing : activeThings) {
+            thing.resize(prevWidth, prevHeight, width, height);
+        }
     }
 }

@@ -6,29 +6,43 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 // TODO: fjern blit når man starter spillet
+// TODO: fiks størrelsesforhold på bilder
 
 public class Katteknappeklikkeren2 extends JFrame{
     private CardLayout scenes = new CardLayout();
-    private boolean running = true;
     private int width = 1200;
     private int height = 800;
     private String currentScene = "Menu";
     private JPanel menu = new JPanel();
     private JPanel settings = new JPanel();
     private JPanel stats = new JPanel();
-    private JPanel game = new JPanel();
+    private JPanel game = new JPanel() {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
+        }
+    };
     private Image backgroundImage;
     private int monKilInt = 0;
     private Image roomImg;
     private int i = 0;
+    private Image img;
+    private List<Thing> things = new ArrayList<>();
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
-            backgroundImage = ImageIO.read(new File("img/vinn.png"));
+            backgroundImage = ImageIO.read(new File("img/mainscreen.png"));
             setIconImage(ImageIO.read(new File("img/icon.png")));
         } catch (IOException e) {
             e.printStackTrace();
@@ -60,21 +74,35 @@ public class Katteknappeklikkeren2 extends JFrame{
     
 
     public void start() {
-        Logic l = new Logic();
+        Logic l = new Logic(this);
         i = 0;
-        Timer timer = new Timer(1000 / 60, new ActionListener() {
+        changeBackground("img/room1.png");
+        Timer timer = new Timer(1000 / 200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                things.clear();
                 l.tick();
-                changeBackground("img/room1.png");
-                addImage("img/icon.png", i, 100);
                 i++;
-                //if (i > 100) {
-                //    ((Timer) e.getSource()).stop();
-                //}
+                //((Timer) e.getSource()).stop(); // TODO: stop timer
             }
         });
         timer.start();
+        Set<Integer> pressedKeys = new HashSet<>();
+
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                pressedKeys.add(e.getKeyCode());
+                l.keys(pressedKeys);
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+                pressedKeys.remove(e.getKeyCode());
+                l.keys(pressedKeys);
+            }
+        });
+        this.requestFocusInWindow();
     }
 
     public void changeBackground(String path) {
@@ -83,44 +111,35 @@ public class Katteknappeklikkeren2 extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
-        class Background extends JPanel {
+    }
+
+    public void addImage(Thing t) {
+        try {
+            img = ImageIO.read(new File(t.getPath()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        things.add(t);
+        class Item extends JPanel {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Image scaledImage = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
                 g.drawImage(scaledImage, 0, 0, this);
+                for (int i = 0; i < things.size(); i++) {
+                    g.drawImage(img, things.get(i).getX(), things.get(i).getY(), this);
+                }
             }
-
             @Override
             public Dimension getPreferredSize() {
-                if (roomImg != null) {
-                    return new Dimension(game.getWidth(), game.getHeight());
-                }
-                return super.getPreferredSize();
-            }
-        }
-        Background background = new Background();
-        game.add(background);
-        game.revalidate();
-        game.repaint();
-    }
-
-    public void addImage(String path, int x, int y) { //, Thing t) {
-        try {
-            Image i = ImageIO.read(new File(path));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        class Item extends JPanel {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                g.drawImage(roomImg, x, y, this);
+                return new Dimension(game.getWidth(), game.getHeight());
             }
         }
         Item item = new Item();
-        game.add(item);
+        item.setOpaque(false);
+        game.removeAll();
+        game.setLayout(new BorderLayout());
+        game.add(item, BorderLayout.CENTER);
         game.revalidate();
         game.repaint();
     }

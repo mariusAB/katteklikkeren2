@@ -267,16 +267,21 @@ public class Thing {
     }
 
     private void enemyTick(int xMain, int yMain) {
-        int dx = xMain - x;
-        int dy = yMain - y;
+        double dx = xMain - x;
+        double dy = yMain - y;
         double s = Math.sqrt(dx*dx + dy*dy);
         if (s <= hitBox) {
             currRoom.queueRemove(this);
         }
-        dx = (int)(dx*speed/s);
-        dy = (int)(dy*speed/s);
-        this.x += dx;
-        this.y += dy;
         rotation = Math.toDegrees(Math.atan2(dy, dx));
+        double lerpFactor = speed / s;
+        dx = lerp(x, xMain, lerpFactor);
+        dy = lerp(y, yMain, lerpFactor);
+        this.x = (int) dx;
+        this.y = (int) dy;
+    }
+    
+    private double lerp(double start, double end, double t) {
+        return start + t * (end - start);
     }
 }

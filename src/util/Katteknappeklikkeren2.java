@@ -107,8 +107,6 @@ public class Katteknappeklikkeren2 extends JFrame{
         @Override
         public void mousePressed(MouseEvent e) {
             l.mouseClicked(e.getX(), e.getY()-58);
-            System.out.println("Mouse pressed at: " + e.getX() + ", " + e.getY());
-            System.out.println("Main at: " + l.getMain().getX() + ", " + l.getMain().getY());
         }
         });
         

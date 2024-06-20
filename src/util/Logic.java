@@ -7,7 +7,6 @@ import java.util.Iterator;
 import weapons.Staff;
 
 public class Logic {
-    private List<Thing> activeThings = new ArrayList<Thing>();
     private Katteknappeklikkeren2 k;
     private Thing main;
     private Set<Integer> keys;
@@ -16,22 +15,27 @@ public class Logic {
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Thing(0,0,10, true, this);
+        main = new Thing(0,0,10, true, currRoom);
         main.setPath("img/icon.png");
         k.addImage(main);
-        activeThings.add(main);
+        currRoom.addThing(main);
         main.setSpeed(7);
     }
 
     public void tick() {
-        Iterator<Thing> iterator = activeThings.iterator();
+        Iterator<Thing> iterator = currRoom.getThings().iterator();
         while (iterator.hasNext()) {
             Thing t = iterator.next();
             t.tick(k.getWidth(), k.getHeight());
             k.addImage(t);
         }
+        Iterator<Thing> iterator2 = currRoom.getObstacles().iterator();
+        while (iterator2.hasNext()) {
+            Thing t = iterator2.next();
+            k.addImage(t);
+        }
         for (Thing t : toRemove) {
-            activeThings.remove(t);
+            currRoom.removeThing(t);
         }
         toRemove.clear();
         if (keys != null) {
@@ -68,31 +72,15 @@ public class Logic {
     public void mouseClicked(int x, int y) {
         int vx = x - main.getX();
         int vy = y - main.getY();
-        Staff s = new Staff(this);
+        Staff s = new Staff(currRoom);
         if (vx == 0 && vy == 0) {
             vx = 1;
         }
         s.use(main.getX(), main.getY(), vx, vy);
     }
 
-    public void addProjectile(Thing p) {
-        activeThings.add(p);
-    }
-
-    public void removeProjectile(Thing p) {
-        activeThings.remove(p);
-    }
-
     public void keys(Set<Integer> keys) {
         this.keys = keys;
-    }
-
-    public List<Thing> getActiveThings() {
-        return new ArrayList<Thing>(activeThings);
-    }
-
-    public void addThing(Thing thing) {
-        activeThings.add(thing);
     }
 
     public void removeThing(Thing thing) {
@@ -100,7 +88,7 @@ public class Logic {
     }
 
     public void resize(int prevWidth, int prevHeight, int width, int height) {
-        for (Thing thing : activeThings) {
+        for (Thing thing : currRoom.getThings()) {
             thing.resize(prevWidth, prevHeight, width, height);
         }
     }

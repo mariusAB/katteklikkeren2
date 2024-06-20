@@ -1,11 +1,11 @@
 package weapons;
 
-import util.Logic;
+import util.Room;
 
 public class Weapon {
-    Logic l;
-    public Weapon(Logic l) {
-        this.l = l;
+    Room r;
+    public Weapon(Room r) {
+        this.r = r;
     }
     public void use() {
     }

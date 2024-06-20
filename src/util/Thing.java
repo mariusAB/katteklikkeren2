@@ -16,7 +16,7 @@ public class Thing {
     private Room currRoom;
     private int hitBox;
     private boolean isFriendly;
-    private Logic l;
+    private int rad;
     private double rotation = 0.0;
     private int originalSpeed;
     
@@ -38,10 +38,11 @@ public class Thing {
         currRoom = r;
     }
 
-    public Thing(int x, int y, int r) {
+    public Thing(int x, int y, int rad, Room r) {
         this.x = x;
         this.y = y;
-        this.hitBox = r;
+        this.rad = rad;
+        currRoom = r;
     }
 
     public int getX() {
@@ -50,6 +51,10 @@ public class Thing {
 
     public int getY() {
         return y;
+    }
+
+    public int getRad() {
+        return rad;
     }
 
     public int getHitBox() {
@@ -145,7 +150,7 @@ public class Thing {
             y += vy;
         }
         else {
-            currRoom.removeThing(this);
+            currRoom.queueRemove(this);
         }
     }
 }

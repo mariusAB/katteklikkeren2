@@ -28,6 +28,10 @@ public class Katteknappeklikkeren2 extends JFrame{
     private JPanel menu = new JPanel();
     private JPanel settings = new JPanel();
     private JPanel stats = new JPanel();
+    private JPanel gameOver = new JPanel();
+    private JPanel win = new JPanel();
+    private JPanel pause = new JPanel();
+    private List<JPanel> panels = new ArrayList<>();
     private JPanel game = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
@@ -42,6 +46,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private Logic l = new Logic(this);
     private String backPath;
     private boolean hasRun = false;
+    private Timer timer;
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -50,6 +55,12 @@ public class Katteknappeklikkeren2 extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        panels.add(menu);
+        panels.add(settings);
+        panels.add(stats);
+        panels.add(gameOver);
+        panels.add(win);
+        panels.add(pause);
         this.width = width;
         this.height = heigth;
         setSize(width, height);
@@ -67,10 +78,16 @@ public class Katteknappeklikkeren2 extends JFrame{
         menu(menu, panel);
         settings(settings, panel);
         stats(stats, panel);
+        gameOver(gameOver, panel);
+        win(win, panel);
+        pause(pause, panel);
         panel.add(game, "Game");
         panel.add(menu, "Menu");
         panel.add(settings, "Settings");
         panel.add(stats, "Stats");
+        panel.add(gameOver, "GameOver");
+        panel.add(win, "Win");
+        panel.add(pause, "Pause");
         scenes.show(panel, "Menu");
     }
 
@@ -79,7 +96,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     public void start() {
         changeBackground("img/room1.png");
         l.toMid();
-        Timer timer = new Timer(1000 / 200, new ActionListener() {
+        timer = new Timer(1000 / 100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 things.clear();
@@ -95,12 +112,18 @@ public class Katteknappeklikkeren2 extends JFrame{
                 public void keyPressed(KeyEvent e) {
                     pressedKeys.add(e.getKeyCode());
                     l.keys(pressedKeys);
-                }
+                    }
     
                 @Override
                 public void keyReleased(KeyEvent e) {
                     pressedKeys.remove(e.getKeyCode());
                     l.keys(pressedKeys);
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE && currentScene.equals("Game")) {
+                        pause();
+                    }
+                    else if (e.getKeyCode() == KeyEvent.VK_ESCAPE && currentScene.equals("Pause")) {
+                        unPause();
+                    }
                 }
             });
     
@@ -113,6 +136,25 @@ public class Katteknappeklikkeren2 extends JFrame{
             hasRun = true;
         }
         this.requestFocusInWindow();
+    }
+
+    public void pause() {
+        scenes.show(this.getContentPane(), "Pause");
+        currentScene = "Pause";
+        timer.stop();
+    }
+
+    public void unPause() {
+        scenes.show(this.getContentPane(), "Game");
+        currentScene = "Game";
+        timer.start();
+        this.requestFocusInWindow();
+    }
+
+    public void win(ActionEvent e) {
+        resetGame(e);
+        scenes.show(this.getContentPane(), "Win");
+        currentScene = "Win";
     }
 
     public void changeBackground(String path) {
@@ -162,18 +204,20 @@ public class Katteknappeklikkeren2 extends JFrame{
         width = this.getWidth();
         height = this.getHeight();
 
-        if (currentScene.equals("Menu") || currentScene.equals("Stats") || currentScene.equals("Settings")) {
-            for (Component c : menu.getComponents()) {
-                if (c instanceof JLabel) {
-                    Font f = c.getFont();
-                    int num = (int) prevWidth*prevHeight / f.getSize();
-                    c.setFont(f.deriveFont((float) width*height/num));
-                    ((JComponent) c).setBorder(new EmptyBorder(width*height / num, 0, width*height / num, 0));
-                }
-                else {
-                    Font f = c.getFont();
-                    int num = (int) prevWidth*prevHeight / f.getSize();
-                    c.setFont(f.deriveFont((float) width*height/num));
+        if (!currentScene.equals("Game")) {
+            for (JPanel p : panels) {
+                for (Component c : p.getComponents()) {
+                    if (c instanceof JLabel) {
+                        Font f = c.getFont();
+                        int num = (int) prevWidth*prevHeight / f.getSize();
+                        c.setFont(f.deriveFont((float) width*height/num));
+                        ((JComponent) c).setBorder(new EmptyBorder(width*height / num, 0, width*height / num, 0));
+                    }
+                    else {
+                        Font f = c.getFont();
+                        int num = (int) prevWidth*prevHeight / f.getSize();
+                        c.setFont(f.deriveFont((float) width*height/num));
+                    }
                 }
             }
         }
@@ -192,8 +236,8 @@ public class Katteknappeklikkeren2 extends JFrame{
 
     public void gameOver(ActionEvent e) {
         resetGame(e);
-        scenes.show(this.getContentPane(), "Menu");
-        currentScene = "Menu";
+        scenes.show(this.getContentPane(), "GameOver");
+        currentScene = "GameOver";
     }
 
     private void resetGame(ActionEvent e) {
@@ -331,6 +375,98 @@ public class Katteknappeklikkeren2 extends JFrame{
         monKil.setBorder(b);
         s.add(monKil);
         s.setOpaque(false);
+    }
+
+    private void gameOver(JPanel go, JPanel p) {
+        go.setLayout(new BoxLayout(go, BoxLayout.Y_AXIS));
+    
+        JLabel title = new JLabel("Game Over");
+        title.setFont(new Font("Rockwell", Font.BOLD, 40));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        EmptyBorder b = new EmptyBorder(15, 0, 30, 0);
+        title.setBorder(b);
+        go.add(title);
+
+        JButton goButton = new JButton("");
+        formatButton(goButton, 1);
+        goButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        goButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scenes.show(p, "Menu");
+                currentScene = "Menu";
+            }
+        });
+        go.add(goButton);
+        go.setOpaque(false);
+    }
+
+    private void win(JPanel w, JPanel p) {
+        w.setLayout(new BoxLayout(w, BoxLayout.Y_AXIS));
+    
+        JLabel title = new JLabel("You win!");
+        title.setFont(new Font("Rockwell", Font.BOLD, 40));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        EmptyBorder b = new EmptyBorder(15, 0, 30, 0);
+        title.setBorder(b);
+        w.add(title);
+
+        JButton wButton = new JButton("");
+        formatButton(wButton, 1);
+        wButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        wButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scenes.show(p, "Menu");
+                currentScene = "Menu";
+            }
+        });
+        w.add(wButton);
+        w.setOpaque(false);
+    }
+
+    private void pause(JPanel p, JPanel panel) {
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+    
+        JLabel title = new JLabel("Paused");
+        title.setFont(new Font("Rockwell", Font.BOLD, 40));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        EmptyBorder b = new EmptyBorder(15, 0, 30, 0);
+        title.setBorder(b);
+        p.add(title);
+
+        JButton pButton = new JButton("");
+        formatButton(pButton, 1);
+        pButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        pButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                unPause();
+            }
+        });
+        p.add(pButton);
+
+        JLabel space = new JLabel("");
+        space.setFont(new Font("Rockwell", Font.BOLD, 10));
+        space.setAlignmentX(Component.CENTER_ALIGNMENT);
+        space.setBorder(b);
+        p.add(space);
+        
+        JButton menuButton = new JButton("Main menu (resets run)");
+        formatButton(menuButton);
+        menuButton.setFont(new Font("Rockwell", Font.PLAIN, 20));
+        menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        menuButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                scenes.show(panel, "Menu");
+                currentScene = "Menu";
+                resetGame(e);
+            }
+        });
+        p.add(menuButton);
+
+        p.setOpaque(false);
     }
 
     private void formatButton(JButton b) {

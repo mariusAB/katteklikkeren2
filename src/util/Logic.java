@@ -11,7 +11,7 @@ public class Logic {
     private Katteknappeklikkeren2 k;
     private Thing main;
     private Set<Integer> keys;
-    private Room currRoom = new Room();
+    private Room currRoom = new Room(this);
     private List<Thing> toRemove = new ArrayList<Thing>();
 
     public Logic(Katteknappeklikkeren2 k) {
@@ -20,7 +20,7 @@ public class Logic {
         main.setPath("img/icon.png");
         k.addImage(main);
         activeThings.add(main);
-        main.setSpeed(15);
+        main.setSpeed(7);
     }
 
     public void tick() {

@@ -38,9 +38,9 @@ public class Katteknappeklikkeren2 extends JFrame{
     private Image backgroundImage;
     private int monKilInt = 0;
     private Image roomImg;
-    private Image img;
     private List<Thing> things = new ArrayList<>();
     private Logic l = new Logic(this);
+    private String backPath;
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -106,7 +106,7 @@ public class Katteknappeklikkeren2 extends JFrame{
         this.addMouseListener(new MouseAdapter() {
         @Override
         public void mousePressed(MouseEvent e) {
-            l.mouseClicked(e.getX(), e.getY());
+            l.mouseClicked(e.getX(), e.getY()-58);
             System.out.println("Mouse pressed at: " + e.getX() + ", " + e.getY());
             System.out.println("Main at: " + l.getMain().getX() + ", " + l.getMain().getY());
         }
@@ -117,7 +117,9 @@ public class Katteknappeklikkeren2 extends JFrame{
 
     public void changeBackground(String path) {
         try {
+            backPath = path;
             roomImg = ImageIO.read(new File(path));
+            roomImg = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -131,21 +133,12 @@ public class Katteknappeklikkeren2 extends JFrame{
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                Image scaledImage = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
-                g2d.drawImage(scaledImage, 0, 0, this);
+                g2d.drawImage(roomImg, 0, 0, this);
                 for (int i = 0; i < things.size(); i++) {
-                    try {
-                        img = ImageIO.read(new File(things.get(i).getPath()));
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    double widthScale = (double) img.getWidth(null) / game.getWidth();
-                    double heightScale = (double) img.getHeight(null) / game.getHeight();
-                    double scale = Math.min(widthScale, heightScale);
-                    Image sImg = img.getScaledInstance((int) (scale*2500), (int) (scale*2500), Image.SCALE_SMOOTH);
+                    Image img = things.get(i).getImg(game.getWidth(), game.getHeight());
                     AffineTransform old = g2d.getTransform();
-                    g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX() + sImg.getWidth(null)/2, things.get(i).getY() + sImg.getHeight(null)/2);
-                    g2d.drawImage(sImg, things.get(i).getX()-sImg.getWidth(null)/2, things.get(i).getY()-sImg.getHeight(null)/2, this);
+                    g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX() + img.getWidth(null)/2, things.get(i).getY() + img.getHeight(null)/2);
+                    g2d.drawImage(img, things.get(i).getX(), things.get(i).getY(), this);
                     g2d.setTransform(old);
                 }
             }
@@ -186,6 +179,14 @@ public class Katteknappeklikkeren2 extends JFrame{
         }
         else {
             l.resize(prevWidth, prevHeight, width, height);
+            try {
+                roomImg = ImageIO.read(new File(backPath));
+                roomImg = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            game.revalidate();
+            game.repaint();
         }
 
     }

@@ -1,4 +1,11 @@
 package util;
+
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+import java.awt.Image;
+
 public class Thing {
     private int x = 0;
     private int y = 0;
@@ -6,31 +13,35 @@ public class Thing {
     private int vy = 0;
     private String path = "img/icon.png";
     private int speed;
-    private Room currRoom = new Room();
+    private Room currRoom;
     private int hitBox;
     private boolean isFriendly;
     private Logic l;
     private double rotation = 0.0;
+    private int originalSpeed;
+    
 
-    public Thing(int x, int y, int hitBox, boolean isFriendly, Logic l) {
+    public Thing(int x, int y, int hitBox, boolean isFriendly, Room r) {
         this.x = x;
         this.y = y;
         this.hitBox = hitBox;
         this.isFriendly = isFriendly;
-        this.l = l;
+        currRoom = r;
     }
 
-    public Thing(int x, int y, int vx, int vy, boolean isFriendly, Logic l) {
+    public Thing(int x, int y, int vx, int vy, boolean isFriendly, Room r) {
         this.x = x;
         this.y = y;
         this.vx = vx;
         this.vy = vy;
-        this.l = l;
         rotation = Math.toDegrees(Math.atan2(vy, vx));
+        currRoom = r;
     }
 
-    public void setCurrRoom(Room c) {
-        this.currRoom = c;
+    public Thing(int x, int y, int r) {
+        this.x = x;
+        this.y = y;
+        this.hitBox = r;
     }
 
     public int getX() {
@@ -79,6 +90,24 @@ public class Thing {
         this.y = y;
     }
 
+    public Image getImg(int w, int h) {
+        try {
+            Image img = ImageIO.read(new File(getPath()));
+            int originalWidth = img.getWidth(null);
+            int originalHeight = img.getHeight(null);
+            double widthScale = (double) w / originalWidth;
+            double heightScale = (double) h / originalHeight;
+            double scale = Math.min(widthScale, heightScale);
+            int scaledWidth = (int) (originalWidth * scale);
+            int scaledHeight = (int) (originalHeight * scale);
+            Image sImg = img.getScaledInstance(scaledWidth/15, scaledHeight/15, Image.SCALE_SMOOTH);
+            return sImg;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String getPath() {
         return path;
     }
@@ -96,6 +125,7 @@ public class Thing {
     }
 
     public void setSpeed(int speed) {
+        this.originalSpeed = speed;
         this.speed = speed;
     }
 
@@ -106,7 +136,7 @@ public class Thing {
     public void resize(int prevWidth, int prevHeight, int width, int height) {
         x = x * width / prevWidth;
         y = y * height / prevHeight;
-        speed = speed * width / prevWidth;
+        speed = originalSpeed * width / 1700;
     }
 
     public void tick(int w, int h) {
@@ -115,7 +145,7 @@ public class Thing {
             y += vy;
         }
         else {
-            l.removeThing(this);
+            currRoom.removeThing(this);
         }
     }
 }

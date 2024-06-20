@@ -41,6 +41,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private List<Thing> things = new ArrayList<>();
     private Logic l = new Logic(this);
     private String backPath;
+    private boolean hasRun = false;
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -83,33 +84,34 @@ public class Katteknappeklikkeren2 extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 things.clear();
                 l.tick();
-                //((Timer) e.getSource()).stop(); // TODO: stop timer
+                l.giveSource(e);
             }
         });
         timer.start();
         Set<Integer> pressedKeys = new HashSet<>();
-
-        this.addKeyListener(new KeyAdapter() {
+        if (!hasRun) {
+            this.addKeyListener(new KeyAdapter() {
+                @Override
+                public void keyPressed(KeyEvent e) {
+                    pressedKeys.add(e.getKeyCode());
+                    l.keys(pressedKeys);
+                }
+    
+                @Override
+                public void keyReleased(KeyEvent e) {
+                    pressedKeys.remove(e.getKeyCode());
+                    l.keys(pressedKeys);
+                }
+            });
+    
+            this.addMouseListener(new MouseAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
-                pressedKeys.add(e.getKeyCode());
-                l.keys(pressedKeys);
+            public void mousePressed(MouseEvent e) {
+                l.mouseClicked(e.getX(), e.getY()-58);
             }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-                pressedKeys.remove(e.getKeyCode());
-                l.keys(pressedKeys);
-            }
-        });
-
-        this.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mousePressed(MouseEvent e) {
-            l.mouseClicked(e.getX(), e.getY()-58);
+            });
+            hasRun = true;
         }
-        });
-        
         this.requestFocusInWindow();
     }
 
@@ -186,7 +188,17 @@ public class Katteknappeklikkeren2 extends JFrame{
             game.revalidate();
             game.repaint();
         }
+    }
 
+    public void gameOver(ActionEvent e) {
+        resetGame(e);
+        scenes.show(this.getContentPane(), "Menu");
+        currentScene = "Menu";
+    }
+
+    private void resetGame(ActionEvent e) {
+        l = new Logic(this);
+        ((Timer) e.getSource()).stop();
     }
 
     private void menu(JPanel menu, JPanel panel) {

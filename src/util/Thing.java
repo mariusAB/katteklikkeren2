@@ -29,6 +29,7 @@ public class Thing {
     private Image rightImg;
     private int health = 100;
     private int dmg;
+    private boolean isMain = false;
     
 
     public Thing(int x, int y, int hitBox, boolean isFriendly, Room r) {
@@ -95,6 +96,11 @@ public class Thing {
         return isFriendly;
     }
 
+    public void setMain() {
+        setDirectional();
+        isMain = true;
+    }
+
     public void moveX(int x, int w, int h) {
         for (int i = 0; i < speed; i++) {
             if (currRoom.canMove(this.x + x - i, y, w, h)) {
@@ -124,7 +130,12 @@ public class Thing {
     public void damage(int dmg) {
         health -= dmg;
         if (health <= 0) {
-            currRoom.queueRemove(this);
+            if (isMain) {
+                currRoom.gameOver();
+            }
+            else {
+                currRoom.queueRemove(this);
+            }
         }
     }
 

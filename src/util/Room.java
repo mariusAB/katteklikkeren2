@@ -15,7 +15,7 @@ public class Room {
         addObstacle(obstacle);
         this.l = l;
 
-        Thing enemy = new Thing(500, 20, 20, 5, 25, 50, this);
+        Thing enemy = new Thing(500, 20, 20, 2, 25, 50, this);
         enemy.setPath("img/icon.png");
         addEnemy(enemy);
 
@@ -71,6 +71,10 @@ public class Room {
 
     public void damageMain(int dmg) {
         l.getMain().damage(dmg);
+    }
+
+    public void gameOver() {
+        l.gameOver();
     }
 
     public List<Thing> getThings() {

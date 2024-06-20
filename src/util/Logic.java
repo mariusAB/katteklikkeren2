@@ -1,4 +1,5 @@
 package util;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +13,13 @@ public class Logic {
     private Set<Integer> keys;
     private Room currRoom = new Room(this);
     private List<Thing> toRemove = new ArrayList<Thing>();
+    private ActionEvent source;
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
         main = new Thing(0,0,10, true, currRoom);
         main.setPaths("img/venstrefly.png", "img/icon.png");
-        main.setDirectional();
+        main.setMain();
         k.addImage(main);
         currRoom.addThing(main);
         main.setSpeed(7);
@@ -29,7 +31,6 @@ public class Logic {
             Thing t = iterator.next();
             t.tick(k.getWidth(), k.getHeight());
             k.addImage(t);
-            System.out.println(main.getHealth());
         }
         Iterator<Thing> iterator2 = currRoom.getObstacles().iterator();
         while (iterator2.hasNext()) {
@@ -69,6 +70,14 @@ public class Logic {
 
     public Thing getMain() {
         return main;
+    }
+
+    public void giveSource(ActionEvent e) {
+        source = e;
+    }
+
+    public void gameOver() {
+        k.gameOver(source);
     }
 
     public void toMid() {

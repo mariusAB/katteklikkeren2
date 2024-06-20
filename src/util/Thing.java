@@ -27,7 +27,7 @@ public class Thing {
     private boolean isDirectional = false;
     private Image leftImg;
     private Image rightImg;
-    private int health = 100;
+    private int health = 101;
     private int dmg;
     private boolean isMain = false;
     
@@ -152,44 +152,8 @@ public class Thing {
     }
 
     public Image getImg(int w, int h) {
-        if (!initiated) {
-            updateImage(w, h);
-            if (isDirectional) {
-                initiateDirectional(w, h);
-            }
-            initiated = true;
-        }
-        return img;
-    }
-
-    public void updateImage(int w, int h) {
-        img = scaleImage(w, h);
-    }
-
-    private void initiateDirectional(int w, int h) {
-        setPath(path1);
-        leftImg = scaleImage(w, h);
-        setPath(path2);
-        rightImg = scaleImage(w, h);
-    }
-
-    public void updateImages(int w, int h) {
-        leftImg = scaleImage(w, h);
-        rightImg = scaleImage(w, h);
-    }
-  
-    private Image scaleImage(int w, int h) {
         try {
-            Image tempImg = ImageIO.read(new File(getPath()));
-            int originalWidth = tempImg.getWidth(null);
-            int originalHeight = tempImg.getHeight(null);
-            double widthScale = (double) w / originalWidth;
-            double heightScale = (double) h / originalHeight;
-            double scale = Math.min(widthScale, heightScale);
-            int scaledWidth = (int) (originalWidth * scale);
-            int scaledHeight = (int) (originalHeight * scale);
-            tempImg = tempImg.getScaledInstance(scaledWidth/15, scaledHeight/15, Image.SCALE_SMOOTH);
-            return tempImg;
+            return currRoom.getImageHandler().getImage(path, w, h);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -244,12 +208,7 @@ public class Thing {
         x = x * width / prevWidth;
         y = y * height / prevHeight;
         speed = originalSpeed * width / 1700;
-        if (isDirectional) {
-            updateImages(width, height);
-        }
-        else {
-            updateImage(width, height);
-        }
+        currRoom.getImageHandler().resize(width, height);
     }
 
     public void tick(int w, int h) {

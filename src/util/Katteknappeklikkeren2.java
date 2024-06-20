@@ -168,7 +168,6 @@ public class Katteknappeklikkeren2 extends JFrame{
     }
 
     public void addImage(Thing t) {
-
         things.add(t);
         class Item extends JPanel {
             @Override
@@ -191,10 +190,8 @@ public class Katteknappeklikkeren2 extends JFrame{
         }
         Item item = new Item();
         item.setOpaque(false);
-        game.removeAll();
         game.setLayout(new BorderLayout());
         game.add(item, BorderLayout.CENTER);
-        game.revalidate();
         game.repaint();
     }
 

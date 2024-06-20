@@ -1,4 +1,5 @@
 package util;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Logic {
     private Room currRoom = new Room(this);
     private List<Thing> toRemove = new ArrayList<Thing>();
     private ActionEvent source;
+    private ImageHandler ih;
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
@@ -23,6 +25,7 @@ public class Logic {
         k.addImage(main);
         currRoom.addThing(main);
         main.setSpeed(7);
+        ih = new ImageHandler();
     }
 
     public void tick() {
@@ -62,6 +65,10 @@ public class Logic {
                 main.moveY(main.getSpeed(), k.getWidth(), k.getHeight());
             }
         }
+    }
+
+    public ImageHandler getImageHandler() {
+        return ih;
     }
 
     public Room getRoom() {

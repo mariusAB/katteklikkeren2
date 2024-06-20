@@ -1,4 +1,5 @@
 package util;
+import java.awt.Image;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ public class Room {
     private List<Thing> enemies = new ArrayList<>();
     private double margin = 0.03;
     private Logic l;
+    ;
 
     public Room(Logic l) {
         Thing obstacle = new Thing(100, 100, 50, this);
@@ -42,6 +44,10 @@ public class Room {
 
     public void queueRemove(Thing t) {
         l.removeThing(t);
+    }
+
+    public ImageHandler getImageHandler() {
+        return l.getImageHandler();
     }
 
     public void kill(Thing t) {

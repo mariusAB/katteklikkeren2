@@ -19,6 +19,16 @@ public class Thing {
     private int rad;
     private double rotation = 0.0;
     private int originalSpeed;
+    private boolean isEnemy = false;
+    private String path1;
+    private String path2;
+    private Image img;
+    private boolean initiated = false;
+    private boolean isDirectional = false;
+    private Image leftImg;
+    private Image rightImg;
+    private int health = 100;
+    private int dmg;
     
 
     public Thing(int x, int y, int hitBox, boolean isFriendly, Room r) {
@@ -43,6 +53,22 @@ public class Thing {
         this.y = y;
         this.rad = rad;
         currRoom = r;
+    }
+
+    public Thing (int x, int y, int hitBox, int speed, int dmg, int hp, Room r) {
+        this.x = x;
+        this.y = y;
+        this.hitBox = hitBox;
+        this.speed = speed;
+        this.originalSpeed = speed;
+        currRoom = r;
+        isEnemy = true;
+        health = hp;
+        this.dmg = dmg;
+    }
+
+    public void setDirectional() {
+        isDirectional = true;
     }
 
     public int getX() {
@@ -95,26 +121,87 @@ public class Thing {
         this.y = y;
     }
 
+    public void damage(int dmg) {
+        health -= dmg;
+        if (health <= 0) {
+            currRoom.queueRemove(this);
+        }
+    }
+
+    public int getDamage() {
+        return dmg;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void heal(int h) {
+        health += h;
+    }
+
     public Image getImg(int w, int h) {
+        if (!initiated) {
+            updateImage(w, h);
+            if (isDirectional) {
+                initiateDirectional(w, h);
+            }
+            initiated = true;
+        }
+        return img;
+    }
+
+    public void updateImage(int w, int h) {
+        img = scaleImage(w, h);
+    }
+
+    private void initiateDirectional(int w, int h) {
+        setPath(path1);
+        leftImg = scaleImage(w, h);
+        setPath(path2);
+        rightImg = scaleImage(w, h);
+    }
+
+    public void updateImages(int w, int h) {
+        leftImg = scaleImage(w, h);
+        rightImg = scaleImage(w, h);
+    }
+  
+    private Image scaleImage(int w, int h) {
         try {
-            Image img = ImageIO.read(new File(getPath()));
-            int originalWidth = img.getWidth(null);
-            int originalHeight = img.getHeight(null);
+            Image tempImg = ImageIO.read(new File(getPath()));
+            int originalWidth = tempImg.getWidth(null);
+            int originalHeight = tempImg.getHeight(null);
             double widthScale = (double) w / originalWidth;
             double heightScale = (double) h / originalHeight;
             double scale = Math.min(widthScale, heightScale);
             int scaledWidth = (int) (originalWidth * scale);
             int scaledHeight = (int) (originalHeight * scale);
-            Image sImg = img.getScaledInstance(scaledWidth/15, scaledHeight/15, Image.SCALE_SMOOTH);
-            return sImg;
+            tempImg = tempImg.getScaledInstance(scaledWidth/15, scaledHeight/15, Image.SCALE_SMOOTH);
+            return tempImg;
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    public void faceLeft(boolean left) {
+        if (left) {
+            path = path1;
+            img = leftImg;
+        } else {
+            path = path2;
+            img = rightImg;
+        }
+    }
+
     public String getPath() {
         return path;
+    }
+
+    public void setPaths(String path1, String path2) {
+        this.path1 = path1;
+        this.path2 = path2;
     }
 
     public void setPath(String path) {
@@ -138,19 +225,47 @@ public class Thing {
         return speed;
     }
 
+    public boolean isEnemy() {
+        return isEnemy;
+    }
+
     public void resize(int prevWidth, int prevHeight, int width, int height) {
         x = x * width / prevWidth;
         y = y * height / prevHeight;
         speed = originalSpeed * width / 1700;
+        if (isDirectional) {
+            updateImages(width, height);
+        }
+        else {
+            updateImage(width, height);
+        }
     }
 
     public void tick(int w, int h) {
-        if (currRoom.canMove(x + vx, y + vy, w, h)) {
-            x += vx;
-            y += vy;
+        if (isEnemy) {
+            enemyTick(currRoom.getMainX(), currRoom.getMainY());
+        } else {
+            if (currRoom.canMove(x + vx, y + vy, w, h)) {
+                x += vx;
+                y += vy;
+            }
+            else {
+                currRoom.queueRemove(this);
+            }
         }
-        else {
+    }
+
+    private void enemyTick(int xMain, int yMain) {
+        int dx = xMain - x;
+        int dy = yMain - y;
+        double s = Math.sqrt(dx*dx + dy*dy);
+        if (s <= hitBox) {
             currRoom.queueRemove(this);
         }
+        dx = (int)(dx*speed/s);
+        dy = (int)(dy*speed/s);
+        this.x += dx;
+        this.y += dy;
+        rotation = Math.toDegrees(Math.atan2(dy, dx));
     }
 }

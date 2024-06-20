@@ -16,7 +16,8 @@ public class Logic {
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
         main = new Thing(0,0,10, true, currRoom);
-        main.setPath("img/icon.png");
+        main.setPaths("img/venstrefly.png", "img/icon.png");
+        main.setDirectional();
         k.addImage(main);
         currRoom.addThing(main);
         main.setSpeed(7);
@@ -28,6 +29,7 @@ public class Logic {
             Thing t = iterator.next();
             t.tick(k.getWidth(), k.getHeight());
             k.addImage(t);
+            System.out.println(main.getHealth());
         }
         Iterator<Thing> iterator2 = currRoom.getObstacles().iterator();
         while (iterator2.hasNext()) {
@@ -35,17 +37,22 @@ public class Logic {
             k.addImage(t);
         }
         for (Thing t : toRemove) {
-            currRoom.removeThing(t);
+            if (t.isEnemy()) {
+                currRoom.kill(t);
+            }
+            else {
+                currRoom.removeThing(t);
+            }
         }
         toRemove.clear();
         if (keys != null) {
             if (keys.contains(KeyEvent.VK_A)) {
                 main.moveX(-main.getSpeed(), k.getWidth(), k.getHeight());
-                main.setPath("img/back.png");
+                main.faceLeft(true);
             }
             if (keys.contains(KeyEvent.VK_D)) {
                 main.moveX(main.getSpeed(), k.getWidth(), k.getHeight());
-                main.setPath("img/icon.png");
+                main.faceLeft(false);
             }
             if (keys.contains(KeyEvent.VK_W)) {
                 main.moveY(-main.getSpeed(), k.getWidth(), k.getHeight());

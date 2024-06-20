@@ -93,13 +93,8 @@ public class Logic {
     }
 
     public void mouseClicked(int x, int y) {
-        int vx = x - main.getX();
-        int vy = y - main.getY();
         Staff s = new Staff(currRoom);
-        if (vx == 0 && vy == 0) {
-            vx = 1;
-        }
-        s.use(main.getX(), main.getY(), vx, vy);
+        s.use(main.getX(), main.getY(), x, y);
     }
 
     public void keys(Set<Integer> keys) {

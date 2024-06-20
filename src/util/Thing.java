@@ -1,16 +1,13 @@
 package util;
 
-import java.io.File;
 import java.io.IOException;
-
-import javax.imageio.ImageIO;
 import java.awt.Image;
 
 public class Thing {
     private int x = 0;
     private int y = 0;
-    private int vx = 0;
-    private int vy = 0;
+    private double vx = 0;
+    private double vy = 0;
     private String path = "img/icon.png";
     private int speed;
     private Room currRoom;
@@ -40,11 +37,14 @@ public class Thing {
         currRoom = r;
     }
 
-    public Thing(int x, int y, int vx, int vy, boolean isFriendly, Room r) {
-        this.x = x;
-        this.y = y;
-        this.vx = vx;
-        this.vy = vy;
+    public Thing(int xfrom, int yfrom, int xto, int yto, int speed, boolean isFriendly, Room r) {
+        this.x = xfrom;
+        this.y = yfrom;
+        double dx = xto - xfrom;
+        double dy = yto - yfrom;
+        double length = Math.sqrt(dx * dx + dy * dy);
+        this.vx = (dx / length) * speed;
+        this.vy = (dy / length) * speed;
         rotation = Math.toDegrees(Math.atan2(vy, vx));
         currRoom = r;
     }
@@ -215,7 +215,7 @@ public class Thing {
         if (isEnemy) {
             enemyTick(currRoom.getMainX(), currRoom.getMainY());
         } else {
-            if (currRoom.canMove(x + vx, y + vy, w, h)) {
+            if (currRoom.canMove(x + ((int)vx), y + ((int)vy), w, h)) {
                 x += vx;
                 y += vy;
             }

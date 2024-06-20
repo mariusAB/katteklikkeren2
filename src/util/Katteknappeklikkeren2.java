@@ -32,6 +32,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private JPanel win = new JPanel();
     private JPanel pause = new JPanel();
     private List<JPanel> panels = new ArrayList<>();
+    private Item item = new Item();
     private JPanel game = new JPanel() {
         @Override
         protected void paintComponent(Graphics g) {
@@ -61,6 +62,10 @@ public class Katteknappeklikkeren2 extends JFrame{
         panels.add(gameOver);
         panels.add(win);
         panels.add(pause);
+
+        item.setOpaque(false);
+        game.setLayout(new BorderLayout());
+        game.add(item, BorderLayout.CENTER);
         this.width = width;
         this.height = heigth;
         setSize(width, height);
@@ -96,6 +101,8 @@ public class Katteknappeklikkeren2 extends JFrame{
     public void start() {
         changeBackground("img/room1.png");
         l.toMid();
+
+
         timer = new Timer(1000 / 100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -169,30 +176,27 @@ public class Katteknappeklikkeren2 extends JFrame{
 
     public void addImage(Thing t) {
         things.add(t);
-        class Item extends JPanel {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                Graphics2D g2d = (Graphics2D) g;
-                g2d.drawImage(roomImg, 0, 0, this);
-                for (int i = 0; i < things.size(); i++) {
-                    Image img = things.get(i).getImg(game.getWidth(), game.getHeight());
-                    AffineTransform old = g2d.getTransform();
-                    g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX() + img.getWidth(null)/2, things.get(i).getY() + img.getHeight(null)/2);
-                    g2d.drawImage(img, things.get(i).getX(), things.get(i).getY(), this);
-                    g2d.setTransform(old);
-                }
-            }
-            @Override
-            public Dimension getPreferredSize() {
-                return new Dimension(game.getWidth(), game.getHeight());
+        item.repaint();
+    }
+
+    class Item extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.drawImage(roomImg, 0, 0, this);
+            for (int i = 0; i < things.size(); i++) {
+                Image img = things.get(i).getImg(game.getWidth(), game.getHeight());
+                AffineTransform old = g2d.getTransform();
+                g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX() + img.getWidth(null)/2, things.get(i).getY() + img.getHeight(null)/2);
+                g2d.drawImage(img, things.get(i).getX(), things.get(i).getY(), this);
+                g2d.setTransform(old);
             }
         }
-        Item item = new Item();
-        item.setOpaque(false);
-        game.setLayout(new BorderLayout());
-        game.add(item, BorderLayout.CENTER);
-        game.repaint();
+        @Override
+        public Dimension getPreferredSize() {
+            return new Dimension(game.getWidth(), game.getHeight());
+        }
     }
 
     public void resized() {

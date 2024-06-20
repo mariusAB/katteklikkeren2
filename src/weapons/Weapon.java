@@ -7,6 +7,6 @@ public class Weapon {
     public Weapon(Room r) {
         this.r = r;
     }
-    public void use() {
+    public void use(int xfrom, int yfrom, int xto, int yto) {
     }
 }

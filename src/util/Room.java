@@ -50,6 +50,10 @@ public class Room {
     }
 
     public void kill(Thing t) {
+        enemies.remove(t);
+    }
+
+    public void killButDamageMain(Thing t) {
         damageMain(t.getDamage());
         enemies.remove(t);
     }
@@ -93,7 +97,7 @@ public class Room {
     }
 
     public boolean canMove(int x, int y, int width, int height) {
-        if (x < width*margin || x > width*(1-margin*2) || y < height*margin || y > height*(1-margin*4)) {
+        if (x < 0/*width*margin*/ || x > width/*width*(1-margin*2)*/ || y < 0/*height*margin*/ || y > height)/*height*(1-margin*4))*/ {
             return false;
         }
         for (Thing o : obstacles) {
@@ -103,5 +107,16 @@ public class Room {
             }
         }
         return true;
+    }
+
+    public void projectileTick(Thing t) {
+        for (Thing e : enemies) {
+            double d = Math.sqrt(Math.pow(t.getX()-e.getX(), 2) + Math.pow(t.getY()-e.getY(), 2));
+            if (d <= t.getHitBox() + e.getHitBox()) {
+                e.damage(t.getDamage());
+                queueRemove(t);
+                return;
+            }
+        }
     }
 }

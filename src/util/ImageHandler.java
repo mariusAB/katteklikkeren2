@@ -18,7 +18,7 @@ public class ImageHandler {
         if (images.containsKey(path)) {
             return images.get(path);
         } else {
-            Image img = getImage(w, h, path);
+            Image img = getImageFromDisc(path, w, h);
             images.put(path, img);
             return img;
         }
@@ -26,11 +26,11 @@ public class ImageHandler {
 
     public void resize(int w, int h) {
         for (String path : images.keySet()) {
-            images.put(path, getImage(w, h, path));
+            images.put(path, getImageFromDisc(path, w, h));
         }
     }
 
-    private Image getImage(int w, int h, String path) {
+    private Image getImageFromDisc(String path, int w, int h) {
         try {
             Image tempImg = ImageIO.read(new File(path));
             int originalWidth = tempImg.getWidth(null);

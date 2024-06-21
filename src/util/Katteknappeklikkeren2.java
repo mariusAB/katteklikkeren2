@@ -103,7 +103,7 @@ public class Katteknappeklikkeren2 extends JFrame{
         l.toMid();
 
 
-        timer = new Timer(1000 / 100, new ActionListener() {
+        timer = new Timer(1000 / 200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 things.clear();
@@ -137,7 +137,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                l.mouseClicked(e.getX(), e.getY()-58);
+                l.mouseClicked(e.getX(), e.getY()-15*1713/getHeight());
             }
             });
             hasRun = true;
@@ -187,9 +187,14 @@ public class Katteknappeklikkeren2 extends JFrame{
             g2d.drawImage(roomImg, 0, 0, this);
             for (int i = 0; i < things.size(); i++) {
                 Image img = things.get(i).getImg(game.getWidth(), game.getHeight());
+                int imgWidth = img.getWidth(null);
+                int imgHeight = img.getHeight(null);
+                int centerX = things.get(i).getX() - imgWidth / 2;
+                int centerY = things.get(i).getY() - imgHeight / 2;
+                
                 AffineTransform old = g2d.getTransform();
-                g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX() + img.getWidth(null)/2, things.get(i).getY() + img.getHeight(null)/2);
-                g2d.drawImage(img, things.get(i).getX(), things.get(i).getY(), this);
+                g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX(), things.get(i).getY());
+                g2d.drawImage(img, centerX, centerY, this);
                 g2d.setTransform(old);
             }
         }

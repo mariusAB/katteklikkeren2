@@ -19,25 +19,23 @@ public class Thing {
     private boolean isEnemy = false;
     private String path1;
     private String path2;
-    private Image img;
-    private boolean initiated = false;
-    private boolean isDirectional = false;
-    private Image leftImg;
-    private Image rightImg;
     private int health = 101;
     private int dmg;
     private boolean isMain = false;
+    private boolean isProjectile = false;
+    private boolean damagedMain = false;
     
 
-    public Thing(int x, int y, int hitBox, boolean isFriendly, Room r) {
+    public Thing(int x, int y, int hitBox, int hp, boolean isFriendly, Room r) {
         this.x = x;
         this.y = y;
+        health = hp;
         this.hitBox = hitBox;
         this.isFriendly = isFriendly;
         currRoom = r;
     }
 
-    public Thing(int xfrom, int yfrom, int xto, int yto, int speed, boolean isFriendly, Room r) {
+    public Thing(int xfrom, int yfrom, int xto, int yto, int speed, int hitBox, int dmg, boolean isFriendly, Room r) {
         this.x = xfrom;
         this.y = yfrom;
         double dx = xto - xfrom;
@@ -45,8 +43,11 @@ public class Thing {
         double length = Math.sqrt(dx * dx + dy * dy);
         this.vx = (dx / length) * speed;
         this.vy = (dy / length) * speed;
+        this.hitBox = hitBox;
+        this.dmg = dmg;
         rotation = Math.toDegrees(Math.atan2(vy, vx));
         currRoom = r;
+        isProjectile = true;
     }
 
     public Thing(int x, int y, int rad, Room r) {
@@ -66,10 +67,6 @@ public class Thing {
         isEnemy = true;
         health = hp;
         this.dmg = dmg;
-    }
-
-    public void setDirectional() {
-        isDirectional = true;
     }
 
     public int getX() {
@@ -97,7 +94,6 @@ public class Thing {
     }
 
     public void setMain() {
-        setDirectional();
         isMain = true;
     }
 
@@ -163,10 +159,8 @@ public class Thing {
     public void faceLeft(boolean left) {
         if (left) {
             path = path1;
-            img = leftImg;
         } else {
             path = path2;
-            img = rightImg;
         }
     }
 
@@ -204,6 +198,10 @@ public class Thing {
         return isEnemy;
     }
 
+    public boolean damagedMain() {
+        return damagedMain;
+    }
+
     public void resize(int prevWidth, int prevHeight, int width, int height) {
         x = x * width / prevWidth;
         y = y * height / prevHeight;
@@ -212,9 +210,14 @@ public class Thing {
     }
 
     public void tick(int w, int h) {
+        if (isProjectile) {
+            currRoom.projectileTick(this);
+        }
         if (isEnemy) {
             enemyTick(currRoom.getMainX(), currRoom.getMainY());
         } else {
+            if (vx != 0 || vy != 0) {
+            }
             if (currRoom.canMove(x + ((int)vx), y + ((int)vy), w, h)) {
                 x += vx;
                 y += vy;
@@ -230,6 +233,7 @@ public class Thing {
         double dy = yMain - y;
         double s = Math.sqrt(dx*dx + dy*dy);
         if (s <= hitBox) {
+            damagedMain = true;
             currRoom.queueRemove(this);
         }
         rotation = Math.toDegrees(Math.atan2(dy, dx));

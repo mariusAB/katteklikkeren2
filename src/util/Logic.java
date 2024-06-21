@@ -1,5 +1,4 @@
 package util;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -19,7 +18,7 @@ public class Logic {
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Thing(0,0,10, true, currRoom);
+        main = new Thing( 0, 0, 10, 100, true, currRoom);
         main.setPaths("img/venstrefly.png", "img/icon.png");
         main.setMain();
         k.addImage(main);
@@ -42,7 +41,12 @@ public class Logic {
         }
         for (Thing t : toRemove) {
             if (t.isEnemy()) {
-                currRoom.kill(t);
+                if (t.damagedMain()) {
+                    currRoom.killButDamageMain(t);
+                }
+                else {
+                    currRoom.kill(t);
+                }
             }
             else {
                 currRoom.removeThing(t);

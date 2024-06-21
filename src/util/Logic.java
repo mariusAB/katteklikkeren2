@@ -22,21 +22,21 @@ public class Logic {
         main.setPaths("img/venstrefly.png", "img/icon.png");
         main.setMain();
         k.addImage(main);
-        currRoom.addThing(main);
+        currRoom.addMain(main);
         main.setSpeed(7);
         ih = new ImageHandler();
     }
 
     public void tick() {
-        Iterator<Thing> iterator = currRoom.getThings().iterator();
+        Iterator<Thing> iterator = currRoom.getObstacles().iterator();
         while (iterator.hasNext()) {
             Thing t = iterator.next();
-            t.tick(k.getWidth(), k.getHeight());
             k.addImage(t);
         }
-        Iterator<Thing> iterator2 = currRoom.getObstacles().iterator();
+        Iterator<Thing> iterator2 = currRoom.getThings().iterator();
         while (iterator2.hasNext()) {
             Thing t = iterator2.next();
+            t.tick(k.getWidth(), k.getHeight());
             k.addImage(t);
         }
         for (Thing t : toRemove) {
@@ -85,6 +85,10 @@ public class Logic {
 
     public void giveSource(ActionEvent e) {
         source = e;
+    }
+
+    public void interact() {
+        currRoom.interact();
     }
 
     public void gameOver() {

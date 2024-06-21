@@ -3,9 +3,10 @@ import util.*;
 
 public class Staff extends Weapon{
     private Room r;
-    private int speed = 20;
+    private int speed = 10;
     private int hitBox = 10;
     private int dmg = 10;
+    private int delay = 100;
     public Staff(Room r) {
         super(r);
         this.r = r;

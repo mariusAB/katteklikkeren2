@@ -2,13 +2,17 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 
+//TODO: prosjektiler overlever mellom wipes noen ganger
+
 public class Room {
     private List<Thing> obstacles = new ArrayList<>();
     private List<Thing> things = new ArrayList<>();
     private List<Thing> enemies = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
     private double margin = 0.03;
     private Logic l;
-    ;
+    private Thing main;
+    private int i = 0;
 
     public Room(Logic l) {
         Thing obstacle = new Thing(100, 100, 50, this);
@@ -20,25 +24,44 @@ public class Room {
         enemy.setPath("img/icon.png");
         addEnemy(enemy);
 
-        Thing enemy2 = new Thing(600, 20, 20, 5, 25, 50, this);
+        Thing enemy2 = new Thing(600, 20, 20, 3, 25, 50, this);
         enemy2.setPath("img/icon.png");
         addEnemy(enemy2);
 
-        Thing enemy3 = new Thing(800, 20, 20, 5, 25, 50, this);
+        Thing enemy3 = new Thing(800, 20, 20, 3, 25, 50, this);
         enemy3.setPath("img/icon.png");
         addEnemy(enemy3);
 
-        Thing enemy4 = new Thing(1000, 20, 20, 5, 25, 50, this);
+        Thing enemy4 = new Thing(1000, 20, 20, 3, 25, 50, this);
         enemy4.setPath("img/icon.png");
         addEnemy(enemy4);
+
+        Item item = new Item(200, 600, 70, "HealthPotion", this);
+        item.setPath("img/healthPotion.png");
+        addItem(item);
     }
 
     public void addThing(Thing t) {
         things.add(t);
     }
 
+    public void addMain(Thing t) {
+        this.main = t;
+    }
+
+    public Thing getMain() {
+        return main;
+    }
+    public void addItem(Item t) {
+        items.add(t);
+    }
+
     public void removeThing(Thing t) {
         things.remove(t);
+    }
+
+    public void removeItem(Item i) {
+        items.remove(i);
     }
 
     public void queueRemove(Thing t) {
@@ -70,6 +93,10 @@ public class Room {
         return enemies;
     }
 
+    public List<Item> getItems() {
+        return items;
+    }
+
     public int getMainX() {
         return l.getMain().getX();
     }
@@ -87,13 +114,21 @@ public class Room {
     }
 
     public List<Thing> getThings() {
-        List<Thing> newList = new ArrayList<>(things);
+        List<Thing> newList = new ArrayList<>();
+        newList.addAll(items);
         newList.addAll(enemies);
+        newList.addAll(things);
+        newList.remove(main);
+        newList.add(main);
         return newList;
     }
 
     public List<Thing> getObstacles() {
         return obstacles;
+    }
+
+    public void roomTick() {
+
     }
 
     public boolean canMove(int x, int y, int width, int height) {
@@ -107,6 +142,16 @@ public class Room {
             }
         }
         return true;
+    }
+
+    public void interact() {
+        for (Item i : items) {
+            double d = Math.sqrt(Math.pow(main.getX()-i.getX(), 2) + Math.pow(main.getY()-i.getY(), 2));
+            if (d <= main.getHitBox() + i.getHitBox()) {
+                i.interact();
+                return;
+            }
+        }
     }
 
     public void projectileTick(Thing t) {

@@ -10,7 +10,7 @@ public class Thing {
     private double vy = 0;
     private String path = "img/icon.png";
     private int speed;
-    private Room currRoom;
+    protected Room currRoom;
     private int hitBox;
     private boolean isFriendly;
     private int rad;
@@ -24,11 +24,13 @@ public class Thing {
     private boolean isMain = false;
     private boolean isProjectile = false;
     private boolean damagedMain = false;
+    private int maxHealth;
     
 
     public Thing(int x, int y, int hitBox, int hp, boolean isFriendly, Room r) {
         this.x = x;
         this.y = y;
+        maxHealth = hp;
         health = hp;
         this.hitBox = hitBox;
         this.isFriendly = isFriendly;
@@ -65,12 +67,17 @@ public class Thing {
         this.originalSpeed = speed;
         currRoom = r;
         isEnemy = true;
+        maxHealth = hp;
         health = hp;
         this.dmg = dmg;
     }
 
     public int getX() {
         return x;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     public int getY() {
@@ -95,6 +102,10 @@ public class Thing {
 
     public void setMain() {
         isMain = true;
+    }
+
+    public boolean isMain() {
+        return isMain;
     }
 
     public void moveX(int x, int w, int h) {
@@ -145,6 +156,9 @@ public class Thing {
 
     public void heal(int h) {
         health += h;
+        if (health > maxHealth) {
+            health = maxHealth;
+        }
     }
 
     public Image getImg(int w, int h) {

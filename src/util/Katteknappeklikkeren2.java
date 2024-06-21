@@ -125,6 +125,9 @@ public class Katteknappeklikkeren2 extends JFrame{
                 public void keyReleased(KeyEvent e) {
                     pressedKeys.remove(e.getKeyCode());
                     l.keys(pressedKeys);
+                    if (e.getKeyCode() == KeyEvent.VK_E) {
+                        l.interact();
+                    }
                     if (e.getKeyCode() == KeyEvent.VK_ESCAPE && currentScene.equals("Game")) {
                         pause();
                     }
@@ -139,6 +142,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             public void mousePressed(MouseEvent e) {
                 l.mouseClicked(e.getX(), e.getY()-15*1713/getHeight());
             }
+            
             });
             hasRun = true;
         }
@@ -196,6 +200,19 @@ public class Katteknappeklikkeren2 extends JFrame{
                 g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX(), things.get(i).getY());
                 g2d.drawImage(img, centerX, centerY, this);
                 g2d.setTransform(old);
+
+                if (things.get(i).isMain() || things.get(i).isEnemy()) {
+                    int healthBarHeight = 5;
+                    double healthPercentage = things.get(i).getHealth() / (double) things.get(i).getMaxHealth();
+                    int healthBarWidth = (int) (imgWidth * healthPercentage);
+                    int healthBarX = centerX;
+                    int healthBarY = centerY + imgHeight + 5;
+                    g2d.setColor(Color.RED);
+                    g2d.fillRect(healthBarX, healthBarY, imgWidth, healthBarHeight);
+                    g2d.setColor(Color.GREEN);
+                    g2d.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+                    g2d.setColor(Color.BLACK);
+                }
             }
         }
         @Override

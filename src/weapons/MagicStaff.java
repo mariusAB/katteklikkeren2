@@ -11,6 +11,7 @@ public class MagicStaff extends Weapon{
     private double spread = 20;
     public MagicStaff(Room r) {
         super(r);
+        super.path = "img/magicWand.png";
         super.path1 = "img/magicStaffCatL.png";
         super.path2 = "img/magicStaffCatR.png";
     }

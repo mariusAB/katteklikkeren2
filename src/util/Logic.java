@@ -22,7 +22,8 @@ public class Logic {
     private Katteknappeklikkeren2 k;
     private Main main;
     private Set<Integer> keys;
-    private Room currRoom = new Room(this);
+    private Map map = new Map(this);
+    private Room currRoom = map.getCurrRoom();
     private List<Thing> toRemove = new ArrayList<Thing>();
     private ActionEvent source;
     private ImageHandler ih;
@@ -37,8 +38,6 @@ public class Logic {
         k.addImage(main);
         currRoom.addMain(main);
         ih = new ImageHandler();
-        MagicStaff s = new MagicStaff(currRoom);
-        FireBallStaff f = new FireBallStaff(currRoom);
         StarterSword w = new StarterSword(currRoom);
         w.equip();
         setWeapon(w);

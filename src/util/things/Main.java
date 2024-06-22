@@ -9,6 +9,8 @@ public class Main extends Thing{
     private int maxHealth;
     private String path1;
     private String path2;
+    private boolean dirLeft = false;
+
     public Main(int hitBox, int speed, int hp, String path1, String path2, Room r) {
         super(0, 0, hitBox, path1, r);
         this.speed = speed;
@@ -23,8 +25,10 @@ public class Main extends Thing{
     public void moveX(int x, int w, int h) {
         if (x < 0) {
             super.path = path1;
+            dirLeft = true;
         } else {
             super.path = path2;
+            dirLeft = false;
         }
         for (int i = 0; i < speed; i++) {
             if (currRoom.canMove(this.x + x - i, y, w, h)) {
@@ -50,7 +54,11 @@ public class Main extends Thing{
     public void setPaths(String path1, String path2) {
         this.path1 = path1;
         this.path2 = path2;
-        super.path = path1;
+        if (dirLeft) {
+            super.path = path1;
+        } else {
+            super.path = path2;
+        }
     }
 
     public void damage(int dmg) {

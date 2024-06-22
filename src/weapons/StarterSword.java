@@ -12,6 +12,7 @@ public class StarterSword extends Weapon{
     private int length = 200;
     public StarterSword(Room r) {
         super(r);
+        super.path = "img/sword.png";
         super.path1 = "img/swordCatL.png";
         super.path2 = "img/swordCatR.png";
     }

@@ -57,7 +57,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
             backgroundImage = ImageIO.read(new File("img/mainscreen.png"));
-            setIconImage(ImageIO.read(new File("img/icon.png")));
+            setIconImage(ImageIO.read(new File("img/magicStaffCatR.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }

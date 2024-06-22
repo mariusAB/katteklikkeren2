@@ -9,6 +9,8 @@ import util.things.Obstacle;
 import util.things.Projectile;
 import util.things.SwordSwipe;
 import util.things.Thing;
+import util.things.WeaponItem;
+import weapons.MagicStaff;
 
 public class Room {
     private List<Obstacle> obstacles = new ArrayList<>();
@@ -40,6 +42,11 @@ public class Room {
 
         Item item = new Item(200, 600, 70, "HealthPotion", "img/healthPotion.png", this);
         addThing(item);
+
+        MagicStaff weapon = new MagicStaff(this);
+
+        WeaponItem weaponItem = new WeaponItem(300, 600, 70, weapon, this);
+        addThing(weaponItem);
     }
 
     public void addMain(Main m) {
@@ -73,11 +80,17 @@ public class Room {
             enemies.add((Enemy) t);
         } else if (t instanceof Obstacle) {
             obstacles.add((Obstacle) t);
+        } else if (t instanceof WeaponItem) {
+            items.add((WeaponItem) t);
         }
     }
 
     public void queueRemove(Thing t) {
         l.removeThing(t);
+    }
+
+    public Logic getLogic() {
+        return l;
     }
 
     public ImageHandler getImageHandler() {

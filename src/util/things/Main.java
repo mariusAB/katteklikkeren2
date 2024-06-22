@@ -21,7 +21,7 @@ public class Main extends Thing{
     }
 
     public void moveX(int x, int w, int h) {
-        if (x < this.x) {
+        if (x < 0) {
             super.path = path1;
         } else {
             super.path = path2;
@@ -45,6 +45,12 @@ public class Main extends Thing{
 
     public int getSpeed() {
         return speed;
+    }
+
+    public void setPaths(String path1, String path2) {
+        this.path1 = path1;
+        this.path2 = path2;
+        super.path = path1;
     }
 
     public void damage(int dmg) {

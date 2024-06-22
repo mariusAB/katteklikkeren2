@@ -7,6 +7,7 @@ import util.things.Item;
 import util.things.Main;
 import util.things.Obstacle;
 import util.things.Projectile;
+import util.things.SwordSwipe;
 import util.things.Thing;
 
 public class Room {
@@ -14,34 +15,31 @@ public class Room {
     private List<Projectile> projectiles = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
-    private double margin = 0.03;
+    private List<SwordSwipe> swordswipes = new ArrayList<>();
+    private double margin = 0.06;
     private Logic l;
     private Main main;
     private int i = 0;
 
     public Room(Logic l) {
         Obstacle obstacle = new Obstacle(100, 100, 50, "img/icon.png", this);
-        addObstacle(obstacle);
+        addThing(obstacle);
         this.l = l;
 
         Enemy enemy = new Enemy(500, 20, 20, 2, 25, 50, "img/icon.png", this);
-        addEnemy(enemy);
+        addThing(enemy);
 
         Enemy enemy2 = new Enemy(600, 20, 20, 3, 25, 50, "img/icon.png", this);
-        addEnemy(enemy2);
+        addThing(enemy2);
 
         Enemy enemy3 = new Enemy(800, 20, 20, 3, 25, 50, "img/icon.png", this);
-        addEnemy(enemy3);
+        addThing(enemy3);
 
         Enemy enemy4 = new Enemy(1000, 20, 20, 3, 25, 50, "img/icon.png", this);
-        addEnemy(enemy4);
+        addThing(enemy4);
 
         Item item = new Item(200, 600, 70, "HealthPotion", "img/healthPotion.png", this);
-        addItem(item);
-    }
-
-    public void addProjectile(Projectile p) {
-        projectiles.add(p);
+        addThing(item);
     }
 
     public void addMain(Main m) {
@@ -51,16 +49,31 @@ public class Room {
     public Main getMain() {
         return main;
     }
-    public void addItem(Item t) {
-        items.add(t);
+
+    public void removeThing(Thing t) {
+        if (t instanceof Projectile) {
+            projectiles.remove(t);
+        } else if (t instanceof Item) {
+            items.remove(t);
+        } else if (t instanceof SwordSwipe) {
+            swordswipes.remove(t);
+        } else if (t instanceof Obstacle) {
+            obstacles.remove(t);
+        }
     }
 
-    public void removeProjectile(Projectile p) {
-        projectiles.remove(p);
-    }
-
-    public void removeItem(Item i) {
-        items.remove(i);
+    public void addThing(Thing t) {
+        if (t instanceof Projectile) {
+            projectiles.add((Projectile) t);
+        } else if (t instanceof Item) {
+            items.add((Item) t);
+        } else if (t instanceof SwordSwipe) {
+            swordswipes.add((SwordSwipe) t);
+        } else if (t instanceof Enemy) {
+            enemies.add((Enemy) t);
+        } else if (t instanceof Obstacle) {
+            obstacles.add((Obstacle) t);
+        }
     }
 
     public void queueRemove(Thing t) {
@@ -80,12 +93,8 @@ public class Room {
         enemies.remove(e);
     }
 
-    public void addObstacle(Obstacle o) {
-        obstacles.add(o);
-    }
-
-    public void addEnemy(Enemy e) {
-        enemies.add(e);
+    public List<Enemy> getEnemies() {
+        return enemies;
     }
 
     public int getMainX() {
@@ -109,12 +118,15 @@ public class Room {
         newList.addAll(items);
         newList.addAll(obstacles);
         newList.addAll(enemies);
+        newList.addAll(swordswipes);
         newList.addAll(projectiles);
         newList.add(main);
         return newList;
     }
 
-
+    public void addSwordSwipe(SwordSwipe s) {
+        swordswipes.add(s);
+    }
 
     public void tick() {
         i++;
@@ -125,7 +137,7 @@ public class Room {
     }
 
     public boolean canMove(int x, int y, int width, int height) {
-        if (x < 0/*width*margin*/ || x > width/*width*(1-margin*2)*/ || y < 0/*height*margin*/ || y > height)/*height*(1-margin*4))*/ {
+        if (x < width*margin || x > width*(1-margin) || y < height*margin || y > height*(1-margin*2)) {
             return false;
         }
         for (Thing o : obstacles) {
@@ -142,17 +154,6 @@ public class Room {
             double d = Math.sqrt(Math.pow(main.getX()-i.getX(), 2) + Math.pow(main.getY()-i.getY(), 2));
             if (d <= main.getHitBox() + i.getHitBox()) {
                 i.interact();
-                return;
-            }
-        }
-    }
-
-    public void projectileTick(Projectile p) {
-        for (Enemy e : enemies) {
-            double d = Math.sqrt(Math.pow(p.getX()-e.getX(), 2) + Math.pow(p.getY()-e.getY(), 2));
-            if (d <= p.getHitBox() + e.getHitBox()) {
-                e.damage(p.getDamage());
-                queueRemove(p);
                 return;
             }
         }

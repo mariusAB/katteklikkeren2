@@ -12,7 +12,7 @@ public class Item extends Thing{
     public void interact() {
         if (item.equals("HealthPotion")) {
             super.currRoom.getMain().heal(25);
-            super.currRoom.removeItem(this);
+            super.currRoom.removeThing(this);
         }
     }
 }

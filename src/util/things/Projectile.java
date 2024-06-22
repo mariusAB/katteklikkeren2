@@ -34,7 +34,14 @@ public class Projectile extends Thing{
     }
 
     public void tick(int w, int h) {
-        currRoom.projectileTick(this);
+        for (Enemy e : currRoom.getEnemies()) {
+            double d = Math.sqrt(Math.pow(getX()-e.getX(), 2) + Math.pow(getY()-e.getY(), 2));
+            if (d <= getHitBox() + e.getHitBox()) {
+                e.damage(getDamage());
+                currRoom.queueRemove(this);
+                return;
+            }
+        }
         if (vx != 0 || vy != 0) {
         }
         if (currRoom.canMove(x + ((int)vx), y + ((int)vy), w, h)) {

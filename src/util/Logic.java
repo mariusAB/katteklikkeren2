@@ -9,9 +9,13 @@ import util.things.Main;
 import util.things.Thing;
 import util.things.Enemy;
 import util.things.Projectile;
+import util.things.SwordSwipe;
 
 import java.util.Iterator;
-import weapons.Staff;
+
+import weapons.FireBallStaff;
+import weapons.MagicStaff;
+import weapons.StarterSword;
 import weapons.Weapon;
 
 public class Logic {
@@ -33,8 +37,11 @@ public class Logic {
         k.addImage(main);
         currRoom.addMain(main);
         ih = new ImageHandler();
-        Staff s = new Staff(currRoom);
-        setWeapon(s);
+        MagicStaff s = new MagicStaff(currRoom);
+        FireBallStaff f = new FireBallStaff(currRoom);
+        StarterSword w = new StarterSword(currRoom);
+        w.equip();
+        setWeapon(w);
     }
 
     public void tick() {
@@ -48,6 +55,9 @@ public class Logic {
             if (t instanceof Projectile) {
                 ((Projectile) t).tick(k.getWidth(), k.getHeight());
             }
+            if (t instanceof SwordSwipe) {
+                ((SwordSwipe) t).tick();
+            }
             k.addImage(t);
         }
         for (Thing t : toRemove) {
@@ -60,7 +70,7 @@ public class Logic {
                 }
             }
             else {
-                currRoom.removeProjectile((Projectile) t);
+                currRoom.removeThing(t);
             }
         }
         if (held) {

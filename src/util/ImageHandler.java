@@ -38,9 +38,10 @@ public class ImageHandler {
             double widthScale = (double) w / originalWidth;
             double heightScale = (double) h / originalHeight;
             double scale = Math.min(widthScale, heightScale);
+            scale = Math.min(scale, 1.0);
             int scaledWidth = (int) (originalWidth * scale);
             int scaledHeight = (int) (originalHeight * scale);
-            tempImg = tempImg.getScaledInstance(scaledWidth/15, scaledHeight/15, Image.SCALE_SMOOTH);
+            tempImg = tempImg.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
             return tempImg;
         } catch (IOException e) {
             e.printStackTrace();

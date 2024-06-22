@@ -108,7 +108,7 @@ public class Katteknappeklikkeren2 extends JFrame{
         l.toMid();
 
 
-        timer = new Timer(1000 / 200, new ActionListener() {
+        timer = new Timer(1000 / 90, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 things.clear();

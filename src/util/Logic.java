@@ -4,63 +4,75 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import util.things.Main;
+import util.things.Thing;
+import util.things.Enemy;
+import util.things.Projectile;
+
 import java.util.Iterator;
 import weapons.Staff;
+import weapons.Weapon;
 
 public class Logic {
     private Katteknappeklikkeren2 k;
-    private Thing main;
+    private Main main;
     private Set<Integer> keys;
     private Room currRoom = new Room(this);
     private List<Thing> toRemove = new ArrayList<Thing>();
     private ActionEvent source;
     private ImageHandler ih;
+    private Weapon currWeapon;
+    private boolean held = false;
+    private int mouseX = 0;
+    private int mouseY = 0;
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Thing( 0, 0, 10, 100, true, currRoom);
-        main.setPaths("img/venstrefly.png", "img/icon.png");
-        main.setMain();
+        main = new Main(10, 7, 100, "img/venstrefly.png", "img/icon.png", currRoom);
         k.addImage(main);
         currRoom.addMain(main);
-        main.setSpeed(7);
         ih = new ImageHandler();
+        Staff s = new Staff(currRoom);
+        setWeapon(s);
     }
 
     public void tick() {
-        Iterator<Thing> iterator = currRoom.getObstacles().iterator();
+        currRoom.tick();
+        Iterator<Thing> iterator = currRoom.getThings().iterator();
         while (iterator.hasNext()) {
             Thing t = iterator.next();
-            k.addImage(t);
-        }
-        Iterator<Thing> iterator2 = currRoom.getThings().iterator();
-        while (iterator2.hasNext()) {
-            Thing t = iterator2.next();
-            t.tick(k.getWidth(), k.getHeight());
+            if (t instanceof Enemy) {
+                ((Enemy) t).tick();
+            }
+            if (t instanceof Projectile) {
+                ((Projectile) t).tick(k.getWidth(), k.getHeight());
+            }
             k.addImage(t);
         }
         for (Thing t : toRemove) {
-            if (t.isEnemy()) {
-                if (t.damagedMain()) {
-                    currRoom.killButDamageMain(t);
+            if (t instanceof Enemy) {
+                if (((Enemy) t).damagedMain()) {
+                    currRoom.killButDamageMain((Enemy) t);
                 }
                 else {
                     currRoom.kill(t);
                 }
             }
             else {
-                currRoom.removeThing(t);
+                currRoom.removeProjectile((Projectile) t);
             }
+        }
+        if (held) {
+            mouseClicked(mouseX, mouseY);
         }
         toRemove.clear();
         if (keys != null) {
             if (keys.contains(KeyEvent.VK_A)) {
                 main.moveX(-main.getSpeed(), k.getWidth(), k.getHeight());
-                main.faceLeft(true);
             }
             if (keys.contains(KeyEvent.VK_D)) {
                 main.moveX(main.getSpeed(), k.getWidth(), k.getHeight());
-                main.faceLeft(false);
             }
             if (keys.contains(KeyEvent.VK_W)) {
                 main.moveY(-main.getSpeed(), k.getWidth(), k.getHeight());
@@ -79,7 +91,7 @@ public class Logic {
         return currRoom;
     }
 
-    public Thing getMain() {
+    public Main getMain() {
         return main;
     }
 
@@ -101,8 +113,25 @@ public class Logic {
     }
 
     public void mouseClicked(int x, int y) {
-        Staff s = new Staff(currRoom);
-        s.use(main.getX(), main.getY(), x, y);
+        useWeapon(x, y);
+        mouseX = x;
+        mouseY = y;
+    }
+
+    public void mouseHeld(Boolean held) {
+        this.held = held;
+    }
+
+    private void useWeapon(int x, int y) {
+        currWeapon.use(main.getX(), main.getY(), x, y);
+    }
+
+    public Weapon getWeapon() {
+        return currWeapon;
+    }
+
+    public void setWeapon(Weapon w) {
+        currWeapon = w;
     }
 
     public void keys(Set<Integer> keys) {

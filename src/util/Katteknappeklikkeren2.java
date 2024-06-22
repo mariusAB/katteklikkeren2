@@ -3,6 +3,10 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
+import util.things.Enemy;
+import util.things.Main;
+import util.things.Thing;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,6 +16,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
 import java.io.File;
 import java.io.IOException;
@@ -141,11 +146,23 @@ public class Katteknappeklikkeren2 extends JFrame{
             @Override
             public void mousePressed(MouseEvent e) {
                 l.mouseClicked(e.getX(), e.getY()-15*1713/getHeight());
+                l.mouseHeld(true);
+            }
+
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                l.mouseHeld(false);
             }
             
             });
             hasRun = true;
         }
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                l.mouseClicked(e.getX(), e.getY() - 15 * 1713 / getHeight());
+            }
+        });
         this.requestFocusInWindow();
     }
 
@@ -201,15 +218,25 @@ public class Katteknappeklikkeren2 extends JFrame{
                 g2d.drawImage(img, centerX, centerY, this);
                 g2d.setTransform(old);
 
-                if (things.get(i).isMain() || things.get(i).isEnemy()) {
+                if (things.get(i) instanceof Main) {
                     int healthBarHeight = 5;
-                    double healthPercentage = things.get(i).getHealth() / (double) things.get(i).getMaxHealth();
+                    double healthPercentage = ((Main) things.get(i)).getHealth() / (double) ((Main) things.get(i)).getMaxHealth();
                     int healthBarWidth = (int) (imgWidth * healthPercentage);
                     int healthBarX = centerX;
                     int healthBarY = centerY + imgHeight + 5;
                     g2d.setColor(Color.RED);
                     g2d.fillRect(healthBarX, healthBarY, imgWidth, healthBarHeight);
                     g2d.setColor(Color.GREEN);
+                    g2d.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
+                    g2d.setColor(Color.BLACK);
+                }
+                if (things.get(i) instanceof Enemy) {
+                    int healthBarHeight = 5;
+                    double healthPercentage = ((Enemy) things.get(i)).getHealth() / (double) ((Enemy) things.get(i)).getMaxHealth();
+                    int healthBarWidth = (int) (imgWidth * healthPercentage);
+                    int healthBarX = centerX;
+                    int healthBarY = centerY + imgHeight + 5;
+                    g2d.setColor(Color.YELLOW);
                     g2d.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
                     g2d.setColor(Color.BLACK);
                 }

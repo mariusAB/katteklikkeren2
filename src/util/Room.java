@@ -2,62 +2,61 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: prosjektiler overlever mellom wipes noen ganger
+import util.things.Enemy;
+import util.things.Item;
+import util.things.Main;
+import util.things.Obstacle;
+import util.things.Projectile;
+import util.things.Thing;
 
 public class Room {
-    private List<Thing> obstacles = new ArrayList<>();
-    private List<Thing> things = new ArrayList<>();
-    private List<Thing> enemies = new ArrayList<>();
+    private List<Obstacle> obstacles = new ArrayList<>();
+    private List<Projectile> projectiles = new ArrayList<>();
+    private List<Enemy> enemies = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
     private double margin = 0.03;
     private Logic l;
-    private Thing main;
+    private Main main;
     private int i = 0;
 
     public Room(Logic l) {
-        Thing obstacle = new Thing(100, 100, 50, this);
-        obstacle.setPath("img/icon.png");
+        Obstacle obstacle = new Obstacle(100, 100, 50, "img/icon.png", this);
         addObstacle(obstacle);
         this.l = l;
 
-        Thing enemy = new Thing(500, 20, 20, 2, 25, 50, this);
-        enemy.setPath("img/icon.png");
+        Enemy enemy = new Enemy(500, 20, 20, 2, 25, 50, "img/icon.png", this);
         addEnemy(enemy);
 
-        Thing enemy2 = new Thing(600, 20, 20, 3, 25, 50, this);
-        enemy2.setPath("img/icon.png");
+        Enemy enemy2 = new Enemy(600, 20, 20, 3, 25, 50, "img/icon.png", this);
         addEnemy(enemy2);
 
-        Thing enemy3 = new Thing(800, 20, 20, 3, 25, 50, this);
-        enemy3.setPath("img/icon.png");
+        Enemy enemy3 = new Enemy(800, 20, 20, 3, 25, 50, "img/icon.png", this);
         addEnemy(enemy3);
 
-        Thing enemy4 = new Thing(1000, 20, 20, 3, 25, 50, this);
-        enemy4.setPath("img/icon.png");
+        Enemy enemy4 = new Enemy(1000, 20, 20, 3, 25, 50, "img/icon.png", this);
         addEnemy(enemy4);
 
-        Item item = new Item(200, 600, 70, "HealthPotion", this);
-        item.setPath("img/healthPotion.png");
+        Item item = new Item(200, 600, 70, "HealthPotion", "img/healthPotion.png", this);
         addItem(item);
     }
 
-    public void addThing(Thing t) {
-        things.add(t);
+    public void addProjectile(Projectile p) {
+        projectiles.add(p);
     }
 
-    public void addMain(Thing t) {
-        this.main = t;
+    public void addMain(Main m) {
+        this.main = m;
     }
 
-    public Thing getMain() {
+    public Main getMain() {
         return main;
     }
     public void addItem(Item t) {
         items.add(t);
     }
 
-    public void removeThing(Thing t) {
-        things.remove(t);
+    public void removeProjectile(Projectile p) {
+        projectiles.remove(p);
     }
 
     public void removeItem(Item i) {
@@ -76,25 +75,17 @@ public class Room {
         enemies.remove(t);
     }
 
-    public void killButDamageMain(Thing t) {
-        damageMain(t.getDamage());
-        enemies.remove(t);
+    public void killButDamageMain(Enemy e) {
+        damageMain(e.getDamage());
+        enemies.remove(e);
     }
 
-    public void addObstacle(Thing t) {
-        obstacles.add(t);
+    public void addObstacle(Obstacle o) {
+        obstacles.add(o);
     }
 
-    public void addEnemy(Thing t) {
-        enemies.add(t);
-    }
-
-    public List<Thing> getEnemies() {
-        return enemies;
-    }
-
-    public List<Item> getItems() {
-        return items;
+    public void addEnemy(Enemy e) {
+        enemies.add(e);
     }
 
     public int getMainX() {
@@ -116,19 +107,21 @@ public class Room {
     public List<Thing> getThings() {
         List<Thing> newList = new ArrayList<>();
         newList.addAll(items);
+        newList.addAll(obstacles);
         newList.addAll(enemies);
-        newList.addAll(things);
-        newList.remove(main);
+        newList.addAll(projectiles);
         newList.add(main);
         return newList;
     }
 
-    public List<Thing> getObstacles() {
-        return obstacles;
+
+
+    public void tick() {
+        i++;
     }
 
-    public void roomTick() {
-
+    public int getRoomTick() {
+        return i;
     }
 
     public boolean canMove(int x, int y, int width, int height) {
@@ -137,7 +130,7 @@ public class Room {
         }
         for (Thing o : obstacles) {
             double d = Math.sqrt(Math.pow(x-o.getX(), 2) + Math.pow(y-o.getY(), 2));
-            if (d <= o.getRad()) {
+            if (d <= o.getHitBox()) {
                 return false;
             }
         }
@@ -154,12 +147,12 @@ public class Room {
         }
     }
 
-    public void projectileTick(Thing t) {
-        for (Thing e : enemies) {
-            double d = Math.sqrt(Math.pow(t.getX()-e.getX(), 2) + Math.pow(t.getY()-e.getY(), 2));
-            if (d <= t.getHitBox() + e.getHitBox()) {
-                e.damage(t.getDamage());
-                queueRemove(t);
+    public void projectileTick(Projectile p) {
+        for (Enemy e : enemies) {
+            double d = Math.sqrt(Math.pow(p.getX()-e.getX(), 2) + Math.pow(p.getY()-e.getY(), 2));
+            if (d <= p.getHitBox() + e.getHitBox()) {
+                e.damage(p.getDamage());
+                queueRemove(p);
                 return;
             }
         }

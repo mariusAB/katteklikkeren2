@@ -1,16 +1,12 @@
-package util;
+package util.things;
+
+import util.Room;
 
 public class Item extends Thing{
     private String item;
-    private int hitBox;
-    Item(int x, int y, int hitBox, String item, Room r) {
-        super(x, y, hitBox, r);
+    public Item(int x, int y, int hitBox, String item, String path, Room r) {
+        super(x, y, hitBox, path, r);
         this.item = item;
-        this.hitBox = hitBox;
-    }
-
-    public int getHitBox() {
-        return hitBox;
     }
 
     public void interact() {

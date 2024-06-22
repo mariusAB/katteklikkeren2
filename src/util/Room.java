@@ -1,7 +1,9 @@
 package util;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.things.Door;
 import util.things.Enemy;
 import util.things.Item;
 import util.things.Main;
@@ -22,6 +24,8 @@ public class Room {
     private Logic l;
     private Main main;
     private int i = 0;
+    private String path = "img/room1.png";
+    private List<Door> doors = new ArrayList<>();
 
     public Room(Logic l) {
         Obstacle obstacle = new Obstacle(100, 100, 50, "img/icon.png", this);
@@ -47,6 +51,8 @@ public class Room {
 
         WeaponItem weaponItem = new WeaponItem(300, 600, 70, weapon, this);
         addThing(weaponItem);
+
+        
     }
 
     public void addMain(Main m) {
@@ -55,6 +61,58 @@ public class Room {
 
     public Main getMain() {
         return main;
+    }
+
+    public BufferedImage getBackground() {
+        for (int i = 0; i < 4; i++) {
+            if (l.getMap().getDoors().get(i)) {
+                if (i == 0) {
+                    Door d = new Door(
+                    (int) (l.getWidth() / 2.5), 
+                    (int) (l.getHeight() * margin), 
+                    (int) (l.getWidth() / 1.5), 
+                    (int) (l.getHeight() * margin + 10), 
+                    0,
+                    this
+                );
+                doors.add(d);
+                }
+                if (i == 1) {
+                    Door d = new Door(
+                    (int) (l.getWidth() * (1 - margin - 10)), 
+                    (int) (l.getHeight() / 2.5), 
+                    (int) (l.getWidth() * (1 - margin)), 
+                    (int) (l.getHeight() / 1.5), 
+                    1,
+                    this
+                );
+                doors.add(d);
+                }
+                if (i == 2) {
+                    Door d = new Door(
+                    (int) (l.getWidth() / 2.5), 
+                    (int) (l.getHeight() * (1 - margin - 10)), 
+                    (int) (l.getWidth() / 1.5), 
+                    (int) (l.getHeight() * (1 - margin)), 
+                    2,
+                    this
+                );
+                doors.add(d);
+                }
+                if (i == 3) {
+                    Door d = new Door(
+                    (int) (l.getWidth() * margin), 
+                    (int) (l.getHeight() / 2.5), 
+                    (int) (l.getWidth() * margin + 10), 
+                    (int) (l.getHeight() / 1.5), 
+                    3,
+                    this
+                );
+                doors.add(d);
+                }
+            }
+        }
+        return getImageHandler().getBackground(path, l.getMap().getDoors(), false);
     }
 
     public void removeThing(Thing t) {
@@ -142,7 +200,20 @@ public class Room {
     }
 
     public void tick() {
+        if (enemies.size() == 0) {
+            openDoors();
+        }
+        for (Door d : doors) {
+            d.tick();
+        }
         i++;
+    }
+
+    private void openDoors() {
+        l.changeBackground(getImageHandler().getBackground(path, l.getMap().getDoors(), true));
+        for (Door d : doors) {
+            d.open();
+        }
     }
 
     public int getRoomTick() {

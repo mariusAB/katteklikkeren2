@@ -5,7 +5,10 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
+import java.awt.Graphics;
 import java.awt.Image;
+import java.util.List;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,6 +31,47 @@ public class ImageHandler {
         for (String path : images.keySet()) {
             images.put(path, getImageFromDisc(path, w, h));
         }
+    }
+
+    public BufferedImage getBackground(String path, List<Boolean> doors, Boolean open) {
+        try {
+            BufferedImage img = ImageIO.read(new File(path));
+            Graphics g = img.getGraphics();
+            for (int i = 0; i < 4; i++) {
+                if (doors.get(i)) {
+                    if (i == 0) {
+                        if (open) {
+                            g.drawImage(ImageIO.read(new File("img/doors/openUp.png")), 0, 0, null);
+                        } else {
+                            g.drawImage(ImageIO.read(new File("img/doors/closedUp.png")), 0, 0, null);
+                        }
+                    } else if (i == 1) {
+                        if (open) {
+                            g.drawImage(ImageIO.read(new File("img/doors/openRight.png")), 0, 0, null);
+                        } else {
+                            g.drawImage(ImageIO.read(new File("img/doors/closedRight.png")), 0, 0, null);
+                        }
+                    } else if (i == 2) {
+                        if (open) {
+                            g.drawImage(ImageIO.read(new File("img/doors/openDown.png")), 0, 0, null);
+                        } else {
+                            g.drawImage(ImageIO.read(new File("img/doors/closedDown.png")), 0, 0, null);
+                        }
+                    } else if (i == 3) {
+                        if (open) {
+                            g.drawImage(ImageIO.read(new File("img/doors/openLeft.png")), 0, 0, null);
+                        } else {
+                            g.drawImage(ImageIO.read(new File("img/doors/closedLeft.png")), 0, 0, null);
+                        }
+                    }
+                }
+            }
+            g.dispose();
+            return img;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     private Image getImageFromDisc(String path, int w, int h) {

@@ -1,4 +1,5 @@
 package util;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
@@ -13,8 +14,6 @@ import util.things.SwordSwipe;
 
 import java.util.Iterator;
 
-import weapons.FireBallStaff;
-import weapons.MagicStaff;
 import weapons.StarterSword;
 import weapons.Weapon;
 
@@ -38,6 +37,7 @@ public class Logic {
         k.addImage(main);
         currRoom.addMain(main);
         ih = new ImageHandler();
+        k.changeBackground(currRoom.getBackground());
         StarterSword w = new StarterSword(currRoom);
         w.equip();
         setWeapon(w);
@@ -96,6 +96,10 @@ public class Logic {
         return ih;
     }
 
+    public Map getMap() {
+        return map;
+    }
+
     public Room getRoom() {
         return currRoom;
     }
@@ -116,6 +120,14 @@ public class Logic {
         k.gameOver(source);
     }
 
+    public int getWidth() {
+        return k.getWidth();
+    }
+
+    public int getHeight() {
+        return k.getHeight();
+    }
+    
     public void toMid() {
         main.setX(k.getSize().width / 2);
         main.setY(k.getSize().height / 2);
@@ -125,6 +137,14 @@ public class Logic {
         useWeapon(x, y);
         mouseX = x;
         mouseY = y;
+    }
+
+    public void changeBackground(Image i) {
+        k.changeBackground(i);
+    }
+
+    public void setRoom(Room r) {
+        currRoom = r;
     }
 
     public void mouseHeld(Boolean held) {

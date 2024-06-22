@@ -49,7 +49,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private int monKilInt = 0;
     private Image roomImg;
     private List<Thing> things = new ArrayList<>();
-    private Logic l = new Logic(this);
+    private Logic l;
     private String backPath;
     private boolean hasRun = false;
     private Timer timer;
@@ -104,9 +104,8 @@ public class Katteknappeklikkeren2 extends JFrame{
     
 
     public void start() {
-        changeBackground("img/room1.png");
+        l = new Logic(this);
         l.toMid();
-
 
         timer = new Timer(1000 / 90, new ActionListener() {
             @Override
@@ -185,14 +184,8 @@ public class Katteknappeklikkeren2 extends JFrame{
         currentScene = "Win";
     }
 
-    public void changeBackground(String path) {
-        try {
-            backPath = path;
-            roomImg = ImageIO.read(new File(path));
-            roomImg = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void changeBackground(Image img) {
+        roomImg = img.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
     }
 
     public void addImage(Thing t) {

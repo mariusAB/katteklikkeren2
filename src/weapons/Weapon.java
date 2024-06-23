@@ -24,4 +24,7 @@ public class Weapon {
     public void equip() {
         r.getMain().setPaths(path1, path2);
     }
+
+    public void reset() {
+    }
 }

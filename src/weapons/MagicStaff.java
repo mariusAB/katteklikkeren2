@@ -29,4 +29,8 @@ public class MagicStaff extends Weapon{
         lastFired = r.getRoomTick();
         }
     }
+
+    public void reset() {
+        lastFired = 0;
+    }
 }

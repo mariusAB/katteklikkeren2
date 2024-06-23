@@ -201,6 +201,9 @@ public class Katteknappeklikkeren2 extends JFrame{
             g2d.drawImage(roomImg, 0, 0, this);
             for (int i = 0; i < things.size(); i++) {
                 Image img = things.get(i).getImg(game.getWidth(), game.getHeight());
+                if (img == null) {
+                    break;
+                }
                 int imgWidth = img.getWidth(null);
                 int imgHeight = img.getHeight(null);
                 int centerX = things.get(i).getX() - imgWidth / 2;
@@ -234,6 +237,7 @@ public class Katteknappeklikkeren2 extends JFrame{
                     g2d.setColor(Color.BLACK);
                 }
             }
+            g2d.dispose();
         }
         @Override
         public Dimension getPreferredSize() {

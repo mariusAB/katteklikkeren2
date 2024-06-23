@@ -62,6 +62,10 @@ public class Room {
         return main;
     }
 
+    public void resetTick() {
+        i = 0;
+    }
+
     public BufferedImage getBackground() {
         for (int i = 0; i < 4; i++) {
             if (l.getMap().getDoors().get(i)) {

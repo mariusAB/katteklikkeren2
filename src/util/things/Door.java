@@ -39,20 +39,20 @@ public class Door extends Thing{
     }
 
     public void tick() {
-        if (open && currRoom.getMainX() > x0 && currRoom.getMainX() < x1 && currRoom.getMainY() > y0 && currRoom.getMainY() < y1) {
+        if (open && currRoom.get().getMainX() > x0 && currRoom.get().getMainX() < x1 && currRoom.get().getMainY() > y0 && currRoom.get().getMainY() < y1) {
             if (dir == 0) {
-                currRoom.getMain().setY(currRoom.getDoors().get(2).gety0()-1);
+                currRoom.get().getMain().setY(currRoom.get().getDoors().get(2).gety0()-1);
             }
             if (dir == 1) {
-                currRoom.getMain().setX(currRoom.getDoors().get(3).getx0()+1);
+                currRoom.get().getMain().setX(currRoom.get().getDoors().get(3).getx0()+1);
             }
             if (dir == 2) {
-                currRoom.getMain().setY(currRoom.getDoors().get(0).gety1()-1);
+                currRoom.get().getMain().setY(currRoom.get().getDoors().get(0).gety1()+1);
             }
             if (dir == 3) {
-                currRoom.getMain().setX(currRoom.getDoors().get(1).getx1()+1);
+                currRoom.get().getMain().setX(currRoom.get().getDoors().get(1).getx0()-1);
             }
-            currRoom.getLogic().getMap().move(dir);
+            currRoom.get().getLogic().getMap().move(dir);
         }
     }
 }

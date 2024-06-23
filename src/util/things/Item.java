@@ -11,8 +11,8 @@ public class Item extends Thing{
 
     public void interact() {
         if (item.equals("HealthPotion")) {
-            super.currRoom.getMain().heal(25);
-            super.currRoom.removeThing(this);
+            super.currRoom.get().getMain().heal(25);
+            super.currRoom.get().removeThing(this);
         }
     }
 }

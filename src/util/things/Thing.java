@@ -1,6 +1,7 @@
 package util.things;
 
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 
 import util.Room;
 
@@ -10,14 +11,14 @@ public class Thing {
     protected int x = 0;
     protected int y = 0;
     protected String path;
-    protected Room currRoom;
+    protected WeakReference<Room> currRoom;
     protected int hitBox;
 
     public Thing(int x, int y, int hitBox, String path, Room r) {
         this.x = x;
         this.y = y;
         this.hitBox = hitBox;
-        currRoom = r;
+        this.currRoom = new WeakReference<>(r);
         this.path = path;
     }
 
@@ -43,13 +44,14 @@ public class Thing {
 
     public Image getImg(int w, int h) {
         try {
-            return currRoom.getImageHandler().getImage(path, w, h);
+            if (currRoom.get() != null) {
+                return currRoom.get().getImageHandler().getImage(path, w, h);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
-
     public String getPath() {
         return path;
     }
@@ -61,6 +63,8 @@ public class Thing {
     public void resize(int prevWidth, int prevHeight, int width, int height) {
         x = x * width / prevWidth;
         y = y * height / prevHeight;
-        currRoom.getImageHandler().resize(width, height);
+        if (currRoom.get() != null) {
+            currRoom.get().getImageHandler().resize(width, height);
+        }
     }
 }

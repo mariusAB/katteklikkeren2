@@ -34,22 +34,22 @@ public class Projectile extends Thing{
     }
 
     public void tick(int w, int h) {
-        for (Enemy e : currRoom.getEnemies()) {
+        for (Enemy e : currRoom.get().getEnemies()) {
             double d = Math.sqrt(Math.pow(getX()-e.getX(), 2) + Math.pow(getY()-e.getY(), 2));
             if (d <= getHitBox() + e.getHitBox()) {
                 e.damage(getDamage());
-                currRoom.queueRemove(this);
+                currRoom.get().queueRemove(this);
                 return;
             }
         }
         if (vx != 0 || vy != 0) {
         }
-        if (currRoom.canMove(x + ((int)vx), y + ((int)vy), w, h)) {
+        if (currRoom.get().canMove(x + ((int)vx), y + ((int)vy), w, h)) {
             x += vx;
             y += vy;
         }
         else {
-            currRoom.queueRemove(this);
+            currRoom.get().queueRemove(this);
         }
     }
 }

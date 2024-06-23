@@ -23,7 +23,7 @@ public class Enemy extends Thing{
     public void damage(int dmg) {
         hp -= dmg;
         if (hp <= 0) {
-            currRoom.queueRemove(this);
+            currRoom.get().queueRemove(this);
         }
     }
 
@@ -48,14 +48,14 @@ public class Enemy extends Thing{
     }
 
     public void tick() {
-        int xMain = currRoom.getMainX();
-        int yMain = currRoom.getMainY();
+        int xMain = currRoom.get().getMainX();
+        int yMain = currRoom.get().getMainY();
         double dx = xMain - x;
         double dy = yMain - y;
         double s = Math.sqrt(dx*dx + dy*dy);
         if (s <= hitBox) {
             damagedMain = true;
-            currRoom.queueRemove(this);
+            currRoom.get().queueRemove(this);
         }
         rotation = Math.toDegrees(Math.atan2(dy, dx));
         double lerpFactor = speed / s;

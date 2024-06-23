@@ -16,8 +16,8 @@ public class Map {
     public List<Boolean> getDoors() {
         List<Boolean> doors = new ArrayList<Boolean>();
         doors.add(true);
-        doors.add(false);
-        doors.add(false);
+        doors.add(true);
+        doors.add(true);
         doors.add(true);
         return doors;
     }

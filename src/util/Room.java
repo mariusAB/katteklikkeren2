@@ -26,13 +26,14 @@ public class Room {
     private int i = 0;
     private String path = "img/room1.png";
     private List<Door> doors = new ArrayList<>();
+    private boolean open = false;
 
     public Room(Logic l) {
         Obstacle obstacle = new Obstacle(100, 100, 50, "img/icon.png", this);
         addThing(obstacle);
         this.l = l;
 
-        Enemy enemy = new Enemy(500, 20, 20, 2, 25, 50, "img/icon.png", this);
+        Enemy enemy = new Enemy(500, 20, 20, 2, 25, 1, "img/icon.png", this);
         addThing(enemy);
 
         Enemy enemy2 = new Enemy(600, 20, 20, 3, 25, 50, "img/icon.png", this);
@@ -51,8 +52,6 @@ public class Room {
 
         WeaponItem weaponItem = new WeaponItem(300, 600, 70, weapon, this);
         addThing(weaponItem);
-
-        
     }
 
     public void addMain(Main m) {
@@ -68,9 +67,9 @@ public class Room {
             if (l.getMap().getDoors().get(i)) {
                 if (i == 0) {
                     Door d = new Door(
-                    (int) (l.getWidth() / 2.5), 
+                    (int) (l.getWidth() / 2.4), 
                     (int) (l.getHeight() * margin), 
-                    (int) (l.getWidth() / 1.5), 
+                    (int) (l.getWidth() / 1.7), 
                     (int) (l.getHeight() * margin + 10), 
                     0,
                     this
@@ -79,10 +78,10 @@ public class Room {
                 }
                 if (i == 1) {
                     Door d = new Door(
-                    (int) (l.getWidth() * (1 - margin - 10)), 
-                    (int) (l.getHeight() / 2.5), 
-                    (int) (l.getWidth() * (1 - margin)), 
-                    (int) (l.getHeight() / 1.5), 
+                    (int) (l.getWidth() * (1 - margin) - 10), 
+                    (int) (l.getHeight() / 2.9), 
+                    (int) (l.getWidth()), 
+                    (int) (l.getHeight() / 1.7), 
                     1,
                     this
                 );
@@ -90,9 +89,9 @@ public class Room {
                 }
                 if (i == 2) {
                     Door d = new Door(
-                    (int) (l.getWidth() / 2.5), 
-                    (int) (l.getHeight() * (1 - margin - 10)), 
-                    (int) (l.getWidth() / 1.5), 
+                    (int) (l.getWidth() / 2.4), 
+                    (int) (l.getHeight() * (1 - margin*2) - 10), 
+                    (int) (l.getWidth() / 1.7), 
                     (int) (l.getHeight() * (1 - margin)), 
                     2,
                     this
@@ -102,9 +101,9 @@ public class Room {
                 if (i == 3) {
                     Door d = new Door(
                     (int) (l.getWidth() * margin), 
-                    (int) (l.getHeight() / 2.5), 
-                    (int) (l.getWidth() * margin + 10), 
-                    (int) (l.getHeight() / 1.5), 
+                    (int) (l.getHeight() / 2.9), 
+                    (int) (l.getWidth() * margin) + 10, 
+                    (int) (l.getHeight() / 1.7), 
                     3,
                     this
                 );
@@ -113,6 +112,14 @@ public class Room {
             }
         }
         return getImageHandler().getBackground(path, l.getMap().getDoors(), false);
+    }
+
+    public double getMargin() {
+        return margin;
+    }
+
+    public List<Door> getDoors() {
+        return doors;
     }
 
     public void removeThing(Thing t) {
@@ -168,6 +175,10 @@ public class Room {
         return enemies;
     }
 
+    public void removeMain() {
+        main = null;
+    }
+
     public int getMainX() {
         return l.getMain().getX();
     }
@@ -210,9 +221,12 @@ public class Room {
     }
 
     private void openDoors() {
-        l.changeBackground(getImageHandler().getBackground(path, l.getMap().getDoors(), true));
-        for (Door d : doors) {
-            d.open();
+        if (!open) {
+            l.changeBackground(getImageHandler().getBackground(path, l.getMap().getDoors(), true));
+            for (Door d : doors) {
+                d.open();
+            }
+            open = true;
         }
     }
 

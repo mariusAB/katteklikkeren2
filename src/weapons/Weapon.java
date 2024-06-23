@@ -17,6 +17,10 @@ public class Weapon {
         return path;
     }
 
+    public void setRoom(Room r) {
+        this.r = r;
+    }
+
     public void equip() {
         r.getMain().setPaths(path1, path2);
     }

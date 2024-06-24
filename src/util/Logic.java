@@ -21,8 +21,8 @@ public class Logic {
     private Katteknappeklikkeren2 k;
     private Main main;
     private Set<Integer> keys;
-    private Map map = new Map(this, 5, 5);
-    private Room currRoom = map.getCurrRoom();
+    private Map map;
+    private Room currRoom;
     private List<Thing> toRemove = new ArrayList<Thing>();
     private ActionEvent source;
     private ImageHandler ih;
@@ -33,6 +33,8 @@ public class Logic {
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
+        map = new Map(this, 5, 7);
+        currRoom = map.getCurrRoom();
         main = new Main(10, 50, 100, "img/venstrefly.png", "img/icon.png", currRoom);
         k.addImage(main);
         currRoom.addMain(main);
@@ -41,6 +43,14 @@ public class Logic {
         StarterSword w = new StarterSword(currRoom);
         w.equip();
         setWeapon(w);
+    }
+
+    public void displayMiniMap() {
+        k.displayMiniMap(map.getMiniMap());
+    }
+    
+    public void hideMiniMap() {
+        k.hideMiniMap();
     }
 
     public void tick() {
@@ -129,10 +139,19 @@ public class Logic {
         useWeapon(x, y);
         mouseX = x;
         mouseY = y;
+        k.displayMiniMap(map.getMiniMap()); // TODO: Remove
     }
 
     public void changeBackground(Image i) {
         k.changeBackground(i);
+    }
+
+    public int getMapWidth() {
+        return map.getMapWidth();
+    }
+
+    public int getMapHeight() {
+        return map.getMapHeight();
     }
 
     public void setRoom(Room r) {

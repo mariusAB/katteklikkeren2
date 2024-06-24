@@ -54,6 +54,8 @@ public class Room {
 
         WeaponItem weaponItem = new WeaponItem(3000, 5000, 300, weapon, this);
         addThing(weaponItem);
+
+        l.hideMiniMap();
     }
 
     public void addMain(Main m) {
@@ -240,6 +242,7 @@ public class Room {
             for (Door d : doors) {
                 d.open();
             }
+            l.displayMiniMap();
             open = true;
         }
     }

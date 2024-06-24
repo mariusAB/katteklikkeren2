@@ -54,6 +54,8 @@ public class Katteknappeklikkeren2 extends JFrame{
     private Timer timer;
     private int roomWidth;
     private int roomHeight;
+    private boolean displayMiniMap = false;
+    private List<Integer> miniMap;
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -174,6 +176,15 @@ public class Katteknappeklikkeren2 extends JFrame{
         return y * roomHeight / game.getHeight();
     }
 
+    public void displayMiniMap(List<Integer> miniMap) {
+        this.miniMap = miniMap;
+        displayMiniMap = true;
+    }
+
+    public void hideMiniMap() {
+        displayMiniMap = false;
+    }
+
     public void pause() {
         scenes.show(this.getContentPane(), "Pause");
         currentScene = "Pause";
@@ -256,7 +267,29 @@ public class Katteknappeklikkeren2 extends JFrame{
                     g2d.setColor(Color.BLACK);
                 }
             }
-            g2d.dispose();
+            if (displayMiniMap) {
+                int miniMapWidth = 30;
+                int miniMapHeight = 30;
+                int margin = 10;
+                int tileWidth = l.getMapWidth();
+                double transp = 0.8;
+                int startX = getWidth() - (tileWidth * miniMapWidth) - margin;
+                int startY = margin;
+                g2d.setColor(new Color(255, 255, 255, (int) (255 * 0.9)));
+                g2d.fillRect(startX - margin, startY, (tileWidth * miniMapWidth) + (margin), (miniMapHeight * (miniMap.size() / tileWidth)) + (margin));
+            
+                for (int i = 0; i < miniMap.size(); i++) {
+                    int x = i % tileWidth;
+                    int y = i / tileWidth;
+                    if (miniMap.get(i) == 1) {
+                        g2d.setColor(new Color(0, 0, 0, (int) (255 * transp)));
+                    } else {
+                        g2d.setColor(new Color(122, 121, 91, (int) (255 * transp)));
+                    }
+                    // Adjust drawing position to be in the top right corner
+                    g2d.fillRect(startX + x * miniMapWidth, startY + margin + y * miniMapHeight, miniMapWidth - margin, miniMapHeight - margin);
+                }
+            }
         }
         @Override
         public Dimension getPreferredSize() {

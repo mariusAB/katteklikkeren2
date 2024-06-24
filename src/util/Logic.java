@@ -21,7 +21,7 @@ public class Logic {
     private Katteknappeklikkeren2 k;
     private Main main;
     private Set<Integer> keys;
-    private Map map = new Map(this);
+    private Map map = new Map(this, 5, 5);
     private Room currRoom = map.getCurrRoom();
     private List<Thing> toRemove = new ArrayList<Thing>();
     private ActionEvent source;

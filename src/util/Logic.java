@@ -139,7 +139,6 @@ public class Logic {
         useWeapon(x, y);
         mouseX = x;
         mouseY = y;
-        k.displayMiniMap(map.getMiniMap()); // TODO: Remove
     }
 
     public void changeBackground(Image i) {
@@ -160,6 +159,9 @@ public class Logic {
         currRoom.addMain(main);
         main.setRoom(r);
         k.changeBackground(r.getBackground());
+        if (!r.getOpenStatus()) {
+            hideMiniMap();
+        }
         currWeapon.setRoom(currRoom);
         currWeapon.reset();
     }

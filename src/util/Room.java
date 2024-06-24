@@ -36,17 +36,8 @@ public class Room {
         addThing(obstacle);
         this.l = l;
 
-        Enemy enemy = new Enemy(5000, 200, 60, 5, 25, 100, "img/icon.png", this);
+        Enemy enemy = new Enemy(5000, 2000, 60, 5, 25, 1, "img/icon.png", this);
         addThing(enemy);
-
-        Enemy enemy2 = new Enemy(6000, 200, 60, 17, 25, 50, "img/icon.png", this);
-        addThing(enemy2);
-
-        Enemy enemy3 = new Enemy(7000, 200, 60, 17, 25, 50, "img/icon.png", this);
-        addThing(enemy3);
-
-        Enemy enemy4 = new Enemy(8000, 200, 60, 17, 25, 50, "img/icon.png", this);
-        addThing(enemy4);
 
         Item item = new Item(2000, 5000, 300, "HealthPotion", "img/healthPotion.png", this);
         addThing(item);
@@ -132,6 +123,7 @@ public class Room {
             }
             return getImageHandler().getBackground(path, l.getMap().getDoors(), false);
         }
+        l.displayMiniMap();
         return getImageHandler().getBackground(path, l.getMap().getDoors(), true);
     }
 
@@ -229,6 +221,7 @@ public class Room {
 
     public void tick() {
         if (enemies.size() == 0) {
+            l.displayMiniMap();
             openDoors();
         }
         for (Door d : doors) {
@@ -243,7 +236,6 @@ public class Room {
             for (Door d : doors) {
                 d.open();
             }
-            l.displayMiniMap();
             open = true;
         }
     }
@@ -263,6 +255,10 @@ public class Room {
             }
         }
         return true;
+    }
+
+    public boolean getOpenStatus() {
+        return open;
     }
 
     public void interact() {

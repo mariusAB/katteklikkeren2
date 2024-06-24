@@ -9,6 +9,7 @@ public class Door extends Thing{
     private int x1;
     private int y1;
     private int dir;
+    private Room r;
     public Door(int x0, int y0, int x1, int y1, int dir, Room r) {
         super(0, 0, 0, "Door", r);
         this.x0 = x0;
@@ -16,6 +17,7 @@ public class Door extends Thing{
         this.x1 = x1;
         this.y1 = y1;
         this.dir = dir;
+        this.r = r;
     }
 
     public void open() {
@@ -41,16 +43,16 @@ public class Door extends Thing{
     public void tick() {
         if (open && currRoom.get().getMainX() > x0 && currRoom.get().getMainX() < x1 && currRoom.get().getMainY() > y0 && currRoom.get().getMainY() < y1) {
             if (dir == 0) {
-                currRoom.get().getMain().setY(currRoom.get().getDoors().get(2).gety0()-1);
+                currRoom.get().getMain().setY(r.getHeight()-currRoom.get().getMain().getY()-500);
             }
             if (dir == 1) {
-                currRoom.get().getMain().setX(currRoom.get().getDoors().get(3).getx1()+1);
+                currRoom.get().getMain().setX(r.getWidth()-currRoom.get().getMain().getX()+200);
             }
             if (dir == 2) {
-                currRoom.get().getMain().setY(currRoom.get().getDoors().get(0).gety1()+1);
+                currRoom.get().getMain().setY(r.getHeight()-currRoom.get().getMain().getY()-100);
             }
             if (dir == 3) {
-                currRoom.get().getMain().setX(currRoom.get().getDoors().get(1).getx0()-1);
+                currRoom.get().getMain().setX(r.getWidth()-currRoom.get().getMain().getX()-200);
             }
             currRoom.get().getLogic().getMap().move(dir);
         }

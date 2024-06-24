@@ -283,6 +283,10 @@ public class Katteknappeklikkeren2 extends JFrame{
                     int y = i / tileWidth;
                     if (miniMap.get(i) == 1) {
                         g2d.setColor(new Color(0, 0, 0, (int) (255 * transp)));
+                    } else if (miniMap.get(i) == 2) {
+                        g2d.setColor(new Color(128, 0, 0, (int) (255 * transp)));
+                    } else if (miniMap.get(i) == 3) {
+                        g2d.setColor(new Color(188, 181, 151, (int) (255 * transp)));
                     } else {
                         g2d.setColor(new Color(122, 121, 91, (int) (255 * transp)));
                     }

@@ -34,9 +34,30 @@ public class ImageHandler {
         }
     }
 
+    private BufferedImage getImage(String path) {
+        BufferedImage originalImage;
+        if (backgrounds.containsKey(path)) {
+            originalImage = backgrounds.get(path);
+        } else {
+            try {
+                originalImage = ImageIO.read(new File(path));
+                backgrounds.put(path, originalImage);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+        }
+        BufferedImage copyOfImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), originalImage.getType());
+        Graphics g = copyOfImage.createGraphics();
+        g.drawImage(originalImage, 0, 0, null);
+        g.dispose();
+        return copyOfImage;
+    }
+
     public BufferedImage getBackground(String path, List<Boolean> doors, Boolean open) {
-        BufferedImage img = getImageFromDisc(path);
+        BufferedImage img = getImage(path);
         Graphics g = img.getGraphics();
+        g.drawImage(img, 0, 0, null);
         for (int i = 0; i < 4; i++) {
             if (doors.get(i)) {
                 if (i == 0) {

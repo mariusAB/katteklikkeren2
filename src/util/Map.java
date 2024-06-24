@@ -7,6 +7,7 @@ public class Map {
     private Logic logic;
     private int currRoom ;
     private List<RoomContainer> rooms;
+    private RoomDistributer roomDistributer;
     private int width = 5;
     private int height = 5;
 
@@ -14,9 +15,11 @@ public class Map {
         this.logic = logic;
         this.width = width;
         this.height = height;
+        roomDistributer = new RoomDistributer(width, height, logic);
         initRooms();
         currRoom = width*height/2; // TODO: fiks
-        rooms.get(currRoom).setRoom(new Room(logic));
+        rooms.get(currRoom).setRoom(roomDistributer.getStartRoom());
+        rooms.get(currRoom-1).setRoom(roomDistributer.getStartRoom());
     }
 
     private void initRooms() {
@@ -24,10 +27,6 @@ public class Map {
         for (int i = 0; i < width*height; i++) {
             rooms.add(new RoomContainer(i, width, height));
         }
-    }
-
-    private int getRoomIndex(int x, int y) {
-        return x + y*width;
     }
 
     public int getMapWidth() {
@@ -45,7 +44,9 @@ public class Map {
     public List<Integer> getMiniMap() {
         List<Integer> miniMap = new ArrayList<Integer>();
         for (int i = 0; i < width*height; i++) {
-            if (rooms.get(i).hasRoom()) {
+            if (rooms.get(i).hasRoom() && i == currRoom) {
+                miniMap.add(2);
+            } else if (rooms.get(i).hasRoom()) {
                 miniMap.add(1);
             } else {
                 miniMap.add(0);
@@ -56,22 +57,22 @@ public class Map {
 
     public List<Boolean> getDoors() {
         List<Boolean> doors = new ArrayList<Boolean>();
-        if (rooms.get(currRoom).getAbove() != -1) {
+        if (rooms.get(currRoom).getAbove() != -1 && rooms.get(rooms.get(currRoom).getAbove()).hasRoom()) {
             doors.add(true);
         } else {
             doors.add(false);
         }
-        if (rooms.get(currRoom).getRight() != -1) {
+        if (rooms.get(currRoom).getRight() != -1 && rooms.get(rooms.get(currRoom).getRight()).hasRoom()) {
             doors.add(true);
         } else {
             doors.add(false);
         }
-        if (rooms.get(currRoom).getBelow() != -1) {
+        if (rooms.get(currRoom).getBelow() != -1 && rooms.get(rooms.get(currRoom).getBelow()).hasRoom()) {
             doors.add(true);
         } else {
             doors.add(false);
         }
-        if (rooms.get(currRoom).getLeft() != -1) {
+        if (rooms.get(currRoom).getLeft() != -1 && rooms.get(rooms.get(currRoom).getLeft()).hasRoom()) {
             doors.add(true);
         } else {
             doors.add(false);
@@ -89,5 +90,6 @@ public class Map {
         } else if (dir == 3 && rooms.get(currRoom).getLeft() != -1) {
             currRoom = rooms.get(currRoom).getLeft();
         }
+        logic.setRoom(rooms.get(currRoom).getRoom());
     }
 }

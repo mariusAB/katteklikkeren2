@@ -27,30 +27,32 @@ public class Room {
     private String path = "img/room1.png";
     private List<Door> doors = new ArrayList<>();
     private boolean open = false;
+    private int width = 10000;
+    private int height = 6000;
 
     public Room(Logic l) {
-        Obstacle obstacle = new Obstacle(100, 100, 50, "img/icon.png", this);
+        Obstacle obstacle = new Obstacle(1000, 1000, 300, "img/icon.png", this);
         addThing(obstacle);
         this.l = l;
 
-        Enemy enemy = new Enemy(500, 20, 20, 2, 25, 1, "img/icon.png", this);
+        Enemy enemy = new Enemy(5000, 200, 20, 5, 25, 100, "img/icon.png", this);
         addThing(enemy);
 
-        Enemy enemy2 = new Enemy(600, 20, 20, 3, 25, 50, "img/icon.png", this);
+        Enemy enemy2 = new Enemy(6000, 200, 20, 17, 25, 50, "img/icon.png", this);
         addThing(enemy2);
 
-        Enemy enemy3 = new Enemy(800, 20, 20, 3, 25, 50, "img/icon.png", this);
+        Enemy enemy3 = new Enemy(7000, 200, 20, 17, 25, 50, "img/icon.png", this);
         addThing(enemy3);
 
-        Enemy enemy4 = new Enemy(1000, 20, 20, 3, 25, 50, "img/icon.png", this);
+        Enemy enemy4 = new Enemy(8000, 200, 20, 17, 25, 50, "img/icon.png", this);
         addThing(enemy4);
 
-        Item item = new Item(200, 600, 70, "HealthPotion", "img/healthPotion.png", this);
+        Item item = new Item(2000, 5000, 300, "HealthPotion", "img/healthPotion.png", this);
         addThing(item);
 
         MagicStaff weapon = new MagicStaff(this);
 
-        WeaponItem weaponItem = new WeaponItem(300, 600, 70, weapon, this);
+        WeaponItem weaponItem = new WeaponItem(3000, 5000, 300, weapon, this);
         addThing(weaponItem);
     }
 
@@ -67,16 +69,24 @@ public class Room {
         projectiles.clear();
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public BufferedImage getBackground() {
         if (!open) {
             for (int i = 0; i < 4; i++) {
                 if (l.getMap().getDoors().get(i)) {
                     if (i == 0) {
                         Door d = new Door(
-                        (int) (l.getWidth() / 2.4), 
-                        (int) (l.getHeight() * margin), 
-                        (int) (l.getWidth() / 1.7), 
-                        (int) (l.getHeight() * margin + 10), 
+                        (int) (width / 2.4), 
+                        (int) (height * margin), 
+                        (int) (width / 1.7), 
+                        (int) (height * margin + 70), 
                         0,
                         this
                     );
@@ -84,10 +94,10 @@ public class Room {
                     }
                     if (i == 1) {
                         Door d = new Door(
-                        (int) (l.getWidth() * (1 - margin) - 10), 
-                        (int) (l.getHeight() / 2.9), 
-                        (int) (l.getWidth()), 
-                        (int) (l.getHeight() / 1.7), 
+                        (int) (width * (1 - margin) - 70), 
+                        (int) (height / 2.9), 
+                        (int) (width), 
+                        (int) (height / 1.7), 
                         1,
                         this
                     );
@@ -95,10 +105,10 @@ public class Room {
                     }
                     if (i == 2) {
                         Door d = new Door(
-                        (int) (l.getWidth() / 2.4), 
-                        (int) (l.getHeight() * (1 - margin*2) - 10), 
-                        (int) (l.getWidth() / 1.7), 
-                        (int) (l.getHeight() * (1 - margin)), 
+                        (int) (width / 2.4), 
+                        (int) (height * (1 - margin*2) - 70), 
+                        (int) (width / 1.7), 
+                        (int) (height * (1 - margin)), 
                         2,
                         this
                     );
@@ -106,10 +116,10 @@ public class Room {
                     }
                     if (i == 3) {
                         Door d = new Door(
-                        (int) (l.getWidth() * margin), 
-                        (int) (l.getHeight() / 2.9), 
-                        (int) (l.getWidth() * margin) + 10, 
-                        (int) (l.getHeight() / 1.7), 
+                        (int) (width * margin), 
+                        (int) (height / 2.9), 
+                        (int) (width * margin) + 70, 
+                        (int) (height / 1.7), 
                         3,
                         this
                     );
@@ -238,7 +248,7 @@ public class Room {
         return i;
     }
 
-    public boolean canMove(int x, int y, int width, int height) {
+    public boolean canMove(int x, int y) {
         if (x < width*margin || x > width*(1-margin) || y < height*margin || y > height*(1-margin*2)) {
             return false;
         }

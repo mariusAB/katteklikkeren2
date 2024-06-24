@@ -30,6 +30,14 @@ public class Thing {
         return y;
     }
 
+    public int getRoomWidth() {
+        return currRoom.get().getWidth();
+    }
+
+    public int getRoomHeight() {
+        return currRoom.get().getHeight();
+    }
+
     public int getHitBox() {
         return hitBox;
     }
@@ -58,13 +66,5 @@ public class Thing {
 
     public double getRotation() {
         return 0;
-    }
-
-    public void resize(int prevWidth, int prevHeight, int width, int height) {
-        x = x * width / prevWidth;
-        y = y * height / prevHeight;
-        if (currRoom.get() != null) {
-            currRoom.get().getImageHandler().resize(width, height);
-        }
     }
 }

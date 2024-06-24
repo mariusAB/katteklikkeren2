@@ -6,7 +6,6 @@ import util.Room;
 
 public class Main extends Thing{
     private int speed;
-    private int originalSpeed;
     private int hp;
     private int maxHealth;
     private String path1;
@@ -16,7 +15,6 @@ public class Main extends Thing{
     public Main(int hitBox, int speed, int hp, String path1, String path2, Room r) {
         super(0, 0, hitBox, path1, r);
         this.speed = speed;
-        this.originalSpeed = speed;
         this.hp = hp;
         maxHealth = hp;
         this.hp = hp;
@@ -24,7 +22,7 @@ public class Main extends Thing{
         this.path2 = path2;
     }
 
-    public void moveX(int x, int w, int h) {
+    public void moveX(int x) {
         if (x < 0) {
             super.path = path1;
             dirLeft = true;
@@ -33,16 +31,16 @@ public class Main extends Thing{
             dirLeft = false;
         }
         for (int i = 0; i < speed; i++) {
-            if (currRoom.get().canMove(this.x + x - i, y, w, h)) {
+            if (currRoom.get().canMove(this.x + x - i, y)) {
                 this.x += x - i;
                 break;
             }
         }
     }
     
-    public void moveY(int y, int w, int h) {
+    public void moveY(int y) {
         for (int i = 0; i < speed; i++) {
-            if (currRoom.get().canMove(x, this.y + y - i, w, h)) {
+            if (currRoom.get().canMove(x, this.y + y - i)) {
                 this.y += y - i;
                 break;
             }
@@ -87,10 +85,5 @@ public class Main extends Thing{
 
     public int getMaxHealth() {
         return maxHealth;
-    }
-
-    public void resize(int prevWidth, int prevHeight, int width, int height) {
-        super.resize(prevWidth, prevHeight, width, height);
-        speed = originalSpeed * width / 1700;
     }
 }

@@ -4,8 +4,8 @@ import util.things.Projectile;
 
 public class FireBallStaff extends Weapon{
     private Room r;
-    private int speed = 10;
-    private int hitBox = 10;
+    private int speed = 70;
+    private int hitBox = 60;
     private int dmg = 25;
     private int delay = 50;
     private int lastFired = 0;

@@ -9,7 +9,7 @@ public class StarterSword extends Weapon{
     private int lastFired = 0;
     private int upTime = 5;
     private int size = 50;
-    private int length = 200;
+    private int length = 1100;
     public StarterSword(Room r) {
         super(r);
         super.path = "img/sword.png";

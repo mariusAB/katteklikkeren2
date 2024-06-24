@@ -50,9 +50,10 @@ public class Katteknappeklikkeren2 extends JFrame{
     private Image roomImg;
     private List<Thing> things = new ArrayList<>();
     private Logic l;
-    private String backPath;
     private boolean hasRun = false;
     private Timer timer;
+    private int roomWidth;
+    private int roomHeight;
 
     public Katteknappeklikkeren2(int width, int heigth) {
         try {
@@ -144,7 +145,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             this.addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                l.mouseClicked(e.getX(), e.getY()-15*1713/getHeight());
+                l.mouseClicked(translateMouseX(e.getX()), translateMouseY(e.getY()-30));
                 l.mouseHeld(true);
             }
 
@@ -159,10 +160,18 @@ public class Katteknappeklikkeren2 extends JFrame{
         this.addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseDragged(MouseEvent e) {
-                l.mouseClicked(e.getX(), e.getY() - 15 * 1713 / getHeight());
+                l.mouseClicked(translateMouseX(e.getX()), translateMouseY(e.getY()-30));
             }
         });
         this.requestFocusInWindow();
+    }
+
+    private int translateMouseX(int x) {
+        return x * roomWidth / game.getWidth();
+    }
+
+    private int translateMouseY(int y) {
+        return y * roomHeight / game.getHeight();
     }
 
     public void pause() {
@@ -193,6 +202,16 @@ public class Katteknappeklikkeren2 extends JFrame{
         item.repaint();
     }
 
+    private int translateGameX(Thing t) {
+        roomWidth = t.getRoomWidth();
+        return t.getX() * game.getWidth() / roomWidth;
+    }
+
+    private int translateGameY(Thing t) {
+        roomHeight = t.getRoomHeight();
+        return t.getY() * game.getHeight() / roomHeight;
+    }
+
     class Item extends JPanel {
         @Override
         protected void paintComponent(Graphics g) {
@@ -206,11 +225,11 @@ public class Katteknappeklikkeren2 extends JFrame{
                 }
                 int imgWidth = img.getWidth(null);
                 int imgHeight = img.getHeight(null);
-                int centerX = things.get(i).getX() - imgWidth / 2;
-                int centerY = things.get(i).getY() - imgHeight / 2;
+                int centerX = translateGameX(things.get(i)) - imgWidth / 2;
+                int centerY = translateGameY(things.get(i)) - imgHeight / 2;
                 
                 AffineTransform old = g2d.getTransform();
-                g2d.rotate(Math.toRadians(things.get(i).getRotation()), things.get(i).getX(), things.get(i).getY());
+                g2d.rotate(Math.toRadians(things.get(i).getRotation()), translateGameX(things.get(i)), translateGameY(things.get(i)));
                 g2d.drawImage(img, centerX, centerY, this);
                 g2d.setTransform(old);
 
@@ -269,15 +288,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             }
         }
         else {
-            l.resize(prevWidth, prevHeight, width, height);
-            try {
-                roomImg = ImageIO.read(new File(backPath));
-                roomImg = roomImg.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            game.revalidate();
-            game.repaint();
+            l.resized();
         }
     }
 

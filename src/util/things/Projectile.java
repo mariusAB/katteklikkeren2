@@ -33,7 +33,7 @@ public class Projectile extends Thing{
         return isFriendly;
     }
 
-    public void tick(int w, int h) {
+    public void tick() {
         for (Enemy e : currRoom.get().getEnemies()) {
             double d = Math.sqrt(Math.pow(getX()-e.getX(), 2) + Math.pow(getY()-e.getY(), 2));
             if (d <= getHitBox() + e.getHitBox()) {
@@ -44,7 +44,7 @@ public class Projectile extends Thing{
         }
         if (vx != 0 || vy != 0) {
         }
-        if (currRoom.get().canMove(x + ((int)vx), y + ((int)vy), w, h)) {
+        if (currRoom.get().canMove(x + ((int)vx), y + ((int)vy))) {
             x += vx;
             y += vy;
         }

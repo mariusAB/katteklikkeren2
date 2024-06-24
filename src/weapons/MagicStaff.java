@@ -3,8 +3,8 @@ import util.*;
 import util.things.Projectile;
 
 public class MagicStaff extends Weapon{
-    private int speed = 10;
-    private int hitBox = 10;
+    private int speed = 70;
+    private int hitBox = 200;
     private int dmg = 10;
     private int delay = 20;
     private int lastFired = 0;

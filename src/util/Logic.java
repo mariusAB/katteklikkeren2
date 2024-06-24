@@ -33,7 +33,7 @@ public class Logic {
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        main = new Main(10, 7, 100, "img/venstrefly.png", "img/icon.png", currRoom);
+        main = new Main(10, 50, 100, "img/venstrefly.png", "img/icon.png", currRoom);
         k.addImage(main);
         currRoom.addMain(main);
         ih = new ImageHandler();
@@ -52,7 +52,7 @@ public class Logic {
                 ((Enemy) t).tick();
             }
             if (t instanceof Projectile) {
-                ((Projectile) t).tick(k.getWidth(), k.getHeight());
+                ((Projectile) t).tick();
             }
             if (t instanceof SwordSwipe) {
                 ((SwordSwipe) t).tick();
@@ -78,16 +78,16 @@ public class Logic {
         toRemove.clear();
         if (keys != null) {
             if (keys.contains(KeyEvent.VK_A)) {
-                main.moveX(-main.getSpeed(), k.getWidth(), k.getHeight());
+                main.moveX(-main.getSpeed());
             }
             if (keys.contains(KeyEvent.VK_D)) {
-                main.moveX(main.getSpeed(), k.getWidth(), k.getHeight());
+                main.moveX(main.getSpeed());
             }
             if (keys.contains(KeyEvent.VK_W)) {
-                main.moveY(-main.getSpeed(), k.getWidth(), k.getHeight());
+                main.moveY(-main.getSpeed());
             }
             if (keys.contains(KeyEvent.VK_S)) {
-                main.moveY(main.getSpeed(), k.getWidth(), k.getHeight());
+                main.moveY(main.getSpeed());
             }
         }
     }
@@ -119,18 +119,10 @@ public class Logic {
     public void gameOver() {
         k.gameOver(source);
     }
-
-    public int getWidth() {
-        return k.getWidth();
-    }
-
-    public int getHeight() {
-        return k.getHeight();
-    }
     
     public void toMid() {
-        main.setX(k.getSize().width / 2);
-        main.setY(k.getSize().height / 2);
+        main.setX(currRoom.getWidth() / 2);
+        main.setY(currRoom.getHeight() / 2);
     }
 
     public void mouseClicked(int x, int y) {
@@ -177,9 +169,7 @@ public class Logic {
         toRemove.add(thing);
     }
 
-    public void resize(int prevWidth, int prevHeight, int width, int height) {
-        for (Thing thing : currRoom.getThings()) {
-            thing.resize(prevWidth, prevHeight, width, height);
-        }
+    public void resized() {
+        k.changeBackground(currRoom.getBackground());
     }
 }

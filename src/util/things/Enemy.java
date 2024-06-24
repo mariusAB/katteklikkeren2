@@ -4,7 +4,6 @@ import util.Room;
 
 public class Enemy extends Thing{
     private int speed;
-    private int originalSpeed;
     private int damage;
     private int hp;
     private int maxHealth;
@@ -13,7 +12,6 @@ public class Enemy extends Thing{
     public Enemy(int x, int y, int hitBox, int speed, int damage, int hp, String path, Room r) {
         super(x, y, hitBox, path, r);
         this.speed = speed;
-        this.originalSpeed = speed;
         this.damage = damage;
         this.hp = hp;
         maxHealth = hp;
@@ -67,10 +65,5 @@ public class Enemy extends Thing{
 
     private double lerp(double start, double end, double t) {
         return start + t * (end - start);
-    }
-
-    public void resize(int prevWidth, int prevHeight, int width, int height) {
-        super.resize(prevWidth, prevHeight, width, height);
-        speed = originalSpeed * width / 1700;
     }
 }

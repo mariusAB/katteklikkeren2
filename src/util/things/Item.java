@@ -13,6 +13,7 @@ public class Item extends Thing{
         if (item.equals("HealthPotion")) {
             super.currRoom.get().getMain().heal(25);
             super.currRoom.get().removeThing(this);
+            super.hitBox = 300;
         }
     }
 }

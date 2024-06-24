@@ -41,27 +41,27 @@ public class ImageHandler {
             if (doors.get(i)) {
                 if (i == 0) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openUp.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/openUp.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedUp.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/closedUp.png"), 0, 0, null);
                     }
                 } else if (i == 1) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openRight.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/openRight.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedRight.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/closedRight.png"), 0, 0, null);
                     }
                 } else if (i == 2) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openDown.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/openDown.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedDown.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/closedDown.png"), 0, 0, null);
                     }
                 } else if (i == 3) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openLeft.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/openLeft.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedLeft.png", img.getWidth(), img.getHeight()), 0, 0, null);
+                        g.drawImage(getImageFromDisc("img/doors/closedLeft.png"), 0, 0, null);
                     }
                 }
             }

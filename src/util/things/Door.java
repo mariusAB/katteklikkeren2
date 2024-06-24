@@ -44,7 +44,7 @@ public class Door extends Thing{
                 currRoom.get().getMain().setY(currRoom.get().getDoors().get(2).gety0()-1);
             }
             if (dir == 1) {
-                currRoom.get().getMain().setX(currRoom.get().getDoors().get(3).getx0()+1);
+                currRoom.get().getMain().setX(currRoom.get().getDoors().get(3).getx1()+1);
             }
             if (dir == 2) {
                 currRoom.get().getMain().setY(currRoom.get().getDoors().get(0).gety1()+1);

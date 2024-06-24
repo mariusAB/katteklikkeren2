@@ -21,7 +21,7 @@ public class Thing {
         this.currRoom = new WeakReference<>(r);
         this.path = path;
     }
-
+    
     public int getX() {
         return x;
     }

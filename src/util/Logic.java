@@ -144,14 +144,13 @@ public class Logic {
     }
 
     public void setRoom(Room r) {
-        currRoom.removeMain();
         currRoom.resetTick();
         currRoom = r;
         currRoom.addMain(main);
+        main.setRoom(r);
         k.changeBackground(r.getBackground());
         currWeapon.setRoom(currRoom);
         currWeapon.reset();
-
     }
 
     public void mouseHeld(Boolean held) {

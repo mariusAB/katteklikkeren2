@@ -179,10 +179,6 @@ public class Room {
         return enemies;
     }
 
-    public void removeMain() {
-        main = null;
-    }
-
     public int getMainX() {
         return l.getMain().getX();
     }

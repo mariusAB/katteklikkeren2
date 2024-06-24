@@ -286,7 +286,6 @@ public class Katteknappeklikkeren2 extends JFrame{
                     } else {
                         g2d.setColor(new Color(122, 121, 91, (int) (255 * transp)));
                     }
-                    // Adjust drawing position to be in the top right corner
                     g2d.fillRect(startX + x * miniMapWidth, startY + margin + y * miniMapHeight, miniMapWidth - margin, miniMapHeight - margin);
                 }
             }

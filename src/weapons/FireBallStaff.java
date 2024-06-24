@@ -13,6 +13,9 @@ public class FireBallStaff extends Weapon{
     public FireBallStaff(Room r) {
         super(r);
         this.r = r;
+        super.path = "img/sword.png";
+        super.path1 = "img/swordCatL.png";
+        super.path2 = "img/swordCatR.png";
     }
 	public void use(int xfrom, int yfrom, int xto, int yto) {
         if (r.getRoomTick() - lastFired > delay){

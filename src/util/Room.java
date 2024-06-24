@@ -12,6 +12,7 @@ import util.things.Projectile;
 import util.things.SwordSwipe;
 import util.things.Thing;
 import util.things.WeaponItem;
+import weapons.FireBallStaff;
 import weapons.MagicStaff;
 
 public class Room {
@@ -35,16 +36,16 @@ public class Room {
         addThing(obstacle);
         this.l = l;
 
-        Enemy enemy = new Enemy(5000, 200, 20, 5, 25, 100, "img/icon.png", this);
+        Enemy enemy = new Enemy(5000, 200, 60, 5, 25, 100, "img/icon.png", this);
         addThing(enemy);
 
-        Enemy enemy2 = new Enemy(6000, 200, 20, 17, 25, 50, "img/icon.png", this);
+        Enemy enemy2 = new Enemy(6000, 200, 60, 17, 25, 50, "img/icon.png", this);
         addThing(enemy2);
 
-        Enemy enemy3 = new Enemy(7000, 200, 20, 17, 25, 50, "img/icon.png", this);
+        Enemy enemy3 = new Enemy(7000, 200, 60, 17, 25, 50, "img/icon.png", this);
         addThing(enemy3);
 
-        Enemy enemy4 = new Enemy(8000, 200, 20, 17, 25, 50, "img/icon.png", this);
+        Enemy enemy4 = new Enemy(8000, 200, 60, 17, 25, 50, "img/icon.png", this);
         addThing(enemy4);
 
         Item item = new Item(2000, 5000, 300, "HealthPotion", "img/healthPotion.png", this);

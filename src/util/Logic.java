@@ -33,9 +33,9 @@ public class Logic {
 
     public Logic(Katteknappeklikkeren2 k) {
         this.k = k;
-        map = new Map(this, 5, 7);
+        map = new Map(this, 7, 7);
         currRoom = map.getCurrRoom();
-        main = new Main(10, 50, 100, "img/venstrefly.png", "img/icon.png", currRoom);
+        main = new Main(70, 50, 100, "img/venstrefly.png", "img/icon.png", currRoom);
         k.addImage(main);
         currRoom.addMain(main);
         ih = new ImageHandler();

@@ -64,58 +64,62 @@ public class Room {
 
     public void resetTick() {
         i = 0;
+        projectiles.clear();
     }
 
     public BufferedImage getBackground() {
-        for (int i = 0; i < 4; i++) {
-            if (l.getMap().getDoors().get(i)) {
-                if (i == 0) {
-                    Door d = new Door(
-                    (int) (l.getWidth() / 2.4), 
-                    (int) (l.getHeight() * margin), 
-                    (int) (l.getWidth() / 1.7), 
-                    (int) (l.getHeight() * margin + 10), 
-                    0,
-                    this
-                );
-                doors.add(d);
-                }
-                if (i == 1) {
-                    Door d = new Door(
-                    (int) (l.getWidth() * (1 - margin) - 10), 
-                    (int) (l.getHeight() / 2.9), 
-                    (int) (l.getWidth()), 
-                    (int) (l.getHeight() / 1.7), 
-                    1,
-                    this
-                );
-                doors.add(d);
-                }
-                if (i == 2) {
-                    Door d = new Door(
-                    (int) (l.getWidth() / 2.4), 
-                    (int) (l.getHeight() * (1 - margin*2) - 10), 
-                    (int) (l.getWidth() / 1.7), 
-                    (int) (l.getHeight() * (1 - margin)), 
-                    2,
-                    this
-                );
-                doors.add(d);
-                }
-                if (i == 3) {
-                    Door d = new Door(
-                    (int) (l.getWidth() * margin), 
-                    (int) (l.getHeight() / 2.9), 
-                    (int) (l.getWidth() * margin) + 10, 
-                    (int) (l.getHeight() / 1.7), 
-                    3,
-                    this
-                );
-                doors.add(d);
+        if (!open) {
+            for (int i = 0; i < 4; i++) {
+                if (l.getMap().getDoors().get(i)) {
+                    if (i == 0) {
+                        Door d = new Door(
+                        (int) (l.getWidth() / 2.4), 
+                        (int) (l.getHeight() * margin), 
+                        (int) (l.getWidth() / 1.7), 
+                        (int) (l.getHeight() * margin + 10), 
+                        0,
+                        this
+                    );
+                    doors.add(d);
+                    }
+                    if (i == 1) {
+                        Door d = new Door(
+                        (int) (l.getWidth() * (1 - margin) - 10), 
+                        (int) (l.getHeight() / 2.9), 
+                        (int) (l.getWidth()), 
+                        (int) (l.getHeight() / 1.7), 
+                        1,
+                        this
+                    );
+                    doors.add(d);
+                    }
+                    if (i == 2) {
+                        Door d = new Door(
+                        (int) (l.getWidth() / 2.4), 
+                        (int) (l.getHeight() * (1 - margin*2) - 10), 
+                        (int) (l.getWidth() / 1.7), 
+                        (int) (l.getHeight() * (1 - margin)), 
+                        2,
+                        this
+                    );
+                    doors.add(d);
+                    }
+                    if (i == 3) {
+                        Door d = new Door(
+                        (int) (l.getWidth() * margin), 
+                        (int) (l.getHeight() / 2.9), 
+                        (int) (l.getWidth() * margin) + 10, 
+                        (int) (l.getHeight() / 1.7), 
+                        3,
+                        this
+                    );
+                    doors.add(d);
+                    }
                 }
             }
+            return getImageHandler().getBackground(path, l.getMap().getDoors(), false);
         }
-        return getImageHandler().getBackground(path, l.getMap().getDoors(), false);
+        return getImageHandler().getBackground(path, l.getMap().getDoors(), true);
     }
 
     public double getMargin() {

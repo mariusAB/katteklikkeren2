@@ -5,12 +5,18 @@ import java.util.List;
 
 public class Map {
     private Logic l;
+    private Room currRoom;
+    private Room firstRoom;
+    private Room secondRoom;
     public Map(Logic l) {
         this.l = l;
+        firstRoom = new Room(l);
+        currRoom = firstRoom;
+        secondRoom = new Room(l);
     }
 
     public Room getCurrRoom() {
-        return new Room(l);
+        return currRoom;
     }
 
     public List<Boolean> getDoors() {
@@ -23,6 +29,12 @@ public class Map {
     }
 
     public void move(int dir) {
-        l.setRoom(new Room(l));
+        if (currRoom.equals(firstRoom)) {
+            currRoom = secondRoom;
+            l.setRoom(currRoom);
+        } else {
+            currRoom = firstRoom;
+            l.setRoom(currRoom);
+        }
     }
 }

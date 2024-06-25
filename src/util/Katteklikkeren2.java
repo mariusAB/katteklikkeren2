@@ -25,7 +25,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Katteknappeklikkeren2 extends JFrame{
+public class Katteklikkeren2 extends JFrame{
     private CardLayout scenes = new CardLayout();
     private int width = 1200;
     private int height = 800;
@@ -57,7 +57,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private boolean displayMiniMap = false;
     private List<Integer> miniMap;
 
-    public Katteknappeklikkeren2(int width, int heigth) {
+    public Katteklikkeren2(int width, int heigth) {
         try {
             backgroundImage = ImageIO.read(new File("img/mainscreen.png"));
             setIconImage(ImageIO.read(new File("img/magicStaffCatR.png")));
@@ -342,7 +342,7 @@ public class Katteknappeklikkeren2 extends JFrame{
     private void menu(JPanel menu, JPanel panel) {
         menu.setLayout(new BoxLayout(menu, BoxLayout.Y_AXIS));
     
-        JLabel title = new JLabel("Katteknappeklikkeren 2");
+        JLabel title = new JLabel("Katteklikkeren 2");
         title.setFont(new Font("Rockwell", Font.BOLD, 40));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
         EmptyBorder b = new EmptyBorder(15, 0, 30, 0);
@@ -429,11 +429,11 @@ public class Katteknappeklikkeren2 extends JFrame{
             public void actionPerformed(ActionEvent e) {
                 if (fullScreen.isSelected()) {
                     GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-                    gd.setFullScreenWindow(Katteknappeklikkeren2.this);
+                    gd.setFullScreenWindow(Katteklikkeren2.this);
                 } else {
                     GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
                     gd.setFullScreenWindow(null);
-                    Katteknappeklikkeren2.this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+                    Katteklikkeren2.this.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 }
             }
         });
@@ -606,7 +606,7 @@ public class Katteknappeklikkeren2 extends JFrame{
             public void run() {
                 int width = 1200;
                 int height = 800;
-                Katteknappeklikkeren2 frame = new Katteknappeklikkeren2(width, height);
+                Katteklikkeren2 frame = new Katteklikkeren2(width, height);
                 frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
                 frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 frame.addComponentListener(new ComponentAdapter() {

@@ -18,7 +18,7 @@ import weapons.StarterSword;
 import weapons.Weapon;
 
 public class Logic {
-    private Katteknappeklikkeren2 k;
+    private Katteklikkeren2 k;
     private Main main;
     private Set<Integer> keys;
     private Map map;
@@ -31,7 +31,7 @@ public class Logic {
     private int mouseX = 0;
     private int mouseY = 0;
 
-    public Logic(Katteknappeklikkeren2 k) {
+    public Logic(Katteklikkeren2 k) {
         this.k = k;
         map = new Map(this, 7, 7);
         currRoom = map.getCurrRoom();

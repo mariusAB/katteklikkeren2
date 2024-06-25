@@ -7,25 +7,155 @@ public class Map {
     private Logic logic;
     private int currRoom ;
     private List<RoomContainer> rooms;
+    private List<RoomContainer> edgeRooms = new ArrayList<>();
+    private List<RoomGroup> buttonGroups = new ArrayList<>();
     private RoomDistributer roomDistributer;
-    private int width = 5;
-    private int height = 5;
+    private int width;
+    private int height;
+    private int buttonRooms = 3;
 
     public Map(Logic logic, int width, int height) {
         this.logic = logic;
+        if (width < 3 || height < 3) {
+            throw new IllegalArgumentException("Width and height must be at least 3");
+        }
         this.width = width;
         this.height = height;
         roomDistributer = new RoomDistributer(width, height, logic);
+        initializeMap();
+    }
+
+    private void initializeMap() {
+        if (width < 3 || height < 3) {
+            throw new IllegalArgumentException("Width and height must be at least 3");
+        }
+        roomDistributer = new RoomDistributer(width, height, logic);
+        rooms = new ArrayList<>();
+        edgeRooms.clear();
+        buttonGroups.clear();
         initRooms();
-        currRoom = width*height/2; // TODO: fiks
+        setUpEdgeRooms();
+        generateStartRoom();
+        generateButtonRoomsOnEdges();
+        generateMap();
+        if (getFilledRooms() < width * height / 2 || getFilledRooms() > width * height / 1.5 || getSqueezedRooms() > width*height/(width*height*0.6)){
+            rooms.clear();
+            edgeRooms.clear();
+            buttonGroups.clear();
+            initializeMap();
+        }
+    }
+
+    private int getFilledRooms() {
+        int amount = 0;
+        for (RoomContainer rc : rooms) {
+            if (rc.hasRoom()) {
+                amount++;
+            }
+        }
+        return amount;
+    }
+
+    private int getSqueezedRooms() {
+        int amount = 0;
+        for (RoomContainer rc : rooms) {
+            if (rc.hasRoom()) {
+                if (rc.getAbove() != -1 && rooms.get(rc.getAbove()).hasRoom()
+                && rc.getRight() != -1 && rooms.get(rc.getRight()).hasRoom()
+                && rc.getBelow() != -1 && rooms.get(rc.getBelow()).hasRoom()
+                && rc.getLeft() != -1 && rooms.get(rc.getLeft()).hasRoom()) {
+                    amount ++;
+                }
+            }
+        }
+        return amount;
+    }
+
+    private void setUpEdgeRooms() {
+        for (int i = 0; i < width*height; i++) {
+            if (rooms.get(i).getAbove() == -1 || rooms.get(i).getRight() == -1 || rooms.get(i).getBelow() == -1 || rooms.get(i).getLeft() == -1) {
+                edgeRooms.add(rooms.get(i));
+            }
+        }
+    }
+
+    private void generateStartRoom() {
+        List<RoomContainer> middleRooms = new ArrayList<>(rooms);
+        middleRooms.removeAll(edgeRooms);
+        currRoom = middleRooms.get((int) (Math.random() * middleRooms.size())).getRoomIndex();
         rooms.get(currRoom).setRoom(roomDistributer.getStartRoom());
-        rooms.get(currRoom-1).setRoom(roomDistributer.getStartRoom());
+        RoomContainer up = rooms.get(rooms.get(currRoom).getAbove());
+        up.cantHaveSpecialRoom();
+        up.setConnected();
+        RoomContainer right = rooms.get(rooms.get(currRoom).getRight());
+        right.cantHaveSpecialRoom();
+        right.setConnected();
+        RoomContainer down = rooms.get(rooms.get(currRoom).getBelow());
+        down.cantHaveSpecialRoom();
+        down.setConnected();
+        RoomContainer left = rooms.get(rooms.get(currRoom).getLeft());
+        left.cantHaveSpecialRoom();
+        left.setConnected();
     }
 
     private void initRooms() {
-        rooms = new ArrayList<>(width*height);
+        rooms = new ArrayList<>();
         for (int i = 0; i < width*height; i++) {
             rooms.add(new RoomContainer(i, width, height));
+        }
+    }
+
+    private void generateMap() {
+        int groupsNotConnected = buttonGroups.size();
+        while (groupsNotConnected > 0) {
+            groupsNotConnected = buttonGroups.size();
+            for (RoomGroup rg : buttonGroups) {
+                rg.expand();
+                if (rg.isConnected()) {
+                    groupsNotConnected--;
+                }
+            }
+        }
+    }
+
+    private void generateButtonRoomsOnEdges() {
+        for (int i = 0; i < buttonRooms; i++) {
+            Room buttonRoom = roomDistributer.getButtonRoom();
+            RoomContainer buttonRoomContainer = null;
+            int edgeRoomSize = edgeRooms.size();
+            int edgeRoomIndex = (int) (Math.random() * edgeRoomSize);
+            if (edgeRooms.get(edgeRoomIndex).canHaveSpecialRoom()) {
+                edgeRooms.get(edgeRoomIndex).setRoom(buttonRoom);
+                buttonRoomContainer = edgeRooms.get(edgeRoomIndex);
+                makeButtonRoomsEndRooms(buttonRoomContainer);
+                buttonGroups.add(new RoomGroup(buttonRoomContainer, rooms, roomDistributer));
+            } else {
+                i--;
+            }
+        }
+        for (RoomGroup g : buttonGroups) {
+            List<RoomGroup> buttonGroupWithoutItself = new ArrayList<>(buttonRooms);
+            buttonGroupWithoutItself.remove(g);
+            g.addButtonGroups(buttonGroupWithoutItself);
+        }
+    }
+
+    private void makeButtonRoomsEndRooms(RoomContainer buttonRoomContainer) {
+        List<RoomContainer> adjacentRooms = new ArrayList<>();
+        if (buttonRoomContainer.getAbove() != -1) {
+            adjacentRooms.add(rooms.get(buttonRoomContainer.getAbove()));
+        }
+        if (buttonRoomContainer.getRight() != -1) {
+            adjacentRooms.add(rooms.get(buttonRoomContainer.getRight()));
+        }
+        if (buttonRoomContainer.getBelow() != -1) {
+            adjacentRooms.add(rooms.get(buttonRoomContainer.getBelow()));
+        }
+        if (buttonRoomContainer.getLeft() != -1) {
+            adjacentRooms.add(rooms.get(buttonRoomContainer.getLeft()));
+        }
+        for (RoomContainer r : adjacentRooms) {
+            r.cantHaveSpecialRoom();
         }
     }
 
@@ -80,16 +210,21 @@ public class Map {
         return doors;
     }
 
-    public void move(int dir) {
-        if (dir == 0 && rooms.get(currRoom).getAbove() != -1) {
-            currRoom = rooms.get(currRoom).getAbove();
-        } else if (dir == 1 && rooms.get(currRoom).getRight() != -1) {
-            currRoom = rooms.get(currRoom).getRight();
-        } else if (dir == 2 && rooms.get(currRoom).getBelow() != -1) {
-            currRoom = rooms.get(currRoom).getBelow();
-        } else if (dir == 3 && rooms.get(currRoom).getLeft() != -1) {
-            currRoom = rooms.get(currRoom).getLeft();
+    public RoomContainer getRoom(int index, int dir) {
+        if (dir == 0 && rooms.get(index).getAbove() != -1) {
+            return rooms.get(rooms.get(index).getAbove());
+        } else if (dir == 1 && rooms.get(index).getRight() != -1) {
+            return rooms.get(rooms.get(index).getRight());
+        } else if (dir == 2 && rooms.get(index).getBelow() != -1) {
+            return rooms.get(rooms.get(index).getBelow());
+        } else if (dir == 3 && rooms.get(index).getLeft() != -1) {
+            return rooms.get(rooms.get(index).getLeft());
         }
+        return null;
+    }
+
+    public void move(int dir) {
+        currRoom = getRoom(currRoom, dir).getRoomIndex();
         logic.setRoom(rooms.get(currRoom).getRoom());
     }
 }

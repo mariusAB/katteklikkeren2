@@ -5,6 +5,8 @@ public class RoomContainer {
     private int index;
     private int width;
     private int height;
+    private Boolean canHaveSpecialRoom = true;
+    private boolean connected = false;
 
     RoomContainer(int index, int width, int height) {
         this.index = index;
@@ -16,8 +18,21 @@ public class RoomContainer {
         this.r = room;
     }
 
+    public void cantHaveSpecialRoom() {
+        canHaveSpecialRoom = false;
+    }
+
     public Room getRoom() {
         return r;
+    }
+
+
+    public boolean canHaveSpecialRoom() {
+        return canHaveSpecialRoom;
+    }
+
+    public void setConnected() {
+        connected = true;
     }
 
     public int getAbove() {
@@ -25,6 +40,10 @@ public class RoomContainer {
             return index - width;
         }
         return -1;
+    }
+
+    public boolean isConnected() {
+        return connected;
     }
 
     public int getRight() {

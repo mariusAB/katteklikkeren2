@@ -5,6 +5,7 @@ import java.util.List;
 
 import util.things.Door;
 import util.things.Enemy;
+import util.things.EnemyLauncher;
 import util.things.Item;
 import util.things.Main;
 import util.things.Obstacle;
@@ -36,8 +37,15 @@ public class Room {
         addThing(obstacle);
         this.l = l;
 
-        Enemy enemy = new Enemy(5000, 2000, 60, 5, 25, 1, "img/icon.png", this);
+        Enemy enemy = new Enemy(5000, 1900, 60, 5, 25, 1, "img/icon.png", this);
         addThing(enemy);
+
+        EnemyLauncher enemy2 = new EnemyLauncher(5000, 2000, 60, 25, 30, 1, "img/icon.png", this);
+        addThing(enemy2);
+        Enemy enemy3 = new Enemy(5000, 2100, 60, 5, 25, 1, "img/icon.png", this);
+        addThing(enemy3);
+        Enemy enemy4 = new Enemy(5000, 2200, 60, 5, 25, 1, "img/icon.png", this);
+        addThing(enemy4);
 
         Item item = new Item(2000, 5000, 300, "HealthPotion", "img/healthPotion.png", this);
         addThing(item);

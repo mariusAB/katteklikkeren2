@@ -29,15 +29,21 @@ public class Projectile extends Thing{
         return rotation;
     }
 
-    public boolean isFriendly() {
-        return isFriendly;
-    }
-
     public void tick() {
-        for (Enemy e : currRoom.get().getEnemies()) {
-            double d = Math.sqrt(Math.pow(getX()-e.getX(), 2) + Math.pow(getY()-e.getY(), 2));
-            if (d <= getHitBox() + e.getHitBox()) {
-                e.damage(getDamage());
+        if (isFriendly) {
+            for (Enemy e : currRoom.get().getEnemies()) {
+                double d = Math.sqrt(Math.pow(getX()-e.getX(), 2) + Math.pow(getY()-e.getY(), 2));
+                if (d <= getHitBox() + e.getHitBox()) {
+                    e.damage(getDamage());
+                    currRoom.get().queueRemove(this);
+                    return;
+                }
+            }
+        } else {
+            Main main = currRoom.get().getMain();
+            double d = Math.sqrt(Math.pow(getX()-main.getX(), 2) + Math.pow(getY()-main.getY(), 2));
+            if (d <= getHitBox() + main.getHitBox()) {
+                main.damage(getDamage());
                 currRoom.get().queueRemove(this);
                 return;
             }

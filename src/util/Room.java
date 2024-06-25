@@ -33,9 +33,13 @@ public class Room {
     private int height = 6000;
 
     public Room(Logic l) {
-        Obstacle obstacle = new Obstacle(1000, 1000, 300, "img/icon.png", this);
-        addThing(obstacle);
         this.l = l;
+        
+        Obstacle obstacle = new Obstacle(1000, 1000, 300, true, "img/icon.png", this);
+        addThing(obstacle);
+
+        Obstacle obstacle2 = new Obstacle(2000, 2000, 300, false, "img/icon.png", this);
+        addThing(obstacle2);
 
         Enemy enemy = new Enemy(5000, 1900, 60, 5, 25, 1, "img/icon.png", this);
         addThing(enemy);
@@ -256,10 +260,16 @@ public class Room {
         if (x < width*margin || x > width*(1-margin) || y < height*margin || y > height*(1-margin*2)) {
             return false;
         }
-        for (Thing o : obstacles) {
-            double d = Math.sqrt(Math.pow(x-o.getX(), 2) + Math.pow(y-o.getY(), 2));
-            if (d <= o.getHitBox()) {
-                return false;
+        for (Obstacle o : obstacles) {
+            if (o.isRound()) {
+                double d = Math.sqrt(Math.pow(x-o.getX(), 2) + Math.pow(y-o.getY(), 2));
+                if (d <= o.getHitBox()) {
+                    return false;
+                }
+            } else {
+                if (x < o.getX() + o.getHitBox() && x > o.getX() - o.getHitBox() && y < o.getY() + o.getHitBox() && y > o.getY() - o.getHitBox()) {
+                    return false;
+                }
             }
         }
         return true;

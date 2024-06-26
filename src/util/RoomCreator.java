@@ -13,7 +13,7 @@ public class RoomCreator {
     private double margin;
     private List<Point> enemyPositionSlots = new ArrayList<>();
     private List<Point> obstaclePositionSlots = new ArrayList<>();
-    private Point lootSlot;
+    private Point lootSlot; // fiks
     public RoomCreator(int width, int height, Logic logic) {
         margin = logic.getMargin();
         this.width = width - (int) (width*3*margin);

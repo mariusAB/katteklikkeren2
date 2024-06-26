@@ -2,7 +2,7 @@ package util.things;
 
 import java.util.List;
 import java.util.ArrayList;
-
+import java.awt.Point;
 import util.Room;
 
 public class Enemy extends Thing{
@@ -68,10 +68,10 @@ public class Enemy extends Thing{
         return false;
     }
 
-    private int getXBasedOnNearbyEnemies(int x, int y) {
+    private Point getAvoidancePointBasedOnNearbyEnemies(int x, int y) {
         List<Enemy> nearbyEnemies = getNearbyEnemies(x, y);
         if (nearbyEnemies.isEmpty()) {
-            return x;
+            return new Point(x, y);
         }
     
         double centerX = 0, centerY = 0;
@@ -86,38 +86,13 @@ public class Enemy extends Thing{
         double avoidanceY = y - centerY;
         double magnitude = Math.sqrt(avoidanceX * avoidanceX + avoidanceY * avoidanceY);
         if (magnitude == 0) {
-            return x;
+            return new Point(x, y);
         }
-    
         avoidanceX = (avoidanceX / magnitude) * speed;
-        return (int) (x + avoidanceX);
-    }
-    
-    private int getYBasedOnNearbyEnemies(int x, int y) {
-        List<Enemy> nearbyEnemies = getNearbyEnemies(x, y);
-        if (nearbyEnemies.isEmpty()) {
-            return y;
-        }
-    
-        double centerX = 0, centerY = 0;
-        for (Enemy e : nearbyEnemies) {
-            centerX += e.getX();
-            centerY += e.getY();
-        }
-        centerX /= nearbyEnemies.size();
-        centerY /= nearbyEnemies.size();
-    
-        double avoidanceY = y - centerY;
-        double avoidanceX = x - centerX;
-        double magnitude = Math.sqrt(avoidanceY * avoidanceY + avoidanceX * avoidanceX);
-        if (magnitude == 0) {
-            return y;
-        }
-    
         avoidanceY = (avoidanceY / magnitude) * speed;
-        return (int) (y + avoidanceY);
+        return new Point((int) (x + avoidanceX), (int) (y + avoidanceY));
     }
-
+    
     public void tick() {
         int xMain = currRoom.get().getMainX();
         int yMain = currRoom.get().getMainY();
@@ -129,19 +104,20 @@ public class Enemy extends Thing{
             currRoom.get().queueRemove(this);
         }
         rotation = Math.toDegrees(Math.atan2(dy, dx));
-        double lerpFactor = speed / s;
-        dx = lerp(x, xMain, lerpFactor);
-        dy = lerp(y, yMain, lerpFactor);
-        if (containsEnemy((int) dx, (int) dy)) {
-            this.x = getXBasedOnNearbyEnemies((int) dx, (int) dy);
-            this.y = getYBasedOnNearbyEnemies((int) dx, (int) dy);
-        } else {
-            this.x = (int) dx;
-            this.y = (int) dy;
+        dx /= s;
+        dy /= s;
+        dx *= speed;
+        dy *= speed;
+        if (containsEnemy((int) dx + this.x, (int) dy + this.y)) {
+            Point avoidancePoint = getAvoidancePointBasedOnNearbyEnemies((int) dx + this.x, (int) dy + this.y);
+            dx = avoidancePoint.x - x;
+            dy = avoidancePoint.y - y;
+            dx /= s;
+            dy /= s;
+            dx *= speed;
+            dy *= speed;
         }
-    }
-
-    private double lerp(double start, double end, double t) {
-        return start + t * (end - start);
+        this.x += dx;
+        this.y += dy;
     }
 }

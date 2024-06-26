@@ -7,10 +7,6 @@ public class RoomDistributer {
         roomCreator = new RoomCreator(logic.getWidth(), logic.getHeight(), logic);
     }
 
-    private int getItemChance() {
-        return itemChance;
-    }
-
     public Room getStartRoom() {
         return roomCreator.getRoom("start", null);
     }
@@ -22,7 +18,6 @@ public class RoomDistributer {
     public Room getNormalRoom() {
         double rand = Math.random() * 100;
         if (rand < itemChance) {
-            System.out.println(rand);
             if (rand <= itemChance/2) {
                 return roomCreator.getRoom("normal", "healthPotion");
             } else {

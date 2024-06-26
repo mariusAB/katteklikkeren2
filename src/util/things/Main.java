@@ -16,7 +16,7 @@ public class Main extends Thing{
         super(0, 0, hitBox, path1, r);
         this.speed = speed;
         this.hp = hp;
-        this.hp = 99999;
+        this.hp = 9999999;
         maxHealth = this.hp;
         this.path1 = path1;
         this.path2 = path2;

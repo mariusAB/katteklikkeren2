@@ -3,20 +3,22 @@ import util.*;
 import util.things.Projectile;
 
 public class FireBallStaff extends Weapon{
-    private Room r;
     private int speed = 70;
-    private int hitBox = 60;
+    private int hitBox = 80;
     private int dmg = 25;
     private int delay = 50;
     private int lastFired = 0;
     private double spread = 10;
-    public FireBallStaff(Room r) {
+    public FireBallStaff(int delay, int dmg, int speed, Room r) {
         super(r);
-        this.r = r;
+        this.delay = delay;
+        this.dmg = dmg;
+        this.speed = speed;
         super.path = "img/sword.png";
         super.path1 = "img/swordCatL.png";
         super.path2 = "img/swordCatR.png";
     }
+
 	public void use(int xfrom, int yfrom, int xto, int yto) {
         if (r.getRoomTick() - lastFired > delay){
         double angle = Math.atan2(yto - yfrom, xto - xfrom);

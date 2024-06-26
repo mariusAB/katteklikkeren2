@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.things.*;
+import weapons.*;
 
 public class RoomCreator {
     private int width;
@@ -13,7 +14,7 @@ public class RoomCreator {
     private double margin;
     private List<Point> enemyPositionSlots = new ArrayList<>();
     private List<Point> obstaclePositionSlots = new ArrayList<>();
-    private Point lootSlot; //test
+    private Point lootSlot;
     public RoomCreator(int width, int height, Logic logic) {
         margin = logic.getMargin();
         this.width = width - (int) (width*3*margin);
@@ -50,6 +51,15 @@ public class RoomCreator {
         Room normalRoom = new Room(logic);
         generateEnemies(normalRoom);
         generateObstacles(normalRoom);
+        if (item.equals("weapon")) {
+            lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height));
+            generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), normalRoom);
+        }
+        if (item.equals("healthPotion")) {
+            lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height));
+            Item healthPotion = new Item((int) lootSlot.getX(), (int) lootSlot.getY(), 400, "healthPotion", "img/healthPotion.png", normalRoom);
+            normalRoom.addThing(healthPotion);
+        }
         return normalRoom;
     }
 
@@ -106,7 +116,37 @@ public class RoomCreator {
         }
     }
 
+    private int randomizeStats(int baseStat) {
+        return (int) (Math.random() * 0.8 * baseStat + baseStat * 0.6);
+    }
 
+    private void generateWeapon(int x, int y, Room room) {
+        int randomIndex = (int) (Math.random() * 3);
+        if (randomIndex == 0) {
+            int speed = randomizeStats(70);
+            int dmg = randomizeStats(25);
+            int delay = randomizeStats(50);
+            FireBallStaff fireBallStaff = new FireBallStaff(delay, dmg, speed, room);
+            WeaponItem weaponItem = new WeaponItem(x, y, 300, fireBallStaff, room);
+            room.addThing(weaponItem);
+        }
+        else if (randomIndex == 1) {
+            int dmg = randomizeStats(15);
+            int delay = randomizeStats(20);
+            Sword sword = new Sword(dmg, delay, room);
+            WeaponItem weaponItem = new WeaponItem(x, y, 300, sword, room);
+            room.addThing(weaponItem);
+
+        }
+        else if (randomIndex == 2) {
+            int speed = randomizeStats(70);
+            int dmg = randomizeStats(10);
+            int delay = randomizeStats(20);
+            MagicStaff magicStaff = new MagicStaff(delay, dmg, speed, room);
+            WeaponItem weaponItem = new WeaponItem(x, y, 300, magicStaff, room);
+            room.addThing(weaponItem);
+        }
+    }
 
     private void generateEnemies(Room room) {
         int enemyAmount = (int) (Math.random() * 4) + 5;

@@ -56,6 +56,8 @@ public class Katteklikkeren2 extends JFrame{
     private int roomHeight;
     private boolean displayMiniMap = false;
     private List<Integer> miniMap;
+    private JLabel monKil;
+    private SaveFileReader saveFileReader = new SaveFileReader();
 
     public Katteklikkeren2(int width, int heigth) {
         try {
@@ -64,6 +66,12 @@ public class Katteklikkeren2 extends JFrame{
         } catch (IOException e) {
             e.printStackTrace();
         }
+        try {
+            saveFileReader.readSaveFile();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        monKilInt = saveFileReader.getMonKil();
         panels.add(menu);
         panels.add(settings);
         panels.add(stats);
@@ -335,8 +343,17 @@ public class Katteklikkeren2 extends JFrame{
     }
 
     private void resetGame(ActionEvent e) {
+        monKilInt += l.getKillCounter();
+        try {
+            saveFileReader.writeSaveFile(monKilInt);
+        } catch (IOException e1) {
+            e1.printStackTrace();
+        }
+        updateMonKilLabel();
         l = new Logic(this);
-        ((Timer) e.getSource()).stop();
+        if (e.getSource() instanceof Timer) {
+            ((Timer) e.getSource()).stop();
+        }
     }
 
     private void menu(JPanel menu, JPanel panel) {
@@ -463,12 +480,16 @@ public class Katteklikkeren2 extends JFrame{
         });
         s.add(statsButton);
 
-        JLabel monKil = new JLabel("Monsters killed: " + monKilInt);
+        monKil = new JLabel("Monsters killed: " + monKilInt);
         monKil.setFont(new Font("Rockwell", Font.PLAIN, 25));
         monKil.setAlignmentX(Component.CENTER_ALIGNMENT);
         monKil.setBorder(b);
         s.add(monKil);
         s.setOpaque(false);
+    }
+
+    private void updateMonKilLabel() {
+        monKil.setText("Monsters killed: " + monKilInt);
     }
 
     private void gameOver(JPanel go, JPanel p) {

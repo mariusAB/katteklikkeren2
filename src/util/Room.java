@@ -163,6 +163,7 @@ public class Room {
     }
 
     public void kill(Thing t) {
+        l.enemyKilled();
         enemies.remove(t);
     }
 

@@ -33,6 +33,7 @@ public class Logic {
     private double margin = 0.06;
     private int width = 10000;
     private int height = 6000;
+    private int killCounter = 0;
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
@@ -66,6 +67,14 @@ public class Logic {
 
     public int getHeight() {
         return height;
+    }
+
+    public void enemyKilled() {
+        killCounter++;
+    }
+
+    public int getKillCounter() {
+        return killCounter;
     }
 
     public void tick() {

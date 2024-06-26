@@ -1,16 +1,146 @@
 package util;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomCreator {
-    public List<Room> buttonRooms;
-    public List
-    public RoomCreator(String type) {
+import util.things.*;
 
+public class RoomCreator {
+    private int width;
+    private int height;
+    private Logic logic;
+    private double margin;
+    private List<Point> enemyPositionSlots = new ArrayList<>();
+    private List<Point> obstaclePositionSlots = new ArrayList<>();
+    private Point lootSlot;
+    public RoomCreator(int width, int height, Logic logic) {
+        margin = logic.getMargin();
+        this.width = width - (int) (width*3*margin);
+        this.height = height - (int) (height*4*margin);
+        this.logic = logic;
+        addEnemyPositionSlots();
+        addObstaclePositionSlots();
     }
 
-    public getRoom() {
+    public Room getRoom(String type, String item) {
+        if (type.equals("normal")) {
+            return getNormalRoom(item);
+        }
+        if (type.equals("button")) {
+            return getButtonRoom();
+        }
+        if (type.equals("start")) {
+            return getStartRoom();
+        }
+        return null;
+    }
 
+    private Room getStartRoom() {
+        Room startRoom = new Room(logic);
+        return startRoom;
+    }
+
+    private Room getButtonRoom() {
+        Room buttonRoom = new Room(logic);
+        return buttonRoom;
+    }
+
+    private Room getNormalRoom(String item) {
+        Room normalRoom = new Room(logic);
+        generateEnemies(normalRoom);
+        generateObstacles(normalRoom);
+        return normalRoom;
+    }
+
+    private Enemy getRandomEnemy(int x, int y, Room room) {
+        int randomIndex = (int) (Math.random() * 10);
+        Enemy enemy = null;
+        if (randomIndex < 9) {
+            enemy = new Enemy(x, y, 60, 6, 25, 100, "img/icon.png", room);
+        }
+        else if (randomIndex >= 9) {
+            enemy = new EnemyLauncher(x, y, 60, 10, 50, 50, "img/icon.png", room);
+        }
+        return enemy;
+    }
+
+    private Obstacle getRandomObstacle(int x, int y, Room room) {
+        int randomIndex = (int) (Math.random() * 10);
+        Obstacle obstacle = null;
+        if (randomIndex < 5) {
+            obstacle = new Obstacle(x, y, 300, true, "img/icon.png", room);
+        }
+        if (randomIndex >= 5) {
+            obstacle = new Obstacle(x, y, 300, false, "img/icon.png", room);
+        }
+        return obstacle;
+    }
+
+    private void addObstaclePositionSlots() {
+        int widthIncrement = (int) (width / 9);
+        for (int i = 1; i < 8; i++) {
+            obstaclePositionSlots.add(new Point(widthIncrement * i + (int) (margin*2*width), (int) (height / 2 + margin*2.5*height)));
+        }
+        for (int i = 1; i < 8; i++) {
+            obstaclePositionSlots.add(new Point(widthIncrement * i + (int) (margin*2*width), (int) (height / 2 - margin*2.5*height)));
+        }
+        for (int i = 1; i < 8; i++) {
+            obstaclePositionSlots.add(new Point(widthIncrement * i + (int) (margin*2*width), (int) (height / 2 + margin*7.5*height)));
+        }
+    }
+
+    private void addEnemyPositionSlots() {
+        int widthIncrement = (int) (width / 6);
+        int heightIncrement = (int) (height / 6);
+        for (int i = 0; i < 7; i++) {
+            if (i != 3) {
+                enemyPositionSlots.add(new Point(widthIncrement * i + (int) (margin*2*width), height - heightIncrement * i + (int) (margin*2.5*height)));
+            }
+        }
+
+        for (int i = 0; i < 7; i++) {
+            if (i != 3) {
+                enemyPositionSlots.add(new Point(widthIncrement * i + (int) (margin*2*width), heightIncrement * i + (int) (margin*2.5*height)));
+            }
+        }
+    }
+
+
+
+    private void generateEnemies(Room room) {
+        int enemyAmount = (int) (Math.random() * 4) + 5;
+        List<Point> enemyPositionsCopy = new ArrayList<>(enemyPositionSlots);
+        List<Point> enemyPositions = new ArrayList<>();
+    
+        for (int i = 0; i < enemyAmount; i++) {
+            int randomIndex = (int) (Math.random() * enemyPositionsCopy.size());
+            enemyPositions.add(enemyPositionsCopy.get(randomIndex));
+            enemyPositionsCopy.remove(randomIndex);
+        }
+    
+        for (int i = 0; i < enemyPositions.size(); i++) {
+            Point p = enemyPositions.get(i);
+            Enemy enemy = getRandomEnemy((int) p.getX(), (int) p.getY(), room);
+            room.addThing(enemy);
+        }
+    }
+
+    private void generateObstacles(Room room) {
+        int obstacleAmount = (int) (Math.random() * 6);
+        List<Point> obstaclePositionsCopy = new ArrayList<>(obstaclePositionSlots);
+        List<Point> obstaclePositions = new ArrayList<>();
+    
+        for (int i = 0; i < obstacleAmount; i++) {
+            int randomIndex = (int) (Math.random() * obstaclePositionsCopy.size());
+            obstaclePositions.add(obstaclePositionsCopy.get(randomIndex));
+            obstaclePositionsCopy.remove(randomIndex);
+        }
+    
+        for (int i = 0; i < obstaclePositions.size(); i++) {
+            Point p = obstaclePositions.get(i);
+            Obstacle obstacle = getRandomObstacle((int) p.getX(), (int) p.getY(), room);
+            room.addThing(obstacle);
+        }
     }
 }

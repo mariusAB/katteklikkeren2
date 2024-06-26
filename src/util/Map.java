@@ -1,6 +1,8 @@
 package util;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.List;
 
 public class Map {
@@ -9,6 +11,8 @@ public class Map {
     private List<RoomContainer> rooms;
     private List<RoomContainer> edgeRooms = new ArrayList<>();
     private List<RoomGroup> buttonGroups = new ArrayList<>();
+    private Set<RoomContainer> visitedRooms = new HashSet<>();
+    private Set<RoomContainer> visibleRooms = new HashSet<>();
     private RoomDistributer roomDistributer;
     private int width;
     private int height;
@@ -23,16 +27,19 @@ public class Map {
         this.height = height;
         roomDistributer = new RoomDistributer(width, height, logic);
         initializeMap();
+        visitedRooms.add(rooms.get(currRoom));
+        updateVisibleRooms();
     }
 
     private void initializeMap() {
         if (width < 3 || height < 3) {
             throw new IllegalArgumentException("Width and height must be at least 3");
         }
-        roomDistributer = new RoomDistributer(width, height, logic);
         rooms = new ArrayList<>();
         edgeRooms.clear();
         buttonGroups.clear();
+        visitedRooms.clear();
+        visibleRooms.clear();
         initRooms();
         setUpEdgeRooms();
         generateStartRoom();
@@ -176,8 +183,10 @@ public class Map {
         for (int i = 0; i < width*height; i++) {
             if (rooms.get(i).hasRoom() && i == currRoom) {
                 miniMap.add(2);
-            } else if (rooms.get(i).hasRoom()) {
+            } else if (visitedRooms.contains(rooms.get(i))) {
                 miniMap.add(1);
+            } else if (visibleRooms.contains(rooms.get(i))) {
+                miniMap.add(3);
             } else {
                 miniMap.add(0);
             }
@@ -223,8 +232,26 @@ public class Map {
         return null;
     }
 
+    private void updateVisibleRooms() {
+        RoomContainer r = rooms.get(currRoom);
+        if (r.getAbove() != -1 && rooms.get(r.getAbove()).hasRoom()) {
+            visibleRooms.add(rooms.get(r.getAbove()));
+        }
+        if (r.getRight() != -1 && rooms.get(r.getRight()).hasRoom()) {
+            visibleRooms.add(rooms.get(r.getRight()));
+        }
+        if (r.getBelow() != -1 && rooms.get(r.getBelow()).hasRoom()) {
+            visibleRooms.add(rooms.get(r.getBelow()));
+        }
+        if (r.getLeft() != -1 && rooms.get(r.getLeft()).hasRoom()) {
+            visibleRooms.add(rooms.get(r.getLeft()));
+        }
+        }
+
     public void move(int dir) {
         currRoom = getRoom(currRoom, dir).getRoomIndex();
+        visitedRooms.add(rooms.get(currRoom));
+        updateVisibleRooms();
         logic.setRoom(rooms.get(currRoom).getRoom());
     }
 }

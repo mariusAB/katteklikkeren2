@@ -1,25 +1,20 @@
 package util;
 
-import util.things.Item;
-
 public class RoomDistributer {
-    private Logic logic;
+    private RoomCreator roomCreator;
     public RoomDistributer(int width, int height, Logic logic) {
-        this.logic = logic;
+        roomCreator = new RoomCreator(logic.getWidth(), logic.getHeight(), logic);
     }
 
     public Room getStartRoom() {
-        return new Room(logic);
+        return roomCreator.getRoom("start", null);
     }
 
     public Room getButtonRoom() {
-        Room broom = new Room(logic);
-        Item item = new Item(2000, 4000, 300, "HealthPotion", "img/healthPotion.png", broom);
-        broom.addThing(item);
-        return broom;
+        return roomCreator.getRoom("button", null);
     }
 
     public Room getNormalRoom() {
-        return new Room(logic);
+        return roomCreator.getRoom("normal", null);
     }
 }

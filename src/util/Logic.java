@@ -30,6 +30,9 @@ public class Logic {
     private boolean held = false;
     private int mouseX = 0;
     private int mouseY = 0;
+    private double margin = 0.06;
+    private int width = 10000;
+    private int height = 6000;
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
@@ -51,6 +54,18 @@ public class Logic {
     
     public void hideMiniMap() {
         k.hideMiniMap();
+    }
+    
+    public double getMargin() {
+        return margin;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public void tick() {

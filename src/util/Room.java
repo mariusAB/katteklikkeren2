@@ -5,7 +5,6 @@ import java.util.List;
 
 import util.things.Door;
 import util.things.Enemy;
-import util.things.EnemyLauncher;
 import util.things.Item;
 import util.things.Main;
 import util.things.Obstacle;
@@ -13,8 +12,6 @@ import util.things.Projectile;
 import util.things.SwordSwipe;
 import util.things.Thing;
 import util.things.WeaponItem;
-import weapons.FireBallStaff;
-import weapons.MagicStaff;
 
 public class Room {
     private List<Obstacle> obstacles = new ArrayList<>();
@@ -34,32 +31,10 @@ public class Room {
 
     public Room(Logic l) {
         this.l = l;
-        
-        Obstacle obstacle = new Obstacle(1000, 1000, 300, true, "img/icon.png", this);
-        addThing(obstacle);
-
-        Obstacle obstacle2 = new Obstacle(2000, 2000, 300, false, "img/icon.png", this);
-        addThing(obstacle2);
-
-        Enemy enemy = new Enemy(5000, 1900, 60, 5, 25, 1, "img/icon.png", this);
-        addThing(enemy);
-
-        EnemyLauncher enemy2 = new EnemyLauncher(5000, 2000, 60, 25, 30, 1, "img/icon.png", this);
-        addThing(enemy2);
-        Enemy enemy3 = new Enemy(5000, 2100, 60, 5, 25, 1, "img/icon.png", this);
-        addThing(enemy3);
-        Enemy enemy4 = new Enemy(5000, 2200, 60, 5, 25, 1, "img/icon.png", this);
-        addThing(enemy4);
-
-        Item item = new Item(2000, 5000, 300, "HealthPotion", "img/healthPotion.png", this);
-        addThing(item);
-
-        MagicStaff weapon = new MagicStaff(this);
-
-        WeaponItem weaponItem = new WeaponItem(3000, 5000, 300, weapon, this);
-        addThing(weaponItem);
-
         l.hideMiniMap();
+        margin = l.getMargin();
+        height = l.getHeight();
+        width = l.getWidth();
     }
 
     public void addMain(Main m) {

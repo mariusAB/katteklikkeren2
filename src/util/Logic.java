@@ -9,7 +9,6 @@ import java.util.Set;
 import util.things.Main;
 import util.things.Portal;
 import util.things.Thing;
-import util.things.Door;
 import util.things.Button;
 import util.things.Enemy;
 import util.things.Projectile;
@@ -162,6 +161,7 @@ public class Logic {
 
     public void interact() {
         currRoom.interact();
+        clickedButtons++;
     }
 
     public void gameOver() {
@@ -169,7 +169,7 @@ public class Logic {
     }
 
     public void teleport() {
-        System.out.println("teleported");
+        map.teleportToBossRoom();
     }
     
     public void toMid() {

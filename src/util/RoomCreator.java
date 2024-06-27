@@ -28,11 +28,14 @@ public class RoomCreator {
         if (type.equals("normal")) {
             return getNormalRoom(item);
         }
-        if (type.equals("button")) {
+        else if (type.equals("button")) {
             return getButtonRoom(item);
         }
-        if (type.equals("start")) {
+        else if (type.equals("start")) {
             return getStartRoom();
+        }
+        else if (type.equals("boss")) {
+            return getBossRoom();
         }
         return null;
     }
@@ -73,6 +76,13 @@ public class RoomCreator {
             normalRoom.addThing(healthPotion);
         }
         return normalRoom;
+    }
+
+    private Room getBossRoom() {
+        Room bossRoom = new Room(logic);
+        lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height));
+        generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), bossRoom);
+        return bossRoom;
     }
 
     private Enemy getRandomEnemy(int x, int y, Room room) {

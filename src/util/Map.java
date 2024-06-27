@@ -13,6 +13,7 @@ public class Map {
     private List<RoomGroup> buttonGroups = new ArrayList<>();
     private Set<RoomContainer> visitedRooms = new HashSet<>();
     private Set<RoomContainer> visibleRooms = new HashSet<>();
+    private RoomContainer bossRoom;
     private RoomDistributer roomDistributer;
     private int width;
     private int height;
@@ -46,6 +47,7 @@ public class Map {
         generateStartRoom();
         generateButtonRoomsOnEdges();
         generateMap();
+        generateBossRoom();
         if (getFilledRooms() < width * height / 2 || getFilledRooms() > width * height / 1.5 || getSqueezedRooms() > width*height/(width*height*0.6)){
             rooms.clear();
             edgeRooms.clear();
@@ -62,6 +64,16 @@ public class Map {
             }
         }
         return amount;
+    }
+
+    private void generateBossRoom() {
+        bossRoom = new RoomContainer(width*height, width*height, width*height);
+        bossRoom.setRoom(roomDistributer.getBossRoom());
+    }
+
+    public void teleportToBossRoom() {
+        logic.setRoom(bossRoom.getRoom());
+        currRoom = bossRoom.getRoomIndex();
     }
 
     private int getSqueezedRooms() {

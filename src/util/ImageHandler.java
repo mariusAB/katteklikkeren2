@@ -9,10 +9,8 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
-import java.nio.Buffer;
 
 public class ImageHandler {
     private Map<String, Image> images = new HashMap<String, Image>();

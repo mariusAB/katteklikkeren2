@@ -7,6 +7,10 @@ public class RoomDistributer {
         roomCreator = new RoomCreator(logic.getWidth(), logic.getHeight(), logic);
     }
 
+    public Room getBossRoom() {
+        return roomCreator.getRoom("boss", null);
+    }
+
     public Room getStartRoom() {
         return roomCreator.getRoom("start", null);
     }

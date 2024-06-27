@@ -26,7 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Katteklikkeren2 extends JFrame{
+public class Katteklikkeren2 extends JFrame {
     private CardLayout scenes = new CardLayout();
     private int width = 1200;
     private int height = 800;
@@ -49,10 +49,8 @@ public class Katteklikkeren2 extends JFrame{
     private Image backgroundImage;
     private int monKilInt = 0;
     private Image roomImg;
-    private List<Thing> things = new ArrayList<>();
     private Logic l;
     private boolean hasRun = false;
-    private Timer timer;
     private int roomWidth;
     private int roomHeight;
     private boolean displayMiniMap = false;
@@ -60,7 +58,9 @@ public class Katteklikkeren2 extends JFrame{
     private JLabel monKil;
     private SaveFileReader saveFileReader = new SaveFileReader();
     private ImageHandler imageHandler = new ImageHandler();
-    boolean miniMapRefreshRequired = true;
+    private boolean miniMapRefreshRequired = true;
+    private int fps = 120;
+    private GameThread loop;
 
     public Katteklikkeren2(int width, int heigth) {
         try {
@@ -118,18 +118,15 @@ public class Katteklikkeren2 extends JFrame{
     
 
     public void start() {
+        
         l = new Logic(this);
+        if (loop != null) {
+            loop.stopRunning();
+        }
+        loop = new GameThread(l, fps);
         l.toMid();
+        loop.start();
 
-        timer = new Timer(1000 / 90, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                //things.clear();
-                l.tick();
-                l.giveSource(e);
-            }
-        });
-        timer.start();
         Set<Integer> pressedKeys = new HashSet<>();
         if (!hasRun) {
             this.addKeyListener(new KeyAdapter() {
@@ -199,20 +196,21 @@ public class Katteklikkeren2 extends JFrame{
     public void pause() {
         scenes.show(this.getContentPane(), "Pause");
         currentScene = "Pause";
-        timer.stop();
+        loop.pause();
     }
 
     public void unPause() {
         scenes.show(this.getContentPane(), "Game");
         currentScene = "Game";
-        timer.start();
         this.requestFocusInWindow();
+        loop.unPause();
     }
 
     public void win(ActionEvent e) {
         resetGame(e);
         scenes.show(this.getContentPane(), "Win");
         currentScene = "Win";
+        loop.stopRunning();
     }
 
     public void changeBackground(Image img) {
@@ -222,18 +220,16 @@ public class Katteklikkeren2 extends JFrame{
         roomImg = img.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
     }
 
-    public void addImage(Thing t) {
-        things.add(t);
-    }
-
-    public void removeThing(Thing t) {
-        things.remove(t);
-    }
-
     public void repaint() {
         item.repaint();
+        
     }
 
+    public void update(Graphics g) {
+        paint(g);
+        l.tick();
+    }
+    
     private int translateGameX(Thing t) {
         roomWidth = t.getRoomWidth();
         return t.getX() * game.getWidth() / roomWidth;
@@ -254,8 +250,7 @@ public class Katteklikkeren2 extends JFrame{
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
             g2d.drawImage(roomImg, 0, 0, null);
-            for (Thing thing : things) {
-                
+            for (Thing thing : l.getThings()) {
                 Image img = thing.getImg(game.getWidth(), game.getHeight());
                 if (img == null) {
                     break;
@@ -373,6 +368,7 @@ public class Katteklikkeren2 extends JFrame{
         resetGame(e);
         scenes.show(this.getContentPane(), "GameOver");
         currentScene = "GameOver";
+        loop.stopRunning();
     }
 
     private void resetGame(ActionEvent e) {
@@ -384,9 +380,6 @@ public class Katteklikkeren2 extends JFrame{
         }
         updateMonKilLabel();
         l = new Logic(this);
-        if (e.getSource() instanceof Timer) {
-            ((Timer) e.getSource()).stop();
-        }
     }
 
     private void menu(JPanel menu, JPanel panel) {

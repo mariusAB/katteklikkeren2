@@ -4,7 +4,7 @@ import util.Room;
 
 public class EnemyLauncher extends Enemy{
     private int fireDelay = 40;
-    private int projectileSpeed = 40;
+    private int projectileSpeed = 25;
     private int projectileHitBox = 70;
     public EnemyLauncher(int x, int y, int hitBox, int damage, int fireDelay, int hp, String path, Room r) {
         super(x, y, hitBox, 0, damage, hp, path, r);

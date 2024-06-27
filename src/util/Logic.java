@@ -44,8 +44,7 @@ public class Logic {
         this.k = k;
         map = new Map(this, 7, 7, totalButtons);
         currRoom = map.getCurrRoom();
-        main = new Main(70, 50, 100, "img/icon.png", "img/icon.png", currRoom);
-        k.addImage(main);
+        main = new Main(70, 25, 100, "img/icon.png", "img/icon.png", currRoom);
         currRoom.addMain(main);
         ih = new ImageHandler();
         k.changeBackground(currRoom.getBackground());
@@ -102,7 +101,6 @@ public class Logic {
             else if (t instanceof Portal) {
                 ((Portal) t).tick();
             }
-            k.addImage(t);
         }
         for (Thing t : toRemove) {
             if (t instanceof Enemy) {
@@ -177,6 +175,10 @@ public class Logic {
     public void toMid() {
         main.setX(currRoom.getWidth() / 2);
         main.setY(currRoom.getHeight() / 2);
+    }
+
+    public Iterable<Thing> getThings() {
+        return currRoom.getThings();
     }
 
     public void mouseClicked(int x, int y) {

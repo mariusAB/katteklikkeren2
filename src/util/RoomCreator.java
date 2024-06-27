@@ -79,10 +79,10 @@ public class RoomCreator {
         int randomIndex = (int) (Math.random() * 10);
         Enemy enemy = null;
         if (randomIndex < 9) {
-            enemy = new Enemy(x, y, 60, 20, 25, 100, "img/icon.png", room);
+            enemy = new Enemy(x, y, 60, 15, 25, 100, "img/icon.png", room);
         }
         else if (randomIndex >= 9) {
-            enemy = new EnemyLauncher(x, y, 60, 10, 50, 50, "img/icon.png", room);
+            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "img/icon.png", room);
         }
         return enemy;
     }
@@ -144,7 +144,7 @@ public class RoomCreator {
         }
         else if (randomIndex == 1) {
             int dmg = randomizeStats(30);
-            int delay = randomizeStats(20);
+            int delay = randomizeStats(40);
             Sword sword = new Sword(dmg, delay, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, sword, room);
             room.addThing(weaponItem);

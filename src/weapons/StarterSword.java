@@ -5,7 +5,7 @@ import util.things.SwordSwipe;
 
 public class StarterSword extends Weapon{
     private int dmg = 10;
-    private int delay = 30;
+    private int delay = 50;
     private int lastFired = 0;
     private int upTime = 5;
     private int size = 50;

@@ -212,6 +212,7 @@ public class Logic {
         if (clickedButtons >= totalButtons) {
             currRoom.openPortal();
         }
+        System.gc();
     }
 
     public void mouseHeld(Boolean held) {

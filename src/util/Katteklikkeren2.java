@@ -124,7 +124,7 @@ public class Katteklikkeren2 extends JFrame{
         timer = new Timer(1000 / 90, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                things.clear();
+                //things.clear();
                 l.tick();
                 l.giveSource(e);
             }
@@ -216,11 +216,18 @@ public class Katteklikkeren2 extends JFrame{
     }
 
     public void changeBackground(Image img) {
+        if (roomImg != null) {
+            roomImg.flush();
+        }
         roomImg = img.getScaledInstance(game.getWidth(), game.getHeight(), Image.SCALE_SMOOTH);
     }
 
     public void addImage(Thing t) {
         things.add(t);
+    }
+
+    public void removeThing(Thing t) {
+        things.remove(t);
     }
 
     public void repaint() {
@@ -246,25 +253,27 @@ public class Katteklikkeren2 extends JFrame{
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2d = (Graphics2D) g;
-            g2d.drawImage(roomImg, 0, 0, this);
-            for (int i = 0; i < things.size(); i++) {
-                Image img = things.get(i).getImg(game.getWidth(), game.getHeight());
+            g2d.drawImage(roomImg, 0, 0, null);
+            for (Thing thing : things) {
+                
+                Image img = thing.getImg(game.getWidth(), game.getHeight());
                 if (img == null) {
                     break;
                 }
+
                 int imgWidth = img.getWidth(null);
                 int imgHeight = img.getHeight(null);
-                int centerX = translateGameX(things.get(i)) - imgWidth / 2;
-                int centerY = translateGameY(things.get(i)) - imgHeight / 2;
+                int centerX = translateGameX(thing) - imgWidth / 2;
+                int centerY = translateGameY(thing) - imgHeight / 2;
                 
                 AffineTransform old = g2d.getTransform();
-                g2d.rotate(Math.toRadians(things.get(i).getRotation()), translateGameX(things.get(i)), translateGameY(things.get(i)));
+                g2d.rotate(Math.toRadians(thing.getRotation()), translateGameX(thing), translateGameY(thing));
                 g2d.drawImage(img, centerX, centerY, this);
                 g2d.setTransform(old);
 
-                if (things.get(i) instanceof Main) {
+                if (thing instanceof Main) {
                     int healthBarHeight = 5;
-                    double healthPercentage = ((Main) things.get(i)).getHealth() / (double) ((Main) things.get(i)).getMaxHealth();
+                    double healthPercentage = ((Main) thing).getHealth() / (double) ((Main) thing).getMaxHealth();
                     int healthBarWidth = (int) (imgWidth * healthPercentage);
                     int healthBarX = centerX;
                     int healthBarY = centerY + imgHeight + 5;
@@ -274,9 +283,9 @@ public class Katteklikkeren2 extends JFrame{
                     g2d.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
                     g2d.setColor(Color.BLACK);
                 }
-                if (things.get(i) instanceof Enemy) {
+                if (thing instanceof Enemy) {
                     int healthBarHeight = 5;
-                    double healthPercentage = ((Enemy) things.get(i)).getHealth() / (double) ((Enemy) things.get(i)).getMaxHealth();
+                    double healthPercentage = ((Enemy) thing).getHealth() / (double) ((Enemy) thing).getMaxHealth();
                     int healthBarWidth = (int) (imgWidth * healthPercentage);
                     int healthBarX = centerX;
                     int healthBarY = centerY + imgHeight + 5;

@@ -9,8 +9,10 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.util.List;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
 import java.io.File;
 import java.io.IOException;
+import java.nio.Buffer;
 
 public class ImageHandler {
     private Map<String, Image> images = new HashMap<String, Image>();
@@ -36,7 +38,10 @@ public class ImageHandler {
     }
 
     public void setMiniMap(BufferedImage bufferedImage) {
-        miniMap = bufferedImage;
+        if (this.miniMap != null) {
+            this.miniMap.flush();
+        }
+        this.miniMap = bufferedImage;
     }
 
     public BufferedImage getMiniMap() {
@@ -66,32 +71,31 @@ public class ImageHandler {
     public BufferedImage getBackground(String path, List<Boolean> doors, Boolean open) {
         BufferedImage img = getImage(path);
         Graphics g = img.getGraphics();
-        g.drawImage(img, 0, 0, null);
         for (int i = 0; i < 4; i++) {
             if (doors.get(i)) {
                 if (i == 0) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openUp.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/openUp.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedUp.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/closedUp.png"), 0, 0, null);
                     }
                 } else if (i == 1) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openRight.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/openRight.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedRight.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/closedRight.png"), 0, 0, null);
                     }
                 } else if (i == 2) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openDown.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/openDown.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedDown.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/closedDown.png"), 0, 0, null);
                     }
                 } else if (i == 3) {
                     if (open) {
-                        g.drawImage(getImageFromDisc("img/doors/openLeft.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/openLeft.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getImageFromDisc("img/doors/closedLeft.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("img/doors/closedLeft.png"), 0, 0, null);
                     }
                 }
             }
@@ -100,7 +104,7 @@ public class ImageHandler {
         return img;
     }
 
-    private BufferedImage getImageFromDisc(String path) {
+    private BufferedImage getBackgroundImage(String path) {
         if (backgrounds.containsKey(path)) {
             return backgrounds.get(path);
         } else {

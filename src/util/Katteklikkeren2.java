@@ -18,6 +18,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -58,6 +59,8 @@ public class Katteklikkeren2 extends JFrame{
     private List<Integer> miniMap;
     private JLabel monKil;
     private SaveFileReader saveFileReader = new SaveFileReader();
+    private ImageHandler imageHandler = new ImageHandler();
+    boolean miniMapRefreshRequired = true;
 
     public Katteklikkeren2(int width, int heigth) {
         try {
@@ -218,6 +221,9 @@ public class Katteklikkeren2 extends JFrame{
 
     public void addImage(Thing t) {
         things.add(t);
+    }
+
+    public void repaint() {
         item.repaint();
     }
 
@@ -229,6 +235,10 @@ public class Katteklikkeren2 extends JFrame{
     private int translateGameY(Thing t) {
         roomHeight = t.getRoomHeight();
         return t.getY() * game.getHeight() / roomHeight;
+    }
+
+    public void updateMiniMap() {
+        miniMapRefreshRequired = true;
     }
 
     class Item extends JPanel {
@@ -276,6 +286,15 @@ public class Katteklikkeren2 extends JFrame{
                 }
             }
             if (displayMiniMap) {
+                g2d.drawImage(drawMiniMap(), 0, 0, null);
+            }
+        }
+
+        private BufferedImage drawMiniMap() {
+            BufferedImage bufferedImage = imageHandler.getMiniMap();
+            if (imageHandler.getMiniMap() == null || miniMapRefreshRequired) {
+                bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g2d = bufferedImage.createGraphics();
                 int miniMapWidth = 30;
                 int miniMapHeight = 30;
                 int margin = 10;
@@ -300,8 +319,13 @@ public class Katteklikkeren2 extends JFrame{
                     }
                     g2d.fillRect(startX + x * miniMapWidth, startY + margin + y * miniMapHeight, miniMapWidth - margin, miniMapHeight - margin);
                 }
+                g2d.dispose();
+                imageHandler.setMiniMap(bufferedImage);
+                miniMapRefreshRequired = false;
             }
+            return bufferedImage;
         }
+
         @Override
         public Dimension getPreferredSize() {
             return new Dimension(game.getWidth(), game.getHeight());

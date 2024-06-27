@@ -7,7 +7,10 @@ import java.util.List;
 import java.util.Set;
 
 import util.things.Main;
+import util.things.Portal;
 import util.things.Thing;
+import util.things.Door;
+import util.things.Button;
 import util.things.Enemy;
 import util.things.Projectile;
 import util.things.SwordSwipe;
@@ -34,12 +37,14 @@ public class Logic {
     private int width = 10000;
     private int height = 6000;
     private int killCounter = 0;
+    private int clickedButtons = 0;
+    private int totalButtons = 3;
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
-        map = new Map(this, 7, 7);
+        map = new Map(this, 7, 7, totalButtons);
         currRoom = map.getCurrRoom();
-        main = new Main(70, 50, 100, "img/venstrefly.png", "img/icon.png", currRoom);
+        main = new Main(70, 50, 100, "img/icon.png", "img/icon.png", currRoom);
         k.addImage(main);
         currRoom.addMain(main);
         ih = new ImageHandler();
@@ -85,11 +90,17 @@ public class Logic {
             if (t instanceof Enemy) {
                 ((Enemy) t).tick();
             }
-            if (t instanceof Projectile) {
+            else if (t instanceof Projectile) {
                 ((Projectile) t).tick();
             }
-            if (t instanceof SwordSwipe) {
+            else if (t instanceof SwordSwipe) {
                 ((SwordSwipe) t).tick();
+            }
+            else if (t instanceof Button) {
+                ((Button) t).tick();
+            }
+            else if (t instanceof Portal) {
+                ((Portal) t).tick();
             }
             k.addImage(t);
         }
@@ -124,6 +135,11 @@ public class Logic {
                 main.moveY(main.getSpeed());
             }
         }
+        k.repaint();
+    }
+
+    public void buttonClicked() {
+        clickedButtons += 1;
     }
 
     public ImageHandler getImageHandler() {
@@ -152,6 +168,10 @@ public class Logic {
 
     public void gameOver() {
         k.gameOver(source);
+    }
+
+    public void teleport() {
+        System.out.println("teleported");
     }
     
     public void toMid() {
@@ -188,6 +208,10 @@ public class Logic {
         }
         currWeapon.setRoom(currRoom);
         currWeapon.reset();
+        k.updateMiniMap();
+        if (clickedButtons >= totalButtons) {
+            currRoom.openPortal();
+        }
     }
 
     public void mouseHeld(Boolean held) {

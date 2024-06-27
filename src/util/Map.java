@@ -18,8 +18,9 @@ public class Map {
     private int height;
     private int buttonRooms = 3;
 
-    public Map(Logic logic, int width, int height) {
+    public Map(Logic logic, int width, int height, int buttonRooms) {
         this.logic = logic;
+        this.buttonRooms = buttonRooms;
         if (width < 3 || height < 3) {
             throw new IllegalArgumentException("Width and height must be at least 3");
         }

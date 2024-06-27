@@ -3,6 +3,8 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+import util.things.Button;
+import util.things.Portal;
 import util.things.Door;
 import util.things.Enemy;
 import util.things.Item;
@@ -18,6 +20,8 @@ public class Room {
     private List<Projectile> projectiles = new ArrayList<>();
     private List<Enemy> enemies = new ArrayList<>();
     private List<Item> items = new ArrayList<>();
+    private List<Button> buttons = new ArrayList<>();
+    private List<Portal> portals = new ArrayList<>();
     private List<SwordSwipe> swordswipes = new ArrayList<>();
     private double margin = 0.06;
     private Logic l;
@@ -147,6 +151,10 @@ public class Room {
             obstacles.add((Obstacle) t);
         } else if (t instanceof WeaponItem) {
             items.add((WeaponItem) t);
+        } else if (t instanceof Button) {
+            buttons.add((Button) t);
+        } else if (t instanceof Portal) {
+            portals.add((Portal) t);
         }
     }
 
@@ -194,8 +202,10 @@ public class Room {
 
     public List<Thing> getThings() {
         List<Thing> newList = new ArrayList<>();
+        newList.addAll(portals);
         newList.addAll(items);
         newList.addAll(obstacles);
+        newList.addAll(buttons);
         newList.addAll(enemies);
         newList.addAll(swordswipes);
         newList.addAll(projectiles);
@@ -216,6 +226,16 @@ public class Room {
             d.tick();
         }
         i++;
+    }
+
+    public void buttonClicked() {
+        l.buttonClicked();
+    }
+
+    public void openPortal() {
+        for (Portal p : portals) {
+            p.open();
+        }
     }
 
     private void openDoors() {
@@ -253,6 +273,10 @@ public class Room {
 
     public boolean getOpenStatus() {
         return open;
+    }
+
+    public void teleport() {
+        l.teleport();
     }
 
     public void interact() {

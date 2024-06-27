@@ -11,7 +11,7 @@ public class Door extends Thing{
     private int dir;
     private Room r;
     public Door(int x0, int y0, int x1, int y1, int dir, Room r) {
-        super(0, 0, 0, "Door", r);
+        super(0, 0, 0, "", r);
         this.x0 = x0;
         this.y0 = y0;
         this.x1 = x1;

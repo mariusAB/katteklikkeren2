@@ -13,8 +13,9 @@ import java.io.File;
 import java.io.IOException;
 
 public class ImageHandler {
-    Map<String, Image> images = new HashMap<String, Image>();
-    Map<String, BufferedImage> backgrounds = new HashMap<String, BufferedImage>();
+    private Map<String, Image> images = new HashMap<String, Image>();
+    private Map<String, BufferedImage> backgrounds = new HashMap<String, BufferedImage>();
+    private BufferedImage miniMap;
     
     public ImageHandler() {}
 
@@ -32,6 +33,14 @@ public class ImageHandler {
         for (String path : images.keySet()) {
             images.put(path, getImageFromDisc(path, w, h));
         }
+    }
+
+    public void setMiniMap(BufferedImage bufferedImage) {
+        miniMap = bufferedImage;
+    }
+
+    public BufferedImage getMiniMap() {
+        return miniMap;
     }
 
     private BufferedImage getImage(String path) {

@@ -29,7 +29,7 @@ public class RoomCreator {
             return getNormalRoom(item);
         }
         if (type.equals("button")) {
-            return getButtonRoom();
+            return getButtonRoom(item);
         }
         if (type.equals("start")) {
             return getStartRoom();
@@ -39,11 +39,23 @@ public class RoomCreator {
 
     private Room getStartRoom() {
         Room startRoom = new Room(logic);
+        Portal p = new Portal((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "img/portalClosed.png", "img/portalOpen.png", startRoom);
+        startRoom.addThing(p);
         return startRoom;
     }
 
-    private Room getButtonRoom() {
+    private Room getButtonRoom(String item) {
         Room buttonRoom = new Room(logic);
+        Button b = new Button((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "img/buttonUp.png", "img/buttonDown.png", buttonRoom);
+        buttonRoom.addThing(b);
+        lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*6*height));
+        if (item.equals("weapon")) {
+            generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), buttonRoom);
+        }
+        else if (item.equals("healthPotion")) {
+            Item healthPotion = new Item((int) lootSlot.getX(), (int) lootSlot.getY(), 400, "healthPotion", "img/healthPotion.png", buttonRoom);
+            buttonRoom.addThing(healthPotion);
+        }
         return buttonRoom;
     }
 

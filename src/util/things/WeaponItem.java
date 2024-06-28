@@ -1,7 +1,7 @@
 package util.things;
 
 import util.Room;
-import weapons.Weapon;
+import util.weapons.Weapon;
 
 public class WeaponItem extends Item{
     private Weapon w;

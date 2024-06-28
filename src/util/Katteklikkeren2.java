@@ -64,8 +64,8 @@ public class Katteklikkeren2 extends JFrame {
 
     public Katteklikkeren2(int width, int heigth) {
         try {
-            backgroundImage = ImageIO.read(new File("img/mainscreen.png"));
-            setIconImage(ImageIO.read(new File("img/magicStaffCatR.png")));
+            backgroundImage = ImageIO.read(new File("src/resources/img/mainscreen.png"));
+            setIconImage(ImageIO.read(new File("src/resources/img/magicStaffCatR.png")));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -627,7 +627,7 @@ public class Katteklikkeren2 extends JFrame {
         empty.setBorder(new EmptyBorder(15,0,15,0));
         menu.add(empty);
         b.setFont(new Font("Rockwell", Font.BOLD, 25));
-        ImageIcon buttonIcon = new ImageIcon("img/back.png");
+        ImageIcon buttonIcon = new ImageIcon("src/resources/img/back.png");
         b.setFocusPainted(false);
         b.setBorderPainted(false);
         b.setContentAreaFilled(false);

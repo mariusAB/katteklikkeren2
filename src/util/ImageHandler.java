@@ -73,27 +73,27 @@ public class ImageHandler {
             if (doors.get(i)) {
                 if (i == 0) {
                     if (open) {
-                        g.drawImage(getBackgroundImage("img/doors/openUp.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/openUp.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getBackgroundImage("img/doors/closedUp.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/closedUp.png"), 0, 0, null);
                     }
                 } else if (i == 1) {
                     if (open) {
-                        g.drawImage(getBackgroundImage("img/doors/openRight.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/openRight.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getBackgroundImage("img/doors/closedRight.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/closedRight.png"), 0, 0, null);
                     }
                 } else if (i == 2) {
                     if (open) {
-                        g.drawImage(getBackgroundImage("img/doors/openDown.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/openDown.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getBackgroundImage("img/doors/closedDown.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/closedDown.png"), 0, 0, null);
                     }
                 } else if (i == 3) {
                     if (open) {
-                        g.drawImage(getBackgroundImage("img/doors/openLeft.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/openLeft.png"), 0, 0, null);
                     } else {
-                        g.drawImage(getBackgroundImage("img/doors/closedLeft.png"), 0, 0, null);
+                        g.drawImage(getBackgroundImage("src/resources/img/doors/closedLeft.png"), 0, 0, null);
                     }
                 }
             }

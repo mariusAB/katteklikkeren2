@@ -9,15 +9,13 @@ import java.util.Set;
 import util.things.Main;
 import util.things.Portal;
 import util.things.Thing;
+import util.weapons.StarterSword;
+import util.weapons.Weapon;
 import util.things.Button;
 import util.things.Enemy;
 import util.things.Projectile;
 import util.things.SwordSwipe;
-
 import java.util.Iterator;
-
-import weapons.StarterSword;
-import weapons.Weapon;
 
 public class Logic {
     private Katteklikkeren2 k;
@@ -43,7 +41,7 @@ public class Logic {
         this.k = k;
         map = new Map(this, 7, 7, totalButtons);
         currRoom = map.getCurrRoom();
-        main = new Main(70, 25, 100, "img/icon.png", "img/icon.png", currRoom);
+        main = new Main(70, 25, 100, "src/resources/img/icon.png", "src/resources/img/icon.png", currRoom);
         currRoom.addMain(main);
         ih = new ImageHandler();
         k.changeBackground(currRoom.getBackground());

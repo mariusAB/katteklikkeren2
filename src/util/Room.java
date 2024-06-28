@@ -27,7 +27,7 @@ public class Room {
     private Logic l;
     private Main main;
     private int i = 0;
-    private String path = "img/room1.png";
+    private String path = "src/resources/img/room1.png";
     private List<Door> doors = new ArrayList<>();
     private boolean open = false;
     private int width = 10000;

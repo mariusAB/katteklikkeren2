@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import util.things.*;
-import weapons.*;
+import util.weapons.*;
 
 public class RoomCreator {
     private int width;
@@ -42,21 +42,21 @@ public class RoomCreator {
 
     private Room getStartRoom() {
         Room startRoom = new Room(logic);
-        Portal p = new Portal((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "img/portalClosed.png", "img/portalOpen.png", startRoom);
+        Portal p = new Portal((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "src/resources/img/portalClosed.png", "src/resources/img/portalOpen.png", startRoom);
         startRoom.addThing(p);
         return startRoom;
     }
 
     private Room getButtonRoom(String item) {
         Room buttonRoom = new Room(logic);
-        Button b = new Button((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "img/buttonUp.png", "img/buttonDown.png", buttonRoom);
+        Button b = new Button((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "src/resources/img/buttonUp.png", "src/resources/img/buttonDown.png", buttonRoom);
         buttonRoom.addThing(b);
         lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*6*height));
         if (item.equals("weapon")) {
             generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), buttonRoom);
         }
         else if (item.equals("healthPotion")) {
-            Item healthPotion = new Item((int) lootSlot.getX(), (int) lootSlot.getY(), 400, "healthPotion", "img/healthPotion.png", buttonRoom);
+            Item healthPotion = new Item((int) lootSlot.getX(), (int) lootSlot.getY(), 400, "healthPotion", "src/resources/img/healthPotion.png", buttonRoom);
             buttonRoom.addThing(healthPotion);
         }
         return buttonRoom;
@@ -72,7 +72,7 @@ public class RoomCreator {
         }
         if (item.equals("healthPotion")) {
             lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height));
-            Item healthPotion = new Item((int) lootSlot.getX(), (int) lootSlot.getY(), 400, "healthPotion", "img/healthPotion.png", normalRoom);
+            Item healthPotion = new Item((int) lootSlot.getX(), (int) lootSlot.getY(), 400, "healthPotion", "src/resources/img/healthPotion.png", normalRoom);
             normalRoom.addThing(healthPotion);
         }
         return normalRoom;
@@ -89,10 +89,10 @@ public class RoomCreator {
         int randomIndex = (int) (Math.random() * 10);
         Enemy enemy = null;
         if (randomIndex < 9) {
-            enemy = new Enemy(x, y, 60, 15, 25, 100, "img/icon.png", room);
+            enemy = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/icon.png", room);
         }
         else if (randomIndex >= 9) {
-            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "img/icon.png", room);
+            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "src/resources/img/icon.png", room);
         }
         return enemy;
     }
@@ -101,10 +101,10 @@ public class RoomCreator {
         int randomIndex = (int) (Math.random() * 10);
         Obstacle obstacle = null;
         if (randomIndex < 5) {
-            obstacle = new Obstacle(x, y, 300, true, "img/icon.png", room);
+            obstacle = new Obstacle(x, y, 300, true, "src/resources/img/icon.png", room);
         }
         if (randomIndex >= 5) {
-            obstacle = new Obstacle(x, y, 300, false, "img/icon.png", room);
+            obstacle = new Obstacle(x, y, 300, false, "src/resources/img/icon.png", room);
         }
         return obstacle;
     }

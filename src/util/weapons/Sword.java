@@ -1,4 +1,4 @@
-package weapons;
+package util.weapons;
 
 import util.Room;
 import util.things.SwordSwipe;
@@ -14,14 +14,14 @@ public class Sword extends Weapon{
         super(r);
         this.dmg = dmg;
         this.delay = delay;
-        super.path = "img/sword.png";
-        super.path1 = "img/swordCatL.png";
-        super.path2 = "img/swordCatR.png";
+        super.path = "src/resources/img/sword.png";
+        super.path1 = "src/resources/img/swordCatL.png";
+        super.path2 = "src/resources/img/swordCatR.png";
     }
 
     public void use(int xfrom, int yfrom, int xto, int yto) {
         if (r.getRoomTick() - lastFired > delay){
-            SwordSwipe s = new SwordSwipe(xfrom, yfrom, xto, yto, size, length, dmg, upTime, "img/swordSwipe.png", r);
+            SwordSwipe s = new SwordSwipe(xfrom, yfrom, xto, yto, size, length, dmg, upTime, "src/resources/img/swordSwipe.png", r);
             r.addSwordSwipe(s);
             lastFired = r.getRoomTick();
         }

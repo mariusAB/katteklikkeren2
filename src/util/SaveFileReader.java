@@ -13,7 +13,7 @@ public class SaveFileReader {
     }
 
     public void readSaveFile() throws IOException {
-        reader = new Scanner(new File("save.txt"));
+        reader = new Scanner(new File("src/resources/save.txt"));
         if (reader.hasNextLine()) {
             String line = reader.nextLine();
             monKil = Integer.parseInt(line);
@@ -28,7 +28,7 @@ public class SaveFileReader {
     }
 
     public void writeSaveFile(int monKil) throws IOException {
-        writer = new FileWriter(new File("save.txt"));
+        writer = new FileWriter(new File("src/resources/save.txt"));
         writer.write(String.valueOf(monKil));
         writer.close();
     }

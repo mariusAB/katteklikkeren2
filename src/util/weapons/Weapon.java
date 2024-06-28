@@ -1,4 +1,4 @@
-package weapons;
+package util.weapons;
 
 import util.Room;
 

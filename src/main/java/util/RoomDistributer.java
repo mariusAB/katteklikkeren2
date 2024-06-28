@@ -8,7 +8,7 @@ public class RoomDistributer {
         roomCreator = new RoomCreator(logic.getWidth(), logic.getHeight(), logic);
     }
 
-    public Room getBossRoom() {
+    public Room getBossRoom(int i) {
         return roomCreator.getRoom("boss", null);
     }
 

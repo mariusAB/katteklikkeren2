@@ -60,6 +60,7 @@ public class Thing {
         }
         return null;
     }
+    
     public String getPath() {
         return path;
     }

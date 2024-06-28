@@ -8,36 +8,34 @@ import java.util.List;
 
 public class Map {
     private Logic logic;
-    private int currRoom ;
-    private List<RoomContainer> rooms;
+    protected int currRoom ;
+    protected List<RoomContainer> rooms;
     private List<RoomContainer> edgeRooms = new ArrayList<>();
     private List<RoomGroup> buttonGroups = new ArrayList<>();
-    private Set<RoomContainer> visitedRooms = new HashSet<>();
-    private Set<RoomContainer> visibleRooms = new HashSet<>();
-    private RoomContainer bossRoom;
-    private RoomDistributer roomDistributer;
-    private int width;
-    private int height;
+    protected Set<RoomContainer> visitedRooms = new HashSet<>();
+    protected Set<RoomContainer> visibleRooms = new HashSet<>();
+    protected RoomDistributer roomDistributer;
+    protected int width;
+    protected int height;
     private int buttonRooms = 3;
 
-    public Map(Logic logic, int width, int height, int buttonRooms) {
+    public Map(Logic logic, int width, int height, int buttonRooms, boolean isBossMap) {
         this.logic = logic;
-        this.buttonRooms = buttonRooms;
-        if (width < 3 || height < 3) {
-            throw new IllegalArgumentException("Width and height must be at least 3");
-        }
         this.width = width;
         this.height = height;
         roomDistributer = new RoomDistributer(width, height, logic);
-        initializeMap();
-        visitedRooms.add(rooms.get(currRoom));
-        updateVisibleRooms();
+        if (!isBossMap) {
+            this.buttonRooms = buttonRooms;
+            if (width < 3 || height < 3) {
+                throw new IllegalArgumentException("Width and height must be at least 3");
+            }
+            initializeMap();
+            visitedRooms.add(rooms.get(currRoom));
+            updateVisibleRooms();
+        }
     }
 
     private void initializeMap() {
-        if (width < 3 || height < 3) {
-            throw new IllegalArgumentException("Width and height must be at least 3");
-        }
         rooms = new ArrayList<>();
         edgeRooms.clear();
         buttonGroups.clear();
@@ -48,7 +46,6 @@ public class Map {
         generateStartRoom();
         generateButtonRoomsOnEdges();
         generateMap();
-        generateBossRoom();
         if (getFilledRooms() < width * height / 2 || getFilledRooms() > width * height / 1.5 || getSqueezedRooms() > width*height/(width*height*0.6)){
             rooms.clear();
             edgeRooms.clear();
@@ -65,16 +62,6 @@ public class Map {
             }
         }
         return amount;
-    }
-
-    private void generateBossRoom() {
-        bossRoom = new RoomContainer(width*height, width*height, width*height);
-        bossRoom.setRoom(roomDistributer.getBossRoom());
-    }
-
-    public void teleportToBossRoom() {
-        logic.setRoom(bossRoom.getRoom());
-        currRoom = bossRoom.getRoomIndex();
     }
 
     private int getSqueezedRooms() {
@@ -119,7 +106,7 @@ public class Map {
         left.setConnected();
     }
 
-    private void initRooms() {
+    protected void initRooms() {
         rooms = new ArrayList<>();
         for (int i = 0; i < width*height; i++) {
             rooms.add(new RoomContainer(i, width, height));
@@ -246,7 +233,7 @@ public class Map {
         return null;
     }
 
-    private void updateVisibleRooms() {
+    protected void updateVisibleRooms() {
         RoomContainer r = rooms.get(currRoom);
         if (r.getAbove() != -1 && rooms.get(r.getAbove()).hasRoom()) {
             visibleRooms.add(rooms.get(r.getAbove()));

@@ -33,7 +33,8 @@ public class Logic {
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
-        map = new Map(this, 7, 7, totalButtons);
+        map = new Map(this, 7, 7, totalButtons, false);
+        //map = new BossMap(this);
         currRoom = map.getCurrRoom();
         main = new Main(70, 25, 100, "src/resources/img/icon.png", "src/resources/img/icon.png", currRoom);
         currRoom.addMain(main);
@@ -161,7 +162,8 @@ public class Logic {
     }
 
     public void teleport() {
-        map.teleportToBossRoom();
+        map = new BossMap(this);
+        setRoom(map.getCurrRoom());
     }
     
     public void toMid() {

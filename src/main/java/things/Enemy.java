@@ -5,19 +5,23 @@ import java.util.List;
 import util.Room;
 
 import java.util.ArrayList;
+import java.awt.Image;
 import java.awt.Point;
+import java.io.IOException;
 
 public class Enemy extends Thing{
     private int speed;
     protected int damage;
     private int hp;
     private int maxHealth;
+    private double scalar;
     protected double rotation = 0.0;
     protected boolean damagedMain = false;
-    public Enemy(int x, int y, int hitBox, int speed, int damage, int hp, String path, Room r) {
+    public Enemy(int x, int y, int hitBox, int speed, int damage, int hp, String path, double imageScalar, Room r) {
         super(x, y, hitBox, path, r);
         this.speed = speed;
         this.damage = damage;
+        this.scalar = imageScalar;
         this.hp = hp;
         maxHealth = hp;
         this.hp = hp;
@@ -121,5 +125,16 @@ public class Enemy extends Thing{
         }
         this.x += dx;
         this.y += dy;
+    }
+
+        public Image getImg(int w, int h) {
+        try {
+            if (currRoom.get() != null) {
+                return currRoom.get().getImageHandler().getImage(path, w, h, scalar);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

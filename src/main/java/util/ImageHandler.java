@@ -30,6 +30,16 @@ public class ImageHandler {
         }
     }
 
+    public Image getImage(String path, int w, int h, double scalar) throws IOException {
+        if (images.containsKey(path + scalar)) {
+            return images.get(path);
+        } else {
+            Image img = getImageFromDisc(path, w, h, scalar);
+            images.put(path, img);
+            return img;
+        }
+    }
+
     public void resize(int w, int h) {
         for (String path : images.keySet()) {
             images.put(path, getImageFromDisc(path, w, h));
@@ -131,6 +141,25 @@ public class ImageHandler {
             scale = Math.min(scale, 1.0);
             int scaledWidth = (int) (originalWidth * scale);
             int scaledHeight = (int) (originalHeight * scale);
+            tempImg = tempImg.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
+            return tempImg;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    private Image getImageFromDisc(String path, int w, int h, double scalar) {
+        try {
+            Image tempImg = ImageIO.read(new File(path));
+            int originalWidth = tempImg.getWidth(null);
+            int originalHeight = tempImg.getHeight(null);
+            double widthScale = (double) w / originalWidth;
+            double heightScale = (double) h / originalHeight;
+            double scale = Math.min(widthScale, heightScale);
+            scale = Math.min(scale, 1.0);
+            int scaledWidth = (int) (originalWidth * scale * scalar);
+            int scaledHeight = (int) (originalHeight * scale * scalar);
             tempImg = tempImg.getScaledInstance(scaledWidth, scaledHeight, Image.SCALE_SMOOTH);
             return tempImg;
         } catch (IOException e) {

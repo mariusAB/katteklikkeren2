@@ -89,11 +89,17 @@ public class RoomCreator {
     private Enemy getRandomEnemy(int x, int y, Room room) {
         int randomIndex = (int) (Math.random() * 10);
         Enemy enemy = null;
-        if (randomIndex < 9) {
-            enemy = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/enemy.png", room);
+        if (randomIndex < 3) {
+            enemy = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/enemy.png", 1, room);
         }
         else if (randomIndex >= 9) {
-            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "src/resources/img/icon.png", room);
+            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "src/resources/img/icon.png", 1, room);
+        }
+        else if (randomIndex < 6) {
+            enemy = new Enemy(x, y, 120, 10, 50, 150, "src/resources/img/enemy.png", 2, room);
+        }
+        else if (randomIndex < 9) {
+            enemy = new Enemy(x, y, 40, 25, 20, 20, "src/resources/img/enemy.png", 0.5, room);
         }
         return enemy;
     }
@@ -102,7 +108,7 @@ public class RoomCreator {
         int randomIndex = (int) (Math.random() * 10);
         Obstacle obstacle = null;
         if (randomIndex < 5) {
-            obstacle = new Obstacle(x, y, 300, true, "src/resources/img/icon.png", room);
+            obstacle = new Obstacle(x, y, 200, true, "src/resources/img/rock.png", room);
         }
         if (randomIndex >= 5) {
             obstacle = new Obstacle(x, y, 300, false, "src/resources/img/icon.png", room);

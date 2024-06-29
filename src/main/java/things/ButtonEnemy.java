@@ -4,14 +4,14 @@ import util.BossRoom;
 import util.Room;
 
 public class ButtonEnemy extends Enemy{
-    private int fireDelay = 20;
-    private int projectileSpeed = 25;
-    private int projectileHitBox = 70;
+    protected int fireDelay = 20;
+    protected int projectileSpeed = 25;
+    protected int projectileHitBox = 70;
     private String pathUp;
     private String pathDown;
     private String pathDead;
-    private int currentAttack = 0;
-    private Boolean dead = false;
+    protected int currentAttack = 0;
+    protected Boolean dead = false;
     private int radius;
 
     public ButtonEnemy(int x, int y, int hitBox, int radius, int damage, int fireDelay, int hp, String pathUp, String pathDown, String pathDead, double imageScalar, Room r) {

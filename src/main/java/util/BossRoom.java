@@ -22,8 +22,9 @@ public class BossRoom extends Room{
     private List<ButtonEnemy> canBeUsedButtonEnemies = new ArrayList<>();
     private int stageTime = 1000;
 
-    public BossRoom(Logic logic) {
+    public BossRoom(Logic logic, int stageTime) {
         super(logic);
+        this.stageTime = stageTime;
     }
 
     public void tick() {

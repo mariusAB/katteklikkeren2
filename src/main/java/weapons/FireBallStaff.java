@@ -15,9 +15,9 @@ public class FireBallStaff extends Weapon{
         this.delay = delay;
         this.dmg = dmg;
         this.speed = speed;
-        super.path = "src/resources/img/sword.png";
-        super.path1 = "src/resources/img/swordCatL.png";
-        super.path2 = "src/resources/img/swordCatR.png";
+        super.path = "src/resources/img/fireStaff.png";
+        super.path1 = "src/resources/img/fireStaffCatL.png";
+        super.path2 = "src/resources/img/fireStaffCatR.png";
     }
 
 	public void use(int xfrom, int yfrom, int xto, int yto) {
@@ -29,7 +29,7 @@ public class FireBallStaff extends Weapon{
         int fixedDistance = 100;
         int newXto = xfrom + (int) (Math.cos(adjustedAngle) * fixedDistance);
         int newYto = yfrom + (int) (Math.sin(adjustedAngle) * fixedDistance);
-        Projectile p = new Projectile(xfrom, yfrom, newXto, newYto, speed, hitBox, dmg, true, "src/resources/img/magicProjectile.png", r);
+        Projectile p = new Projectile(xfrom, yfrom, newXto, newYto, speed, hitBox, dmg, true, "src/resources/img/fireBall.png", r);
         r.addThing(p);
         lastFired = r.getRoomTick();
         }

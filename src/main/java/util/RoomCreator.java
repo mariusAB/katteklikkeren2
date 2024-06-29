@@ -36,7 +36,7 @@ public class RoomCreator {
             return getStartRoom();
         }
         else if (type.equals("boss")) {
-            return getBossRoom();
+            return getBossRoom(item);
         }
         return null;
     }
@@ -79,12 +79,20 @@ public class RoomCreator {
         return normalRoom;
     }
 
-    private Room getBossRoom() {
-        BossRoom bossRoom = new BossRoom(logic);
-        addButtonEnemy((int) (margin*2*width), (int) (margin*2.5*height), bossRoom);
-        addButtonEnemy((int) (margin*2*width), (int) (height + margin*2.5*height), bossRoom);
-        addButtonEnemy((int) (width + margin*2*width), (int) (height + margin*2.5*height), bossRoom);
-        addButtonEnemy((int) (width + margin*2*width), (int) (margin*2.5*height), bossRoom);
+    private Room getBossRoom(String type) {
+        BossRoom bossRoom = null;
+        if (type.equals("preBoss")) {
+            bossRoom = new BossRoom(logic, 1000);
+            addButtonEnemy((int) (margin*2*width), (int) (margin*2.5*height), bossRoom);
+            addButtonEnemy((int) (margin*2*width), (int) (height + margin*2.5*height), bossRoom);
+            addButtonEnemy((int) (width + margin*2*width), (int) (height + margin*2.5*height), bossRoom);
+            addButtonEnemy((int) (width + margin*2*width), (int) (margin*2.5*height), bossRoom);
+
+        }
+        else if (type.equals("buttonBoss")) {
+            bossRoom = new BossRoom(logic, 500);
+            addButtonBoss((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), bossRoom);
+        }
         return bossRoom;
     }
 
@@ -95,7 +103,7 @@ public class RoomCreator {
             enemy = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/enemy.png", 1, room);
         }
         else if (randomIndex >= 9) {
-            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "src/resources/img/icon.png", 1, room);
+            enemy = new EnemyLauncher(x, y, 60, 10, 80, 50, "src/resources/img/enemyLauncher.png", 1, room);
         }
         else if (randomIndex < 6) {
             enemy = new Enemy(x, y, 120, 10, 50, 150, "src/resources/img/enemy.png", 2, room);
@@ -107,8 +115,13 @@ public class RoomCreator {
     }
 
     private void addButtonEnemy(int x, int y, Room room) {
-        ButtonEnemy buttonEnemy = new ButtonEnemy(x, y, 60, 300, 15, 15, 1, "src/resources/img/buttonEnemy.png", "src/resources/img/buttonInactive.png", "src/resources/img/buttonDown.png", 1, room);
+        ButtonEnemy buttonEnemy = new ButtonEnemy(x, y, 60, 300, 15, 20, 200, "src/resources/img/buttonEnemy.png", "src/resources/img/buttonInactive.png", "src/resources/img/buttonDown.png", 1, room);
         room.addThing(buttonEnemy);
+    }
+
+    private void addButtonBoss(int x, int y, Room room) {
+        ButtonBoss buttonBoss = new ButtonBoss(x, y, 180, 900, 15, 15, 1, "src/resources/img/buttonEnemy.png", "src/resources/img/buttonInactive.png", "src/resources/img/buttonDown.png", 3, room);
+        room.addThing(buttonBoss);
     }
 
     private Obstacle getRandomObstacle(int x, int y, Room room) {
@@ -118,7 +131,7 @@ public class RoomCreator {
             obstacle = new Obstacle(x, y, 200, true, "src/resources/img/rock.png", room);
         }
         if (randomIndex >= 5) {
-            obstacle = new Obstacle(x, y, 300, false, "src/resources/img/icon.png", room);
+            obstacle = new Obstacle(x, y, 200, false, "src/resources/img/box.png", room);
         }
         return obstacle;
     }
@@ -160,7 +173,7 @@ public class RoomCreator {
         int randomIndex = (int) (Math.random() * 3);
         if (randomIndex == 0) {
             int speed = randomizeStats(40);
-            int dmg = randomizeStats(80);
+            int dmg = randomizeStats(50);
             int delay = randomizeStats(60);
             FireBallStaff fireBallStaff = new FireBallStaff(delay, dmg, speed, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, fireBallStaff, room);
@@ -176,7 +189,7 @@ public class RoomCreator {
         }
         else if (randomIndex == 2) {
             int speed = randomizeStats(40);
-            int dmg = randomizeStats(40);
+            int dmg = randomizeStats(25);
             int delay = randomizeStats(30);
             MagicStaff magicStaff = new MagicStaff(delay, dmg, speed, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, magicStaff, room);

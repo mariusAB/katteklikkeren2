@@ -373,6 +373,7 @@ public class Katteklikkeren2 extends JFrame {
     }
 
     private void resetGame(ActionEvent e) {
+        miniMapRefreshRequired = true;
         monKilInt += l.getKillCounter();
         try {
             saveFileReader.writeSaveFile(monKilInt);

@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import java.util.Iterator;
 
 import things.*;
 import weapons.*;
@@ -33,8 +32,8 @@ public class Logic {
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
-        //map = new Map(this, 7, 7, totalButtons, false);
-        map = new BossMap(this);
+        map = new Map(this, 7, 7, totalButtons, false);
+        //map = new BossMap(this);
         currRoom = map.getCurrRoom();
         main = new Main(70, 25, 100, "src/resources/img/icon.png", "src/resources/img/icon.png", currRoom);
         currRoom.addMain(main);

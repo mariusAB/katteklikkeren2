@@ -9,7 +9,13 @@ public class RoomDistributer {
     }
 
     public Room getBossRoom(int i) {
-        return roomCreator.getRoom("boss", null);
+        if (i == 0) {
+            return roomCreator.getRoom("boss", "preBoss");
+        }
+        else if (i == 1) {
+            return roomCreator.getRoom("boss", "buttonBoss");
+        }
+        return null;
     }
 
     public Room getStartRoom() {

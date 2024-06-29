@@ -61,6 +61,7 @@ public class ButtonEnemy extends Enemy{
         if (currRoom.get() instanceof BossRoom) {
             ((BossRoom) currRoom.get()).activateNext();
         }
+        currRoom.get().buttonClicked();
     }
 
     private void attack() {

@@ -33,7 +33,7 @@ public class RoomCreator {
             return getButtonRoom(item);
         }
         else if (type.equals("start")) {
-            return getStartRoom();
+            return getStartRoom(item);
         }
         else if (type.equals("boss")) {
             return getBossRoom(item);
@@ -41,10 +41,18 @@ public class RoomCreator {
         return null;
     }
 
-    private Room getStartRoom() {
+    private Room getStartRoom(String item) {
         Room startRoom = new Room(logic);
         Portal p = new Portal((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "src/resources/img/portalClosed.png", "src/resources/img/portalOpen.png", startRoom);
         startRoom.addThing(p);
+        if (item.equals("beforeBoss")) {
+            lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*6*height));
+            generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), startRoom);
+            Item healthPotion = new Item((int) lootSlot.getX() + (int) (margin*height*3), (int) lootSlot.getY(), 400, "healthPotion", "src/resources/img/healthPotion.png", startRoom);
+            startRoom.addThing(healthPotion);
+            Item healthPotion2 = new Item((int) lootSlot.getX() - (int) (margin*height*3), (int) lootSlot.getY(), 400, "healthPotion", "src/resources/img/healthPotion.png", startRoom);
+            startRoom.addThing(healthPotion2);
+        }
         return startRoom;
     }
 

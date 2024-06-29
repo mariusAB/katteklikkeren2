@@ -91,7 +91,7 @@ public class Map {
         List<RoomContainer> middleRooms = new ArrayList<>(rooms);
         middleRooms.removeAll(edgeRooms);
         currRoom = middleRooms.get((int) (Math.random() * middleRooms.size())).getRoomIndex();
-        rooms.get(currRoom).setRoom(roomDistributer.getStartRoom());
+        rooms.get(currRoom).setRoom(roomDistributer.getStartRoom(false));
         RoomContainer up = rooms.get(rooms.get(currRoom).getAbove());
         up.cantHaveSpecialRoom();
         up.setConnected();

@@ -309,4 +309,8 @@ public class Room {
             }
         }
     }
+
+    public int getTotalButtons() {
+        return 0;
+    }
 }

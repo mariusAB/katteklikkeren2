@@ -17,7 +17,6 @@ public class Logic {
     private Map map;
     private Room currRoom;
     private List<Thing> toRemove = new ArrayList<Thing>();
-    private ActionEvent source;
     private ImageHandler ih;
     private Weapon currWeapon;
     private boolean held = false;
@@ -32,8 +31,8 @@ public class Logic {
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
-        //map = new Map(this, 7, 7, totalButtons, false);
-        map = new BossMap(this);
+        map = new Map(this, 7, 7, totalButtons, false);
+        //map = new BossMap(this);
         currRoom = map.getCurrRoom();
         main = new Main(70, 25, 100, "src/resources/img/icon.png", "src/resources/img/icon.png", currRoom);
         currRoom.addMain(main);
@@ -42,6 +41,10 @@ public class Logic {
         StarterSword w = new StarterSword(currRoom);
         w.equip();
         setWeapon(w);
+    }
+
+    public void setMaxButtons(int i) {
+        totalButtons = i;
     }
 
     public void displayMiniMap() {
@@ -128,21 +131,22 @@ public class Logic {
         return main;
     }
 
-    public void giveSource(ActionEvent e) {
-        source = e;
-    }
-
     public void interact() {
         currRoom.interact();
     }
 
     public void gameOver() {
-        k.gameOver(source);
+        k.gameOver();
     }
 
     public void teleport() {
-        map = new BossMap(this);
-        setRoom(map.getCurrRoom());
+        if (map instanceof BossMap) {
+            map = new BossMap(this);
+            setRoom(map.getCurrRoom());
+            clickedButtons = 0;
+        } else if (map instanceof Map) {
+            k.win();
+        }
     }
     
     public void toMid() {

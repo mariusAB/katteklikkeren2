@@ -160,4 +160,8 @@ public class BossRoom extends Room{
         }
         return true;
     }
+
+    public int getTotalButtons() {
+        return buttonEnemies.size();
+    }
 }

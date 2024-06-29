@@ -116,10 +116,7 @@ public class Katteklikkeren2 extends JFrame {
         scenes.show(panel, "Menu");
     }
 
-    
-
     public void start() {
-        
         l = new Logic(this);
         if (loop != null) {
             loop.stopRunning();
@@ -207,8 +204,8 @@ public class Katteklikkeren2 extends JFrame {
         loop.unPause();
     }
 
-    public void win(ActionEvent e) {
-        resetGame(e);
+    public void win() {
+        resetGame();
         scenes.show(this.getContentPane(), "Win");
         currentScene = "Win";
         loop.stopRunning();
@@ -365,20 +362,20 @@ public class Katteklikkeren2 extends JFrame {
         }
     }
 
-    public void gameOver(ActionEvent e) {
-        resetGame(e);
+    public void gameOver() {
+        resetGame();
         scenes.show(this.getContentPane(), "GameOver");
         currentScene = "GameOver";
         loop.stopRunning();
     }
 
-    private void resetGame(ActionEvent e) {
+    private void resetGame() {
         miniMapRefreshRequired = true;
         monKilInt += l.getKillCounter();
         try {
             saveFileReader.writeSaveFile(monKilInt);
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         updateMonKilLabel();
         l = new Logic(this);
@@ -604,7 +601,7 @@ public class Katteklikkeren2 extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 scenes.show(panel, "Menu");
                 currentScene = "Menu";
-                resetGame(e);
+                resetGame();
             }
         });
         p.add(menuButton);

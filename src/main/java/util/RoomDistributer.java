@@ -18,7 +18,10 @@ public class RoomDistributer {
         return null;
     }
 
-    public Room getStartRoom() {
+    public Room getStartRoom(boolean isBeforeBoss) {
+        if (isBeforeBoss) {
+            return roomCreator.getRoom("start", "beforeBoss");
+        }
         return roomCreator.getRoom("start", null);
     }
 

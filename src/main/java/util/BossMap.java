@@ -1,15 +1,24 @@
 package util;
 
 import java.util.ArrayList;
-//TODO : knappene må funke
 
 public class BossMap extends Map{
+    private int totalButtons = 0;
     
     public BossMap(Logic logic) {
         super(logic, 1, 3, 0, true);
         initializeMap();
+        setTotalButtons();
+        logic.setMaxButtons(totalButtons);
     }
 
+    private void setTotalButtons() {
+        for (RoomContainer r : rooms) {
+            if (r.getRoom() != null) {
+                totalButtons += r.getRoom().getTotalButtons();
+            }
+        }
+    }
     
     private void initializeMap() {
         super.rooms = new ArrayList<>();
@@ -21,7 +30,7 @@ public class BossMap extends Map{
     }
 
     private void generateStartRoom() {
-        super.rooms.get(height-1).setRoom(super.roomDistributer.getStartRoom());
+        super.rooms.get(height-1).setRoom(super.roomDistributer.getStartRoom(true));
         currRoom = height-1;
     }
 

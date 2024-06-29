@@ -1,27 +1,28 @@
 package util;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import things.*;
 
 public class Room {
-    private List<Obstacle> obstacles = new ArrayList<>();
-    private List<Projectile> projectiles = new ArrayList<>();
-    private List<Enemy> enemies = new ArrayList<>();
-    private List<Item> items = new ArrayList<>();
-    private List<Button> buttons = new ArrayList<>();
-    private List<Portal> portals = new ArrayList<>();
-    private List<SwordSwipe> swordswipes = new ArrayList<>();
-    private double margin = 0.06;
-    private Logic l;
-    private Main main;
-    private int i = 0;
+    protected List<Obstacle> obstacles = new ArrayList<>();
+    protected List<Projectile> projectiles = new ArrayList<>();
+    protected List<Enemy> enemies = new ArrayList<>();
+    protected List<Item> items = new ArrayList<>();
+    protected List<Button> buttons = new ArrayList<>();
+    protected List<Portal> portals = new ArrayList<>();
+    protected List<SwordSwipe> swordswipes = new ArrayList<>();
+    protected double margin = 0.06;
+    protected Logic l;
+    protected Main main;
+    protected int i = 0;
     private String path = "src/resources/img/room1.png";
-    private List<Door> doors = new ArrayList<>();
+    protected List<Door> doors = new ArrayList<>();
     private boolean open = false;
-    private int width = 10000;
-    private int height = 6000;
+    protected int width = 10000;
+    protected int height = 6000;
 
     public Room(Logic l) {
         this.l = l;
@@ -174,6 +175,10 @@ public class Room {
         return enemies;
     }
 
+    public List<Enemy> getEnemiesToAvoid() {
+        return enemies;
+    }
+
     public int getMainX() {
         return l.getMain().getX();
     }
@@ -216,6 +221,25 @@ public class Room {
             d.tick();
         }
         i++;
+        Iterator<Thing> iterator = getThings().iterator();
+        while (iterator.hasNext()) {
+            Thing t = iterator.next();
+            if (t instanceof Enemy) {
+                ((Enemy) t).tick();
+            }
+            else if (t instanceof Projectile) {
+                ((Projectile) t).tick();
+            }
+            else if (t instanceof SwordSwipe) {
+                ((SwordSwipe) t).tick();
+            }
+            else if (t instanceof Button) {
+                ((Button) t).tick();
+            }
+            else if (t instanceof Portal) {
+                ((Portal) t).tick();
+            }
+        }
     }
 
     public void buttonClicked() {
@@ -228,7 +252,7 @@ public class Room {
         }
     }
 
-    private void openDoors() {
+    protected void openDoors() {
         if (!open) {
             l.changeBackground(getImageHandler().getBackground(path, l.getMap().getDoors(), true));
             for (Door d : doors) {

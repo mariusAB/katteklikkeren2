@@ -14,6 +14,7 @@ public class WeaponItem extends Item{
         super.currRoom.get().addThing(new WeaponItem(super.x, super.y, super.hitBox, super.currRoom.get().getLogic().getWeapon(), super.currRoom.get()));
         super.currRoom.get().getLogic().setWeapon(w);
         w.equip();
+        w.reset();
         super.currRoom.get().removeThing(this);
         super.hitBox = 300;
     }

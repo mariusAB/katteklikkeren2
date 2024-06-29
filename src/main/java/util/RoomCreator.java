@@ -80,9 +80,11 @@ public class RoomCreator {
     }
 
     private Room getBossRoom() {
-        Room bossRoom = new Room(logic);
-        lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height));
-        generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), bossRoom);
+        BossRoom bossRoom = new BossRoom(logic);
+        addButtonEnemy((int) (margin*2*width), (int) (margin*2.5*height), bossRoom);
+        addButtonEnemy((int) (margin*2*width), (int) (height + margin*2.5*height), bossRoom);
+        addButtonEnemy((int) (width + margin*2*width), (int) (height + margin*2.5*height), bossRoom);
+        addButtonEnemy((int) (width + margin*2*width), (int) (margin*2.5*height), bossRoom);
         return bossRoom;
     }
 
@@ -102,6 +104,11 @@ public class RoomCreator {
             enemy = new Enemy(x, y, 40, 25, 20, 20, "src/resources/img/enemy.png", 0.5, room);
         }
         return enemy;
+    }
+
+    private void addButtonEnemy(int x, int y, Room room) {
+        ButtonEnemy buttonEnemy = new ButtonEnemy(x, y, 60, 300, 15, 15, 1, "src/resources/img/buttonEnemy.png", "src/resources/img/buttonInactive.png", "src/resources/img/buttonDown.png", 1, room);
+        room.addThing(buttonEnemy);
     }
 
     private Obstacle getRandomObstacle(int x, int y, Room room) {
@@ -152,9 +159,9 @@ public class RoomCreator {
     private void generateWeapon(int x, int y, Room room) {
         int randomIndex = (int) (Math.random() * 3);
         if (randomIndex == 0) {
-            int speed = randomizeStats(70);
-            int dmg = randomizeStats(50);
-            int delay = randomizeStats(50);
+            int speed = randomizeStats(40);
+            int dmg = randomizeStats(80);
+            int delay = randomizeStats(60);
             FireBallStaff fireBallStaff = new FireBallStaff(delay, dmg, speed, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, fireBallStaff, room);
             room.addThing(weaponItem);
@@ -168,9 +175,9 @@ public class RoomCreator {
 
         }
         else if (randomIndex == 2) {
-            int speed = randomizeStats(70);
-            int dmg = randomizeStats(10);
-            int delay = randomizeStats(20);
+            int speed = randomizeStats(40);
+            int dmg = randomizeStats(40);
+            int delay = randomizeStats(30);
             MagicStaff magicStaff = new MagicStaff(delay, dmg, speed, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, magicStaff, room);
             room.addThing(weaponItem);

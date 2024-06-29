@@ -12,7 +12,7 @@ import java.io.IOException;
 public class Enemy extends Thing{
     private int speed;
     protected int damage;
-    private int hp;
+    protected int hp;
     private int maxHealth;
     private double scalar;
     protected double rotation = 0.0;
@@ -56,7 +56,7 @@ public class Enemy extends Thing{
 
     private List<Enemy> getNearbyEnemies(int x, int y) {
         List<Enemy> nearbyEnemies = new ArrayList<>();
-        for (Enemy e : currRoom.get().getEnemies()) {
+        for (Enemy e : currRoom.get().getEnemiesToAvoid()) {
             if (!e.equals(this)) {
                 nearbyEnemies.add(e);
             }

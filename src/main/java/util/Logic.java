@@ -33,8 +33,8 @@ public class Logic {
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
-        map = new Map(this, 7, 7, totalButtons, false);
-        //map = new BossMap(this);
+        //map = new Map(this, 7, 7, totalButtons, false);
+        map = new BossMap(this);
         currRoom = map.getCurrRoom();
         main = new Main(70, 25, 100, "src/resources/img/icon.png", "src/resources/img/icon.png", currRoom);
         currRoom.addMain(main);
@@ -75,25 +75,6 @@ public class Logic {
 
     public void tick() {
         currRoom.tick();
-        Iterator<Thing> iterator = currRoom.getThings().iterator();
-        while (iterator.hasNext()) {
-            Thing t = iterator.next();
-            if (t instanceof Enemy) {
-                ((Enemy) t).tick();
-            }
-            else if (t instanceof Projectile) {
-                ((Projectile) t).tick();
-            }
-            else if (t instanceof SwordSwipe) {
-                ((SwordSwipe) t).tick();
-            }
-            else if (t instanceof Button) {
-                ((Button) t).tick();
-            }
-            else if (t instanceof Portal) {
-                ((Portal) t).tick();
-            }
-        }
         for (Thing t : toRemove) {
             if (t instanceof Enemy) {
                 if (((Enemy) t).damagedMain()) {
@@ -154,7 +135,6 @@ public class Logic {
 
     public void interact() {
         currRoom.interact();
-        clickedButtons++;
     }
 
     public void gameOver() {

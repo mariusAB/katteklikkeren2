@@ -30,7 +30,7 @@ public class Main extends Thing{
             dirLeft = false;
         }
         for (int i = 0; i < speed; i++) {
-            if (currRoom.get().canMove(this.x + x - i, y)) {
+            if (currRoom.get().canMove(this.x + x - i, y, null)) {
                 this.x += x - i;
                 break;
             }
@@ -39,7 +39,7 @@ public class Main extends Thing{
     
     public void moveY(int y) {
         for (int i = 0; i < speed; i++) {
-            if (currRoom.get().canMove(x, this.y + y - i)) {
+            if (currRoom.get().canMove(x, this.y + y - i, null)) {
                 this.y += y - i;
                 break;
             }

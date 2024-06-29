@@ -1,6 +1,7 @@
 package util;
 
 import java.util.ArrayList;
+//TODO : knappene må funke
 
 public class BossMap extends Map{
     

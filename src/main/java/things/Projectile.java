@@ -8,11 +8,13 @@ public class Projectile extends Thing{
     private double vx;
     private double vy;
     private double rotation;
+    private boolean canPassThroughObstacles;
 
-    public Projectile(int xfrom, int yfrom, int xto, int yto, int speed, int hitBox, int damage, Boolean isFriendly, String path, Room r) {
+    public Projectile(int xfrom, int yfrom, int xto, int yto, int speed, int hitBox, int damage, Boolean isFriendly, boolean canPassThroughObstacles, String path, Room r) {
         super(xfrom, yfrom, hitBox, path, r);
         this.damage = damage;
         this.isFriendly = isFriendly;
+        this.canPassThroughObstacles = canPassThroughObstacles;
         double dx = xto - xfrom;
         double dy = yto - yfrom;
         double length = Math.sqrt(dx * dx + dy * dy);
@@ -50,7 +52,14 @@ public class Projectile extends Thing{
         }
         if (vx != 0 || vy != 0) {
         }
-        if (currRoom.get().canMove(x + ((int)vx), y + ((int)vy))) {
+        if (canPassThroughObstacles) {
+            x += vx;
+            y += vy;
+            if (currRoom.get().isOutOfBounds(x, y)) {
+                currRoom.get().queueRemove(this);
+            }
+        }
+        else if (currRoom.get().canMove(x + ((int)vx), y + ((int)vy), this)) {
             x += vx;
             y += vy;
         }

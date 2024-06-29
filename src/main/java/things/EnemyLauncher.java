@@ -24,7 +24,7 @@ public class EnemyLauncher extends Enemy{
             }
             rotation = Math.toDegrees(Math.atan2(dy, dx));
             if (currRoom.get().getRoomTick()%fireDelay == 0) {
-                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, "src/resources/img/enemyProjectile.png", currRoom.get());
+                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
                 currRoom.get().addThing(p);
             }
         }

@@ -29,7 +29,7 @@ public class FireBallStaff extends Weapon{
         int fixedDistance = 100;
         int newXto = xfrom + (int) (Math.cos(adjustedAngle) * fixedDistance);
         int newYto = yfrom + (int) (Math.sin(adjustedAngle) * fixedDistance);
-        Projectile p = new Projectile(xfrom, yfrom, newXto, newYto, speed, hitBox, dmg, true, "src/resources/img/fireBall.png", r);
+        Projectile p = new Projectile(xfrom, yfrom, newXto, newYto, speed, hitBox, dmg, true, false, "src/resources/img/fireBall.png", r);
         r.addThing(p);
         lastFired = r.getRoomTick();
         }

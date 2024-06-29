@@ -266,7 +266,7 @@ public class Room {
         return i;
     }
 
-    public boolean canMove(int x, int y) {
+    public boolean canMove(int x, int y, Thing t) {
         if (x < width*margin || x > width*(1-margin) || y < height*margin || y > height*(1-margin*2)) {
             return false;
         }
@@ -283,6 +283,13 @@ public class Room {
             }
         }
         return true;
+    }
+
+    public boolean isOutOfBounds(int x, int y) {
+        if (x < 0 || x > width*1.2 || y < 0 || y > height*1.2) {
+            return true;
+        }
+        return false;
     }
 
     public boolean getOpenStatus() {

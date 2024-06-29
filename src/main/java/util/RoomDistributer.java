@@ -24,7 +24,7 @@ public class RoomDistributer {
 
     public Room getButtonRoom() {
         double rand = Math.random() * 100;
-        if (rand < itemChance*2) { // TODO: fiks
+        if (rand < itemChance*2) {
             if (rand <= itemChance/2) {
                 return roomCreator.getRoom("button", "healthPotion");
             } else {

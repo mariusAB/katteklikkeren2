@@ -38,7 +38,7 @@ public class SwordSwipe extends Thing{
         double spreadRadians = Math.toRadians(spread);
         for (Enemy e : currRoom.get().getEnemies()) {
             double d = Math.sqrt(Math.pow(e.getX() - x, 2) + Math.pow(e.getY() - y, 2));
-            if (d <= length) {
+            if (d <= length + e.getHitBox()) {
                 double enemyAngle = Math.atan2(e.getY() - y, e.getX() - x);
                 double angleDifference = Math.abs(enemyAngle - swipeAngle);
                 if (angleDifference > Math.PI) {

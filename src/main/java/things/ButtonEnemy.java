@@ -7,7 +7,7 @@ public class ButtonEnemy extends Enemy{
     protected int fireDelay = 20;
     protected int projectileSpeed = 25;
     protected int projectileHitBox = 70;
-    private String pathUp;
+    protected String pathUp;
     private String pathDown;
     private String pathDead;
     protected int currentAttack = 0;
@@ -72,12 +72,8 @@ public class ButtonEnemy extends Enemy{
             double dx = xMain - x;
             double dy = yMain - y;
             double s = Math.sqrt(dx*dx + dy*dy);
-            if (s <= hitBox) {
-                damagedMain = true;
-                currRoom.get().queueRemove(this);
-            }
             if (currRoom.get().getRoomTick()%fireDelay == 0) {
-                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, "src/resources/img/magicProjectile.png", currRoom.get());
+                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
                 currRoom.get().addThing(p);
             }
         }

@@ -3,8 +3,15 @@ package things;
 import util.Room;
 
 public class ButtonBoss extends ButtonEnemy{
+
     public ButtonBoss(int x, int y, int hitBox, int radius, int damage, int fireDelay, int hp, String pathUp, String pathDown, String pathDead, double imageScalar, Room r) {
         super(x, y, hitBox, radius, damage, fireDelay, hp, pathUp, pathDown, pathDead, imageScalar, r);
+    }
+
+    public void activate() {
+        path = pathUp;
+        int randAttack = (int)(Math.random()*3) + 1;
+        currentAttack = randAttack;
     }
 
     private void attack() {
@@ -21,7 +28,7 @@ public class ButtonBoss extends ButtonEnemy{
                 currRoom.get().queueRemove(this);
             }
             if (currRoom.get().getRoomTick()%fireDelay == 0) {
-                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, "src/resources/img/magicProjectile.png", currRoom.get());
+                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
                 currRoom.get().addThing(p);
             }
         }
@@ -29,6 +36,13 @@ public class ButtonBoss extends ButtonEnemy{
             if (currRoom.get().getRoomTick()%(fireDelay*5) == 0) {
                 Enemy minion = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/enemy.png", 1, currRoom.get());
                 currRoom.get().addThing(minion);
+            }
+        }
+        else if (currentAttack == 3) {
+            if (currRoom.get().getRoomTick()%(fireDelay) == 0) {
+                int randX = (int) (Math.random() * currRoom.get().getWidth());
+                Projectile p = new Projectile(randX, 0, randX, 1, 10, 60, 50, false, true, "src/resources/img/fireBall.png", currRoom.get());
+                currRoom.get().addThing(p);
             }
         }
     }

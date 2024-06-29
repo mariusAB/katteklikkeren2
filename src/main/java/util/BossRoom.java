@@ -150,10 +150,12 @@ public class BossRoom extends Room{
                 }
             }
         }
-        for (ButtonEnemy b : buttonEnemies) {
-            double d = Math.sqrt(Math.pow(x-b.getX(), 2) + Math.pow(y-b.getY(), 2));
-            if (d < b.getRadius()) {
-                return false;
+        if (!(t instanceof Projectile)) {
+            for (ButtonEnemy b : buttonEnemies) {
+                double d = Math.sqrt(Math.pow(x-b.getX(), 2) + Math.pow(y-b.getY(), 2));
+                if (d <= b.getRadius()) {
+                    return false;
+                }
             }
         }
         return true;

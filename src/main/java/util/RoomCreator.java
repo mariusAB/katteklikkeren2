@@ -45,7 +45,7 @@ public class RoomCreator {
         Room startRoom = new Room(logic);
         Portal p = new Portal((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*2.5*height), 400, "src/resources/img/portalClosed.png", "src/resources/img/portalOpen.png", startRoom);
         startRoom.addThing(p);
-        if (item.equals("beforeBoss")) {
+        if (item != null && item.equals("beforeBoss")) {
             lootSlot = new Point((int) (width / 2 + margin*2*width), (int) (height / 2 + margin*6*height));
             generateWeapon((int) lootSlot.getX(), (int) lootSlot.getY(), startRoom);
             Item healthPotion = new Item((int) lootSlot.getX() + (int) (margin*height*3), (int) lootSlot.getY(), 400, "healthPotion", "src/resources/img/healthPotion.png", startRoom);
@@ -90,11 +90,11 @@ public class RoomCreator {
     private Room getBossRoom(String type) {
         BossRoom bossRoom = null;
         if (type.equals("preBoss")) {
-            bossRoom = new BossRoom(logic, 1000);
-            addButtonEnemy((int) (margin*2*width), (int) (margin*2.5*height), bossRoom);
-            addButtonEnemy((int) (margin*2*width), (int) (height + margin*2.5*height), bossRoom);
-            addButtonEnemy((int) (width + margin*2*width), (int) (height + margin*2.5*height), bossRoom);
-            addButtonEnemy((int) (width + margin*2*width), (int) (margin*2.5*height), bossRoom);
+            bossRoom = new BossRoom(logic, 500);
+            addButtonEnemy((int) (margin*3*width), (int) (margin*3*height), bossRoom);
+            addButtonEnemy((int) (margin*3*width), (int) (height + margin*height), bossRoom);
+            addButtonEnemy((int) (width + margin*width), (int) (height + margin*height), bossRoom);
+            addButtonEnemy((int) (width + margin*width), (int) (margin*3*height), bossRoom);
 
         }
         else if (type.equals("buttonBoss")) {
@@ -178,7 +178,7 @@ public class RoomCreator {
     }
 
     private void generateWeapon(int x, int y, Room room) {
-        int randomIndex = (int) (Math.random() * 3);
+        int randomIndex = (int) (Math.random() * 5);
         if (randomIndex == 0) {
             int speed = randomizeStats(40);
             int dmg = randomizeStats(50);
@@ -201,6 +201,20 @@ public class RoomCreator {
             int delay = randomizeStats(30);
             MagicStaff magicStaff = new MagicStaff(delay, dmg, speed, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, magicStaff, room);
+            room.addThing(weaponItem);
+        }
+        else if (randomIndex == 3) {
+            int dmg = randomizeStats(100);
+            int delay = randomizeStats(120);
+            Hammer hammer = new Hammer(dmg, delay, room);
+            WeaponItem weaponItem = new WeaponItem(x, y, 300, hammer, room);
+            room.addThing(weaponItem);
+        }
+        else if (randomIndex == 4) {
+            int dmg = randomizeStats(30);
+            int delay = randomizeStats(70);
+            LightningStaff lightningStaff = new LightningStaff(dmg, delay, room);
+            WeaponItem weaponItem = new WeaponItem(x, y, 300, lightningStaff, room);
             room.addThing(weaponItem);
         }
     }

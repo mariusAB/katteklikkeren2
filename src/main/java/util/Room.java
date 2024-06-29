@@ -14,6 +14,8 @@ public class Room {
     protected List<Button> buttons = new ArrayList<>();
     protected List<Portal> portals = new ArrayList<>();
     protected List<SwordSwipe> swordswipes = new ArrayList<>();
+    protected List<DamageZone> damagezones = new ArrayList<>();
+    protected List<LightningStrike> lightningstrikes = new ArrayList<>();
     protected double margin = 0.06;
     protected Logic l;
     protected Main main;
@@ -124,6 +126,10 @@ public class Room {
             items.remove(t);
         } else if (t instanceof SwordSwipe) {
             swordswipes.remove(t);
+        } else if (t instanceof DamageZone) {
+            damagezones.remove(t);
+        } else if (t instanceof LightningStrike) {
+            lightningstrikes.remove(t);
         } else if (t instanceof Obstacle) {
             obstacles.remove(t);
         }
@@ -136,6 +142,10 @@ public class Room {
             items.add((Item) t);
         } else if (t instanceof SwordSwipe) {
             swordswipes.add((SwordSwipe) t);
+        } else if (t instanceof DamageZone) {
+            damagezones.add((DamageZone) t);
+        } else if (t instanceof LightningStrike) {
+            lightningstrikes.add((LightningStrike) t);
         } else if (t instanceof Enemy) {
             enemies.add((Enemy) t);
         } else if (t instanceof Obstacle) {
@@ -203,6 +213,8 @@ public class Room {
         newList.addAll(buttons);
         newList.addAll(enemies);
         newList.addAll(swordswipes);
+        newList.addAll(damagezones);
+        newList.addAll(lightningstrikes);
         newList.addAll(projectiles);
         newList.add(main);
         return newList;
@@ -210,6 +222,14 @@ public class Room {
 
     public void addSwordSwipe(SwordSwipe s) {
         swordswipes.add(s);
+    }
+
+    public void addDamageZone(DamageZone d) {
+        damagezones.add(d);
+    }
+
+    public void addLightningStrike(LightningStrike l) {
+        lightningstrikes.add(l);
     }
 
     public void tick() {
@@ -232,6 +252,12 @@ public class Room {
             }
             else if (t instanceof SwordSwipe) {
                 ((SwordSwipe) t).tick();
+            }
+            else if (t instanceof DamageZone) {
+                ((DamageZone) t).tick();
+            }
+            else if (t instanceof LightningStrike) {
+                ((LightningStrike) t).tick();
             }
             else if (t instanceof Button) {
                 ((Button) t).tick();

@@ -46,7 +46,7 @@ public class ButtonEnemy extends Enemy{
     }
 
     public void damage(int dmg) {
-        if (currentAttack != 0) {
+        if (currentAttack != 0 && !dead) {
             hp -= dmg;
             if (hp <= 0) {
                 die();
@@ -70,9 +70,6 @@ public class ButtonEnemy extends Enemy{
         else  if (currentAttack == 1) {
             int xMain = currRoom.get().getMainX();
             int yMain = currRoom.get().getMainY();
-            double dx = xMain - x;
-            double dy = yMain - y;
-            double s = Math.sqrt(dx*dx + dy*dy);
             if (currRoom.get().getRoomTick()%fireDelay == 0) {
                 Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
                 currRoom.get().addThing(p);

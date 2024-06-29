@@ -21,6 +21,7 @@ public class Button extends Thing{
             double d = Math.sqrt(Math.pow(main.getX() - x, 2) + Math.pow(main.getY() - y, 2));
             if (d < hitBox) {
                 click();
+                clicked = true;
             }
         }
     }

@@ -91,6 +91,13 @@ public class Enemy extends Thing{
         double avoidanceX = x - centerX;
         double avoidanceY = y - centerY;
         double magnitude = Math.sqrt(avoidanceX * avoidanceX + avoidanceY * avoidanceY);
+    
+        // Increase the avoidance distance if too close
+        final double MIN_DISTANCE = 10; // Minimum distance to maintain from other enemies
+        if (magnitude < MIN_DISTANCE) {
+            magnitude = MIN_DISTANCE;
+        }
+    
         if (magnitude == 0) {
             return new Point(x, y);
         }

@@ -1,7 +1,6 @@
 package util;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +30,8 @@ public class Logic {
 
     public Logic(Katteklikkeren2 k) {
         this.k = k;
-        map = new Map(this, 7, 7, totalButtons, false);
-        //map = new BossMap(this);
+        //map = new Map(this, 7, 7, totalButtons, false);
+        map = new BossMap(this);
         currRoom = map.getCurrRoom();
         main = new Main(70, 25, 100, "src/resources/img/icon.png", "src/resources/img/icon.png", currRoom);
         currRoom.addMain(main);
@@ -45,6 +44,7 @@ public class Logic {
 
     public void setMaxButtons(int i) {
         totalButtons = i;
+        clickedButtons = 0;
     }
 
     public void displayMiniMap() {
@@ -141,11 +141,12 @@ public class Logic {
 
     public void teleport() {
         if (map instanceof BossMap) {
+            k.win();
+        } else if (map instanceof Map) {
             map = new BossMap(this);
             setRoom(map.getCurrRoom());
             clickedButtons = 0;
-        } else if (map instanceof Map) {
-            k.win();
+            totalButtons = 5;
         }
     }
     

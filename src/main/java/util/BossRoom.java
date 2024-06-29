@@ -13,6 +13,8 @@ import things.Obstacle;
 import things.Portal;
 import things.Projectile;
 import things.SwordSwipe;
+import things.DamageZone;
+import things.LightningStrike;
 import things.Thing;
 import things.WeaponItem;
 
@@ -51,6 +53,12 @@ public class BossRoom extends Room{
             else if (t instanceof SwordSwipe) {
                 ((SwordSwipe) t).tick();
             }
+            else if (t instanceof DamageZone) {
+                ((DamageZone) t).tick();
+            }
+            else if (t instanceof LightningStrike) {
+                ((LightningStrike) t).tick();
+            }
             else if (t instanceof Button) {
                 ((Button) t).tick();
             }
@@ -79,6 +87,10 @@ public class BossRoom extends Room{
             items.add((Item) t);
         } else if (t instanceof SwordSwipe) {
             swordswipes.add((SwordSwipe) t);
+        } else if (t instanceof DamageZone) {
+            damagezones.add((DamageZone) t);
+        } else if (t instanceof LightningStrike) {
+            lightningstrikes.add((LightningStrike) t);
         } else if (t instanceof ButtonEnemy) {
             buttonEnemies.add((ButtonEnemy) t);
         } else if (t instanceof Enemy) {
@@ -103,6 +115,8 @@ public class BossRoom extends Room{
         newList.addAll(buttonEnemies);
         newList.addAll(enemies);
         newList.addAll(swordswipes);
+        newList.addAll(damagezones);
+        newList.addAll(lightningstrikes);
         newList.addAll(projectiles);
         newList.add(main);
         return newList;

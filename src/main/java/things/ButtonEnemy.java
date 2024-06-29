@@ -39,8 +39,10 @@ public class ButtonEnemy extends Enemy{
     }
 
     public void deActivate() {
-        path = pathDown;
-        currentAttack = 0;
+        if (!dead) {
+            path = pathDown;
+            currentAttack = 0;
+        }
     }
 
     public void damage(int dmg) {

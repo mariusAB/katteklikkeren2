@@ -27,7 +27,8 @@ public class BossRoom extends Room{
     }
 
     public void tick() {
-        if (enemies.size() == 0 && buttonEnemies.size() == 0) {
+        updateCanBeUsedButtonEnemies();
+        if (enemies.size() == 0 && canBeUsedButtonEnemies.size() == 0) {
             l.displayMiniMap();
             openDoors();
         }
@@ -56,7 +57,6 @@ public class BossRoom extends Room{
                 ((Portal) t).tick();
             }
         }
-        updateCanBeUsedButtonEnemies();
         if (i%stageTime == 0) {
             activateButtons();
         }
@@ -118,16 +118,19 @@ public class BossRoom extends Room{
     }
 
     public void activateNext() {
+        updateCanBeUsedButtonEnemies();
         stageTime = i + stageTime;
         activateButtons();
     }
 
     private void activateButtons() {
-        int randomInt = (int) (Math.random() * canBeUsedButtonEnemies.size());
-        for (ButtonEnemy b : canBeUsedButtonEnemies) {
-            b.deActivate();
+        if (canBeUsedButtonEnemies.size() > 0) {
+            int randomInt = (int) (Math.random() * canBeUsedButtonEnemies.size());
+            for (ButtonEnemy b : buttonEnemies) {
+                b.deActivate();
+            }
+            canBeUsedButtonEnemies.get(randomInt).activate();
         }
-        canBeUsedButtonEnemies.get(randomInt).activate();
     }
 
     public boolean canMove(int x, int y, Thing t) {

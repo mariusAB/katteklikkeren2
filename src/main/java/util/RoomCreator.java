@@ -204,7 +204,7 @@ public class RoomCreator {
             room.addThing(weaponItem);
         }
         else if (randomIndex == 3) {
-            int dmg = randomizeStats(100);
+            int dmg = randomizeStats(70);
             int delay = randomizeStats(120);
             Hammer hammer = new Hammer(dmg, delay, room);
             WeaponItem weaponItem = new WeaponItem(x, y, 300, hammer, room);

@@ -276,7 +276,7 @@ public class Katteklikkeren2 extends JFrame {
                     g2d.fillRect(healthBarX, healthBarY, healthBarWidth, healthBarHeight);
                     g2d.setColor(Color.BLACK);
                 }
-                if (thing instanceof Enemy) {
+                if (thing instanceof Enemy && ((Enemy) thing).displayHelathBar()) {
                     int healthBarHeight = 5;
                     double healthPercentage = ((Enemy) thing).getHealth() / (double) ((Enemy) thing).getMaxHealth();
                     int healthBarWidth = (int) (imgWidth * healthPercentage);

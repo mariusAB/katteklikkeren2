@@ -45,11 +45,16 @@ public class ButtonEnemy extends Enemy{
         }
     }
 
+    public boolean displayHelathBar() {
+        return !dead;
+    }
+
     public void damage(int dmg) {
         if (currentAttack != 0 && !dead) {
             hp -= dmg;
             if (hp <= 0) {
                 die();
+                hp = 0;
             }
         }
     }

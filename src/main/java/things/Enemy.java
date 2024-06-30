@@ -105,6 +105,10 @@ public class Enemy extends Thing{
         avoidanceY = (avoidanceY / magnitude) * speed;
         return new Point((int) (x + avoidanceX), (int) (y + avoidanceY));
     }
+
+    public boolean displayHelathBar() {
+        return true;
+    }
     
     public void tick() {
         int xMain = currRoom.getMainX();

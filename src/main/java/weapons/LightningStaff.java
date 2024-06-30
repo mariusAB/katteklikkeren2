@@ -1,7 +1,6 @@
 package weapons;
 
 import things.LightningStrike;
-import things.SwordSwipe;
 import util.Room;
 
 public class LightningStaff extends Weapon{

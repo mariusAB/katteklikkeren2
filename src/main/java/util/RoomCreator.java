@@ -128,7 +128,7 @@ public class RoomCreator {
     }
 
     private void addButtonBoss(int x, int y, Room room) {
-        ButtonBoss buttonBoss = new ButtonBoss(x, y, 400, 800, 15, 15, 500, "src/resources/img/buttonEnemy.png", "src/resources/img/buttonInactive.png", "src/resources/img/buttonDown.png", 3, room);
+        ButtonBoss buttonBoss = new ButtonBoss(x, y, 400, 800, 15, 15, 1000, "src/resources/img/buttonEnemy.png", "src/resources/img/buttonInactive.png", "src/resources/img/buttonDown.png", 3, room);
         room.addThing(buttonBoss);
     }
 

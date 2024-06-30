@@ -18,31 +18,31 @@ public class ButtonBoss extends ButtonEnemy{
         if (currentAttack == 0) {
         }
         else  if (currentAttack == 1) {
-            int xMain = currRoom.get().getMainX();
-            int yMain = currRoom.get().getMainY();
+            int xMain = currRoom.getMainX();
+            int yMain = currRoom.getMainY();
             double dx = xMain - x;
             double dy = yMain - y;
             double s = Math.sqrt(dx*dx + dy*dy);
             if (s <= hitBox) {
                 damagedMain = true;
-                currRoom.get().queueRemove(this);
+                currRoom.queueRemove(this);
             }
-            if (currRoom.get().getRoomTick()%fireDelay == 0) {
-                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
-                currRoom.get().addThing(p);
+            if (currRoom.getRoomTick()%fireDelay == 0) {
+                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom);
+                currRoom.addThing(p);
             }
         }
         else if (currentAttack == 2) {
-            if (currRoom.get().getRoomTick()%(fireDelay*5) == 0) {
-                Enemy minion = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/enemy.png", 1, currRoom.get());
-                currRoom.get().addThing(minion);
+            if (currRoom.getRoomTick()%(fireDelay*5) == 0) {
+                Enemy minion = new Enemy(x, y, 60, 15, 25, 100, "src/resources/img/enemy.png", 1, currRoom);
+                currRoom.addThing(minion);
             }
         }
         else if (currentAttack == 3) {
-            if (currRoom.get().getRoomTick()%(fireDelay) == 0) {
-                int randX = (int) (Math.random() * currRoom.get().getWidth());
-                Projectile p = new Projectile(randX, 0, randX, 1, 10, 60, 50, false, true, "src/resources/img/fireBall.png", currRoom.get());
-                currRoom.get().addThing(p);
+            if (currRoom.getRoomTick()%(fireDelay) == 0) {
+                int randX = (int) (Math.random() * currRoom.getWidth());
+                Projectile p = new Projectile(randX, 0, randX, 1, 10, 60, 50, false, true, "src/resources/img/fireBall.png", currRoom);
+                currRoom.addThing(p);
             }
         }
     }

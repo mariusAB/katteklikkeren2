@@ -45,13 +45,13 @@ public class LightningStrike extends Thing {
 
     public void tick() {
         if (time > upTime) {
-            currRoom.get().queueRemove(this);
+            currRoom.queueRemove(this);
             return;
         }
         double lx = xTo - x;
         double ly = yTo - y;
     
-        for (Enemy e : currRoom.get().getEnemies()) {
+        for (Enemy e : currRoom.getEnemies()) {
             if (!hitEnemies.contains(e)) {
                 double ex = e.getX() - x;
                 double ey = e.getY() - y;

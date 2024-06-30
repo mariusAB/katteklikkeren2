@@ -12,12 +12,12 @@ public class Button extends Thing{
 
     private void click() {
         super.path = pathDown;
-        currRoom.get().buttonClicked();
+        currRoom.buttonClicked();
     }
 
     public void tick() {
         if (!clicked) {
-            Main main = currRoom.get().getMain();
+            Main main = currRoom.getMain();
             double d = Math.sqrt(Math.pow(main.getX() - x, 2) + Math.pow(main.getY() - y, 2));
             if (d < hitBox) {
                 click();

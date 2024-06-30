@@ -1,7 +1,5 @@
 package things;
 
-import java.lang.ref.WeakReference;
-
 import util.Room;
 
 public class Main extends Thing{
@@ -30,7 +28,7 @@ public class Main extends Thing{
             dirLeft = false;
         }
         for (int i = 0; i < speed; i++) {
-            if (currRoom.get().canMove(this.x + x - i, y, null)) {
+            if (currRoom.canMove(this.x + x - i, y, null)) {
                 this.x += x - i;
                 break;
             }
@@ -39,7 +37,7 @@ public class Main extends Thing{
     
     public void moveY(int y) {
         for (int i = 0; i < speed; i++) {
-            if (currRoom.get().canMove(x, this.y + y - i, null)) {
+            if (currRoom.canMove(x, this.y + y - i, null)) {
                 this.y += y - i;
                 break;
             }
@@ -47,7 +45,7 @@ public class Main extends Thing{
     }
 
     public void setRoom(Room r) {
-        super.currRoom = new WeakReference<>(r);
+        super.currRoom = r;
     }
 
     public int getSpeed() {
@@ -67,7 +65,7 @@ public class Main extends Thing{
     public void damage(int dmg) {
         hp -= dmg;
         if (hp <= 0) {
-            currRoom.get().gameOver();
+            currRoom.gameOver();
         }
     }
 

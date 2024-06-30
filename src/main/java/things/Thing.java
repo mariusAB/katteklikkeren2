@@ -1,7 +1,6 @@
 package things;
 
 import java.io.IOException;
-import java.lang.ref.WeakReference;
 
 import util.Room;
 
@@ -11,14 +10,14 @@ public class Thing {
     protected int x = 0;
     protected int y = 0;
     protected String path;
-    protected WeakReference<Room> currRoom;
+    protected Room currRoom;
     protected int hitBox;
 
     public Thing(int x, int y, int hitBox, String path, Room r) {
         this.x = x;
         this.y = y;
         this.hitBox = hitBox;
-        this.currRoom = new WeakReference<>(r);
+        this.currRoom = r;
         this.path = path;
     }
     
@@ -31,11 +30,11 @@ public class Thing {
     }
 
     public int getRoomWidth() {
-        return currRoom.get().getWidth();
+        return currRoom.getWidth();
     }
 
     public int getRoomHeight() {
-        return currRoom.get().getHeight();
+        return currRoom.getHeight();
     }
 
     public int getHitBox() {
@@ -52,8 +51,8 @@ public class Thing {
 
     public Image getImg(int w, int h) {
         try {
-            if (currRoom.get() != null) {
-                return currRoom.get().getImageHandler().getImage(path, w, h);
+            if (currRoom != null) {
+                return currRoom.getImageHandler().getImage(path, w, h);
             }
         } catch (IOException e) {
             e.printStackTrace();

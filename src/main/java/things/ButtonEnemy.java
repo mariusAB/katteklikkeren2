@@ -58,27 +58,27 @@ public class ButtonEnemy extends Enemy{
         path = pathDead;
         dead = true;
         radius = 0;
-        if (currRoom.get() instanceof BossRoom) {
-            ((BossRoom) currRoom.get()).activateNext();
+        if (currRoom instanceof BossRoom) {
+            ((BossRoom) currRoom).activateNext();
         }
-        currRoom.get().buttonClicked();
+        currRoom.buttonClicked();
     }
 
     private void attack() {
         if (currentAttack == 0) {
         }
         else  if (currentAttack == 1) {
-            int xMain = currRoom.get().getMainX();
-            int yMain = currRoom.get().getMainY();
-            if (currRoom.get().getRoomTick()%fireDelay == 0) {
-                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
-                currRoom.get().addThing(p);
+            int xMain = currRoom.getMainX();
+            int yMain = currRoom.getMainY();
+            if (currRoom.getRoomTick()%fireDelay == 0) {
+                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom);
+                currRoom.addThing(p);
             }
         }
         else if (currentAttack == 2) {
-            if (currRoom.get().getRoomTick()%(fireDelay*10) == 0) {
-                Enemy minion = new Enemy(x, y, 40, 25, 20, 20, "src/resources/img/enemy.png", 0.5, currRoom.get());
-                currRoom.get().addThing(minion);
+            if (currRoom.getRoomTick()%(fireDelay*10) == 0) {
+                Enemy minion = new Enemy(x, y, 40, 25, 20, 20, "src/resources/img/enemy.png", 0.5, currRoom);
+                currRoom.addThing(minion);
             }
         }
     }

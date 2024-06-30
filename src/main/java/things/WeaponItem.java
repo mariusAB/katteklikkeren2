@@ -11,11 +11,11 @@ public class WeaponItem extends Item{
     }
 
     public void interact() {
-        super.currRoom.get().addThing(new WeaponItem(super.x, super.y, super.hitBox, super.currRoom.get().getLogic().getWeapon(), super.currRoom.get()));
-        super.currRoom.get().getLogic().setWeapon(w);
+        super.currRoom.addThing(new WeaponItem(super.x, super.y, super.hitBox, super.currRoom.getLogic().getWeapon(), super.currRoom));
+        super.currRoom.getLogic().setWeapon(w);
         w.equip();
         w.reset();
-        super.currRoom.get().removeThing(this);
+        super.currRoom.removeThing(this);
         super.hitBox = 300;
     }
 }

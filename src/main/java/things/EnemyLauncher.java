@@ -12,20 +12,20 @@ public class EnemyLauncher extends Enemy{
     }
 
     public void tick() {
-        if (currRoom.get().getRoomTick() > 40) {
-            int xMain = currRoom.get().getMainX();
-            int yMain = currRoom.get().getMainY();
+        if (currRoom.getRoomTick() > 40) {
+            int xMain = currRoom.getMainX();
+            int yMain = currRoom.getMainY();
             double dx = xMain - x;
             double dy = yMain - y;
             double s = Math.sqrt(dx*dx + dy*dy);
             if (s <= hitBox) {
                 damagedMain = true;
-                currRoom.get().queueRemove(this);
+                currRoom.queueRemove(this);
             }
             rotation = Math.toDegrees(Math.atan2(dy, dx));
-            if (currRoom.get().getRoomTick()%fireDelay == 0) {
-                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom.get());
-                currRoom.get().addThing(p);
+            if (currRoom.getRoomTick()%fireDelay == 0) {
+                Projectile p = new Projectile(x, y, xMain, yMain, projectileSpeed, projectileHitBox, damage, false, false, "src/resources/img/enemyProjectile.png", currRoom);
+                currRoom.addThing(p);
             }
         }
     }

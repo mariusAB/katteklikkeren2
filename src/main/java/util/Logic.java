@@ -133,6 +133,7 @@ public class Logic {
 
     public void interact() {
         currRoom.interact();
+        clickedButtons += 1;
     }
 
     public void gameOver() {

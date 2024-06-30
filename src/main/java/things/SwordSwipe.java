@@ -31,12 +31,12 @@ public class SwordSwipe extends Thing{
     
     public void tick() {
         if (time > upTime) {
-            currRoom.get().queueRemove(this);
+            currRoom.queueRemove(this);
             return;
         }
         double swipeAngle = Math.atan2(yTo - y, xTo - x);
         double spreadRadians = Math.toRadians(spread);
-        for (Enemy e : currRoom.get().getEnemies()) {
+        for (Enemy e : currRoom.getEnemies()) {
             double d = Math.sqrt(Math.pow(e.getX() - x, 2) + Math.pow(e.getY() - y, 2));
             if (d <= length + e.getHitBox()) {
                 double enemyAngle = Math.atan2(e.getY() - y, e.getX() - x);

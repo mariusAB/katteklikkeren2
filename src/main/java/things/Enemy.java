@@ -30,7 +30,7 @@ public class Enemy extends Thing{
     public void damage(int dmg) {
         hp -= dmg;
         if (hp <= 0) {
-            currRoom.get().queueRemove(this);
+            currRoom.queueRemove(this);
         }
     }
 
@@ -56,7 +56,7 @@ public class Enemy extends Thing{
 
     private List<Enemy> getNearbyEnemies(int x, int y) {
         List<Enemy> nearbyEnemies = new ArrayList<>();
-        for (Enemy e : currRoom.get().getEnemiesToAvoid()) {
+        for (Enemy e : currRoom.getEnemiesToAvoid()) {
             if (!e.equals(this)) {
                 nearbyEnemies.add(e);
             }
@@ -107,14 +107,14 @@ public class Enemy extends Thing{
     }
     
     public void tick() {
-        int xMain = currRoom.get().getMainX();
-        int yMain = currRoom.get().getMainY();
+        int xMain = currRoom.getMainX();
+        int yMain = currRoom.getMainY();
         double dx = xMain - x;
         double dy = yMain - y;
         double s = Math.sqrt(dx*dx + dy*dy);
         if (s <= hitBox) {
             damagedMain = true;
-            currRoom.get().queueRemove(this);
+            currRoom.queueRemove(this);
         }
         rotation = Math.toDegrees(Math.atan2(dy, dx));
         dx /= s;
@@ -136,8 +136,8 @@ public class Enemy extends Thing{
 
         public Image getImg(int w, int h) {
         try {
-            if (currRoom.get() != null) {
-                return currRoom.get().getImageHandler().getImage(path, w, h, scalar);
+            if (currRoom != null) {
+                return currRoom.getImageHandler().getImage(path, w, h, scalar);
             }
         } catch (IOException e) {
             e.printStackTrace();

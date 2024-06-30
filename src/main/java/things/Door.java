@@ -41,20 +41,20 @@ public class Door extends Thing{
     }
 
     public void tick() {
-        if (open && currRoom.get().getMainX() > x0 && currRoom.get().getMainX() < x1 && currRoom.get().getMainY() > y0 && currRoom.get().getMainY() < y1) {
+        if (open && currRoom.getMainX() > x0 && currRoom.getMainX() < x1 && currRoom.getMainY() > y0 && currRoom.getMainY() < y1) {
             if (dir == 0) {
-                currRoom.get().getMain().setY(r.getHeight()-currRoom.get().getMain().getY()-500);
+                currRoom.getMain().setY(r.getHeight()-currRoom.getMain().getY()-500);
             }
             if (dir == 1) {
-                currRoom.get().getMain().setX(r.getWidth()-currRoom.get().getMain().getX()+200);
+                currRoom.getMain().setX(r.getWidth()-currRoom.getMain().getX()+200);
             }
             if (dir == 2) {
-                currRoom.get().getMain().setY(r.getHeight()-currRoom.get().getMain().getY()-100);
+                currRoom.getMain().setY(r.getHeight()-currRoom.getMain().getY()-100);
             }
             if (dir == 3) {
-                currRoom.get().getMain().setX(r.getWidth()-currRoom.get().getMain().getX()-200);
+                currRoom.getMain().setX(r.getWidth()-currRoom.getMain().getX()-200);
             }
-            currRoom.get().getLogic().getMap().move(dir);
+            currRoom.getLogic().getMap().move(dir);
         }
     }
 }

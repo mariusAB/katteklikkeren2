@@ -17,9 +17,9 @@ public class Portal extends Thing{
 
     public void tick() {
         if (open) {
-            Main main = currRoom.get().getMain();
+            Main main = currRoom.getMain();
             if (main.getX() < x + hitBox && main.getX() > x - hitBox && main.getY() < y + hitBox && main.getY() > y - hitBox) {
-                currRoom.get().teleport();
+                currRoom.teleport();
             }
         }
     }

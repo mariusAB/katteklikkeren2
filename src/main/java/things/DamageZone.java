@@ -19,10 +19,10 @@ public class DamageZone extends Thing{
     
     public void tick() {
         if (time > upTime) {
-            currRoom.get().queueRemove(this);
+            currRoom.queueRemove(this);
             return;
         }
-        for (Enemy e : currRoom.get().getEnemies()) {
+        for (Enemy e : currRoom.getEnemies()) {
             if (e.getHitBox() + hitBox > Math.sqrt(Math.pow(e.getX() - x, 2) + Math.pow(e.getY() - y, 2))) {
                 if (!hitEnemies.contains(e)) {
                     e.damage(damage);

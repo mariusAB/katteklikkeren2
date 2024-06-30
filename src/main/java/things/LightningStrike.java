@@ -13,7 +13,7 @@ public class LightningStrike extends Thing {
     private int upTime;
     private int time = 0;
     private int width;
-    private int maxLength = 200;
+    private int maxLength = 5000;
 
     public LightningStrike(int x, int y, int xTo, int yTo, int width, int damage, int upTime, String path, Room r) {
         super(x, y, 0, path, r);
@@ -56,8 +56,9 @@ public class LightningStrike extends Thing {
                 double ex = e.getX() - x;
                 double ey = e.getY() - y;
                 double dotProduct = ex * lx + ey * ly;
+                double s = Math.sqrt(ex*ex + ey*ey);
     
-                if (dotProduct > 0) {
+                if (dotProduct > 0 && s < maxLength) {
                     double distanceToLine = distanceFromLineToPoint(e.getX(), e.getY());
                     if (distanceToLine <= e.getHitBox() + this.width) {
                         e.damage(damage);

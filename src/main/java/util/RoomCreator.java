@@ -136,7 +136,7 @@ public class RoomCreator {
         int randomIndex = (int) (Math.random() * 10);
         Obstacle obstacle = null;
         if (randomIndex < 5) {
-            obstacle = new Obstacle(x, y, 200, true, "src/resources/img/rock.png", room);
+            obstacle = new Obstacle(x, y, 150, false, "src/resources/img/rock.png", room);
         }
         if (randomIndex >= 5) {
             obstacle = new Obstacle(x, y, 200, false, "src/resources/img/box.png", room);
